@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1668A7</color>
+    <color name="colorPrimaryDark">#151A74</color>
+    <color name="colorAccent">#B51BD8</color>
+    <color name="tapindicator">#fff</color>
+    <color name="white">#fff</color>
+</resources>

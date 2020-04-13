@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.annguyen.truongmamnon">
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
+    <uses-permission android:name="android.permission.SEND_SMS"></uses-permission>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_conek2"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_conek2"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".Fragment.FragmentAddNewAccount"></activity>
+        <activity
+            android:name=".Activity.InformationMembersActivity"
+            android:label="Thông tin chi tiết"
+            android:parentActivityName=".Activity.MainActivity" />
+        <activity
+            android:name=".Fragment.FragmentDiaryTap"
+            android:label="Danh sách chạm thẻ"
+            android:parentActivityName=".Activity.MainActivity" />
+        <activity
+            android:name=".Activity.SettingDeviceActivity"
+            android:label="Cài đặt"
+            android:parentActivityName=".Activity.MainActivity" />
+        <activity
+            android:name=".Activity.ManHinhDangNhapActivity"
+            android:label="Trường mầm non">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activity.MainActivity"
+            android:label="Trường mầm non" />
+
+        <service
+            android:name=".Service.UdpService"
+            android:enabled="true"
+            android:exported="true"
+            android:stopWithTask="false" />
+        
+        <provider
+            android:authorities="com.annguyen.truongmamnon.Fragment"
+            android:name="androidx.core.content.FileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"></meta-data>
+        </provider>
+        <receiver android:name=".Controller.InternetConnectionBroadCast" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

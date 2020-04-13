@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="Menu"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_menu">
+        <menu>
+            <item android:title="Đăng xuất"
+                android:id="@+id/logOutMainActivity"
+                app:showAsAction="never"
+                android:orderInCategory="100"
+                android:icon="@drawable/ic_logout"></item>
+            <item android:title="Xóa dữ liệu"
+                android:id="@+id/clearmenudanhsachchamthe"
+                android:icon="@drawable/ic_clear"></item>
+            <item android:title="Cập nhật dữ liệu"
+                android:id="@+id/updateFromDB"
+                android:icon="@drawable/ic_update"></item>
+            <item android:title="Cài đặt"
+                android:id="@+id/settingDevice"
+                android:icon="@drawable/ic_settings_black"></item>
+        </menu>
+    </item>
+</menu>

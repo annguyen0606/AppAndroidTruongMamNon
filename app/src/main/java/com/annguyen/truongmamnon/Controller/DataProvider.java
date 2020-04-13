@@ -1,0 +1,418 @@
+package com.annguyen.truongmamnon.Controller;
+
+import android.annotation.SuppressLint;
+import android.os.StrictMode;
+import android.util.Log;
+
+import com.annguyen.truongmamnon.Model.HocSinhNopTien;
+import com.annguyen.truongmamnon.Model.ThongTinGiaoVien;
+import com.annguyen.truongmamnon.Model.ThongTinHocSinh;
+import com.annguyen.truongmamnon.Model.ThongTinNguoiThan;
+import com.annguyen.truongmamnon.Model.ThongTinThongKe;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+public class DataProvider {
+    private static DataProvider instance;
+    private final String ipServer = "125.212.201.52";
+    private final String userName = "coneknfc";
+    private final String passWord = "Conek@123";
+    private final String nameDB = "NFC";
+
+    private DataProvider() {
+    }
+
+    public static DataProvider getInstance(){
+        if (instance == null){
+            instance = new DataProvider();
+        }
+        return instance;
+    }
+
+    @SuppressLint("NewApi")
+    public Connection CONN(String _user, String _pass, String _DB,
+                           String _server) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        Connection conn = null;
+        String ConnURL = null;
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            ConnURL = "jdbc:jtds:sqlserver://" + _server + ";"
+                    + "databaseName=" + _DB + ";user=" + _user + ";password="
+                    + _pass + ";"; // c: // :c
+            conn = DriverManager.getConnection(ConnURL);
+        } catch (SQLException se) {
+            Log.e("ERRO", se.getMessage());
+        } catch (ClassNotFoundException e) {
+            Log.e("ERRO", e.getMessage());
+        } catch (Exception e) {
+            Log.e("ERRO", e.getMessage());
+        }
+        return conn;
+    }
+
+    public ThongTinNguoiThan LayThongTinNguoiThan(String query){
+        ThongTinNguoiThan thongTinNguoiThan = new ThongTinNguoiThan("ABC","ABC","ABC","ABC","ABC","ABC",new byte[0],"ABC");
+        Connection connection;
+        ResultSet resultSet;
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        try {
+            Statement stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(query);
+            if (resultSet != null && resultSet.next()) {
+                thongTinNguoiThan.setMaUID(resultSet.getString("uid"));
+                thongTinNguoiThan.setHoTen(resultSet.getString("hoten"));
+                thongTinNguoiThan.setDiaChi(resultSet.getString("diachi"));
+                thongTinNguoiThan.setQuanHe(resultSet.getString("quanhe"));
+                thongTinNguoiThan.setMaHocSinh(resultSet.getString("mahs"));
+                thongTinNguoiThan.setSoDienThoai(resultSet.getString("sodienthoai"));
+                thongTinNguoiThan.setHinhAnh(resultSet.getBytes("hinhanh"));
+                thongTinNguoiThan.setLop(resultSet.getString("lop"));
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return thongTinNguoiThan;
+    }
+
+    public ThongTinHocSinh LayThongTinHocSinh(String query){
+        ThongTinHocSinh thongTinHocSinh = new ThongTinHocSinh("ABC","ABC","ABC","ABC","ABC","ABC",new byte[0],"ABC");
+        Connection connection;
+        ResultSet resultSet;
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        try {
+            Statement stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(query);
+            if (resultSet != null && resultSet.next()) {
+                thongTinHocSinh.setMaHocSinh(resultSet.getString("mahs"));
+                thongTinHocSinh.setHoTen(resultSet.getString("hoten"));
+                thongTinHocSinh.setNgaySinh(resultSet.getString("ngaysinh"));
+                thongTinHocSinh.setLopHocSinh(resultSet.getString("lop"));
+                thongTinHocSinh.setGioiTinh(resultSet.getString("gioitinh"));
+                thongTinHocSinh.setDiaChi(resultSet.getString("diachi"));
+                thongTinHocSinh.setHinhAnh(resultSet.getBytes("hinhanh"));
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return thongTinHocSinh;
+    }
+
+    public ThongTinGiaoVien LayThongTinGiaoVien(String query){
+        ThongTinGiaoVien thongTinGiaoVien = new ThongTinGiaoVien("ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC",5);
+        Connection connection;
+        ResultSet resultSet;
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        try {
+            Statement stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(query);
+            if (resultSet != null && resultSet.next()) {
+                thongTinGiaoVien.setMaGiaoVien(resultSet.getString("magv"));
+                thongTinGiaoVien.setTenGiaoVien(resultSet.getString("ten"));
+                thongTinGiaoVien.setDiaChi(resultSet.getString("diachi"));
+                thongTinGiaoVien.setSoDienThoai(resultSet.getString("sodienthoai"));
+                thongTinGiaoVien.setUserName(resultSet.getString("username"));
+                thongTinGiaoVien.setPassWord(resultSet.getString("password"));
+                thongTinGiaoVien.setPortName(resultSet.getString("port"));
+                thongTinGiaoVien.setLop(resultSet.getString("lop"));
+                thongTinGiaoVien.setLoaiTaiKhoan(resultSet.getInt("loaitaikhoan"));
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return thongTinGiaoVien;
+    }
+
+    public ArrayList<ThongTinHocSinh> LayDanhSachThongTinHocSinh(String query){
+        ArrayList<ThongTinHocSinh> danhSachThongTinHocSinh = new ArrayList<ThongTinHocSinh>();
+
+        Connection connection;
+        ResultSet resultSet;
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        try {
+            Statement stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(query);
+            while (resultSet != null && resultSet.next()) {
+                ThongTinHocSinh thongTinHocSinh = new ThongTinHocSinh("ABC","ABC","ABC","ABC","ABC","ABC",new byte[0],"ABC");
+                thongTinHocSinh.setMaHocSinh(resultSet.getString("mahs"));
+                thongTinHocSinh.setHoTen(resultSet.getString("hoten"));
+                thongTinHocSinh.setNgaySinh(resultSet.getString("ngaysinh"));
+                thongTinHocSinh.setLopHocSinh(resultSet.getString("lop"));
+                thongTinHocSinh.setGioiTinh(resultSet.getString("gioitinh"));
+                thongTinHocSinh.setDiaChi(resultSet.getString("diachi"));
+                thongTinHocSinh.setHinhAnh(resultSet.getBytes("hinhanh"));
+                thongTinHocSinh.setMaGiaoVien(resultSet.getString("magv"));
+                danhSachThongTinHocSinh.add(thongTinHocSinh);
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return danhSachThongTinHocSinh;
+    }
+
+    public ArrayList<ThongTinNguoiThan> LayDanhSachThongTinNguoiThan(String query){
+        ArrayList<ThongTinNguoiThan> danhSachThongTinNguoiThan = new ArrayList<ThongTinNguoiThan>();
+
+        Connection connection;
+        ResultSet resultSet;
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        try {
+            Statement stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(query);
+            while (resultSet != null && resultSet.next()) {
+                ThongTinNguoiThan thongTinNguoiThan = new ThongTinNguoiThan("ABC","ABC","ABC","ABC","ABC","ABC",new byte[0],"ABC");
+                thongTinNguoiThan.setMaUID(resultSet.getString("uid"));
+                thongTinNguoiThan.setHoTen(resultSet.getString("hoten"));
+                thongTinNguoiThan.setDiaChi(resultSet.getString("diachi"));
+                thongTinNguoiThan.setQuanHe(resultSet.getString("quanhe"));
+                thongTinNguoiThan.setMaHocSinh(resultSet.getString("mahs"));
+                thongTinNguoiThan.setSoDienThoai(resultSet.getString("sodienthoai"));
+                thongTinNguoiThan.setHinhAnh(resultSet.getBytes("hinhanh"));
+                thongTinNguoiThan.setLop(resultSet.getString("lop"));
+                danhSachThongTinNguoiThan.add(thongTinNguoiThan);
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return danhSachThongTinNguoiThan;
+    }
+
+    public int InsertThongTinHocSinh(String maHs, String hoTen, String ngaySinh, String lop, String gioiTinh, String diaChi, byte[] hinhAnh, String magv){
+        int resultInsert = 0;
+        Connection connection;
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        String querryInsert = "insert into ThongTinHocSinh(mahs, hoten, ngaysinh, lop, gioitinh, diachi, hinhanh, magv) values(?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(querryInsert);
+            preparedStatement.setString(1,maHs);
+            preparedStatement.setString(2,hoTen);
+            preparedStatement.setString(3,ngaySinh);
+            preparedStatement.setString(4,lop);
+            preparedStatement.setString(5,gioiTinh);
+            preparedStatement.setString(6,diaChi);
+            preparedStatement.setBytes(7,hinhAnh);
+            preparedStatement.setString(8,magv);
+            resultInsert = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultInsert;
+    }
+
+    public int InsertThongTinPhuHuynh(String uid, String hoTen, String diaChi, String quanHe, String mahs, String sodienthoai, byte[] hinhAnh, String lop){
+        int resultInsert = 0;
+        Connection connection;
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        String querryInsert = "insert into ThongTinNguoiThan(uid, hoten, diachi, quanhe, mahs, sodienthoai, hinhanh, lop) values(?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(querryInsert);
+            preparedStatement.setString(1,uid);
+            preparedStatement.setString(2,hoTen);
+            preparedStatement.setString(3,diaChi);
+            preparedStatement.setString(4,quanHe);
+            preparedStatement.setString(5,mahs);
+            preparedStatement.setString(6,sodienthoai);
+            preparedStatement.setBytes(7,hinhAnh);
+            preparedStatement.setString(8,lop);
+            resultInsert = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultInsert;
+    }
+
+    public int InsertThoiGianDonCon(String uid, String mahs, String lop, String ngay, int phut){
+        int resultInsert = 0;
+        Connection connection;
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        String querryInsert = "insert into ThoiGianDonCon(uid, mahs, lop, ngay, phut) values(?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(querryInsert);
+            preparedStatement.setString(1,uid);
+            preparedStatement.setString(2,mahs);
+            preparedStatement.setString(3,lop);
+            preparedStatement.setString(4,ngay);
+            preparedStatement.setInt(5,phut);
+            resultInsert = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultInsert;
+    }
+
+    public int InsertConfirmPayment(String mahs, String magv, String ngayThang, String soTien, String status, String maLop){
+        int resultInsert = 0;
+        Connection connection;
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        String querryInsert = "insert into ThongTinNopTien(mahs, magv, thang, sotien, trangthai, malop) values(?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(querryInsert);
+            preparedStatement.setString(1,mahs);
+            preparedStatement.setString(2,magv) ;
+            preparedStatement.setString(3,ngayThang);
+            preparedStatement.setString(4,soTien);
+            preparedStatement.setString(5,status);
+            preparedStatement.setString(6,maLop);
+            resultInsert = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultInsert;
+    }
+    public int GetLateMinute(String uid, String month){
+        int lateMinute = 0;
+        Connection connection;
+        ResultSet resultSet;
+        String query = "SELECT phut FROM ThoiGianDonCon WHERE uid = '" +uid+"' and ngay LIKE '"+month+"%'";
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        try {
+            Statement stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(query);
+            while (resultSet != null && resultSet.next()) {
+                lateMinute += resultSet.getInt("phut");
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lateMinute;
+    }
+
+    public int GetLateMinuteFromMaHs(String mahs, String month){
+        int lateMinute = 0;
+        Connection connection;
+        ResultSet resultSet;
+        String query = "SELECT phut FROM ThoiGianDonCon WHERE mahs = '" +mahs+"' and ngay LIKE '"+month+"%'";
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        try {
+            Statement stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(query);
+            while (resultSet != null && resultSet.next()) {
+                lateMinute += resultSet.getInt("phut");
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lateMinute;
+    }
+
+    public String CheckConfirmTakeStudent(String uid, String ngay){
+        String uidTemp = "";
+        Connection connection;
+        ResultSet resultSet;
+        String query = "SELECT uid FROM ThoiGianDonCon WHERE mahs = '" +uid+"' and ngay LIKE '"+ngay+"%'";
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        try {
+            Statement stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(query);
+            while (resultSet != null && resultSet.next()) {
+                uidTemp = resultSet.getString("uid");
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return uidTemp;
+    }
+
+    public String LayMaTruongTruong(String malop){
+        String matruong = "";
+        Connection connection;
+        ResultSet resultSet;
+        String query = "SELECT matruong FROM ThongTinLop WHERE malop = '" +malop+"'";
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        try {
+            Statement stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(query);
+            if (resultSet != null && resultSet.next()) {
+                matruong = resultSet.getString("matruong");
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return matruong;
+    }
+
+    public ArrayList<String> LayDanhSachLop(String maTruong){
+        Connection connection;
+        ArrayList<String> arrayDanhSachLop = new ArrayList<>();
+        ResultSet resultSet;
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        try {
+            Statement stmt = connection.createStatement();
+            String query = "SELECT malop FROM ThongTinLop WHERE matruong = '"+maTruong+"'";
+            resultSet = stmt.executeQuery(query);
+            while (resultSet != null && resultSet.next()) {
+                arrayDanhSachLop.add(resultSet.getString("malop"));
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return arrayDanhSachLop;
+    }
+
+    public ArrayList<HocSinhNopTien> LayDanhSachHocSinhNopTien(String maLop, String ngayThang){
+        Connection connection;
+        ArrayList<HocSinhNopTien> arrayDanhSachNopTien = new ArrayList<>();
+        ResultSet resultSet;
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        try {
+            Statement stmt = connection.createStatement();
+            String query = "SELECT mahs,trangthai FROM ThongTinNopTien WHERE malop = '"+maLop+"' and thang LIKE'"+ngayThang+"%'";
+            resultSet = stmt.executeQuery(query);
+            while (resultSet != null && resultSet.next()) {
+                HocSinhNopTien hocSinhNopTien = new HocSinhNopTien("ABC","5");
+                hocSinhNopTien.setMaHocSinh(resultSet.getString("mahs"));
+                hocSinhNopTien.setStatusPayment(resultSet.getString("trangthai"));
+                arrayDanhSachNopTien.add(hocSinhNopTien);
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return arrayDanhSachNopTien;
+    }
+
+    public String CheckConfirmPayment(String mahs, String ngay){
+        String mahsTemp = "";
+        Connection connection;
+        ResultSet resultSet;
+        String query = "SELECT mahs FROM ThongTinNopTien WHERE mahs = '" +mahs+"' and thang LIKE '"+ngay+"%'";
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        try {
+            Statement stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(query);
+            while (resultSet != null && resultSet.next()) {
+                mahsTemp = resultSet.getString("mahs");
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return mahsTemp;
+    }
+}

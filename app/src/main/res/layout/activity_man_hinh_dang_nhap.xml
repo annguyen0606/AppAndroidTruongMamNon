@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+
+    android:orientation="vertical"
+    android:background="@drawable/background_login"
+    android:layout_height="match_parent"
+    tools:context=".Activity.ManHinhDangNhapActivity">
+    <LinearLayout
+        android:id="@+id/containerLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_conek2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"></ImageView>
+            <!--
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Conek"
+                android:textColor="#F8FFFFFF"
+                android:textSize="30dp"
+                android:textStyle="bold"></TextView>-->
+
+            <EditText
+                android:id="@+id/edtUserNameManHinhDangNhap"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/background_textview"
+                android:gravity="center"
+                android:hint="Tên đăng nhập"
+                android:textColor="#F8FFFFFF"
+                android:textStyle="bold"></EditText>
+
+            <EditText
+                android:id="@+id/edtPasswordManHinhDangNhap"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/background_textview"
+                android:gravity="center"
+                android:hint="Mật khẩu"
+                android:inputType="textPassword"
+                android:textColor="#F8FFFFFF"
+                android:textStyle="bold"></EditText>
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <CheckBox
+                    android:id="@+id/chbNhoThongTinDangNhapManHinhDangNhap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Nhớ tài khoản"
+                    android:textColor="#F8FFFFFF"
+                    android:textStyle="bold"></CheckBox>
+                <CheckBox
+                    android:id="@+id/chbShowPasswordManHinhDangNhap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Hiện mật khẩu"
+                    android:textColor="#F8FFFFFF"
+                    android:textStyle="bold"></CheckBox>
+            </LinearLayout>
+            <Button
+                android:id="@+id/btnLoginSystemManHinhDangNhap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/background_button"
+                android:text="Đăng nhập"
+                android:textColor="#F8FFFFFF"
+                android:textStyle="bold"></Button>
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+</RelativeLayout>
