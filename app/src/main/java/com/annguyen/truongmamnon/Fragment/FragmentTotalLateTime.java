@@ -31,11 +31,14 @@ import com.annguyen.truongmamnon.Controller.SharedPref;
 import com.annguyen.truongmamnon.Model.HocSinhNopTien;
 import com.annguyen.truongmamnon.Model.ThongTinHocSinh;
 import com.annguyen.truongmamnon.Model.ThongTinThongKe;
+import com.annguyen.truongmamnon.Model.TrangThaiHocSinhNopTien;
 import com.annguyen.truongmamnon.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class FragmentTotalLateTime extends Fragment implements View.OnClickListener {
     private View view;
@@ -54,6 +57,9 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
     ArrayList<Integer> arrayPhut;
     ArrayList<String> arrayMoney;
     ArrayAdapter arrayAdapterClass;
+
+    String maGiaoVien = "";
+    String ngayThangThongKe = "";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,6 +70,10 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
     }
 
     private void AnhXa() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        ngayThangThongKe = dateFormat.format(new Date());
+        maGiaoVien = SharedPref.get(ManHinhDangNhapActivity.CURRENT_TEACHER,String.class);
+
         exportCSV = view.findViewById(R.id.imageExportFragmentTotalLateTime);
         listViewTotalLateMinute = view.findViewById(R.id.lvListTotalLateMinute);
         arrayThongTinThongKe = new ArrayList<>();
@@ -120,16 +130,24 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
             totalLateTimeAdapter.notifyDataSetChanged();
             switch (loaitaikhoan){
                 case 3:
-                    //Toast.makeText(view.getContext(),txtLop,Toast.LENGTH_SHORT).show();
-                    GetMinuteLateFromDB getMinuteLateFromDB = new GetMinuteLateFromDB(view.getContext());
-                    getMinuteLateFromDB.execute(txtLop);
-                    //Toast.makeText(view.getContext(),arrayThongTinThongKe.get(1).getUid().toString().trim(),Toast.LENGTH_SHORT).show();
+                    if (classList.getCount() > 0){
+                        if (classList.getSelectedItem().toString().trim().equals(txtMaLop)){
+                            //Toast.makeText(view.getContext(),txtLop,Toast.LENGTH_SHORT).show();
+                            arrayDanhSachHocSinh = new ArrayList<>();
+                            arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+txtMaLop+"'");
+                            GetMinuteLateFromDB2 getMinuteLateFromDB2 = new GetMinuteLateFromDB2(view.getContext());
+                            getMinuteLateFromDB2.execute(txtMaLop);
+                            //Toast.makeText(view.getContext(),arrayThongTinThongKe.get(1).getUid().toString().trim(),Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(view.getContext(),"Bạn không thể xem dữ liệu lớp khác",Toast.LENGTH_SHORT).show();
+                        }
+                    }
                     break;
                 case 2:
                     arrayDanhSachHocSinh = new ArrayList<>();
                     arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+txtLop+"'");
-                    GetMinuteLateFromDB2 getMinuteLateFromDB2 = new GetMinuteLateFromDB2(view.getContext());
-                    getMinuteLateFromDB2.execute(txtLop);
+                    GetMinuteLateFromDB2 getMinuteLateFromDB3 = new GetMinuteLateFromDB2(view.getContext());
+                    getMinuteLateFromDB3.execute(txtLop);
                     break;
             }
         }else {
@@ -142,16 +160,16 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
             case R.id.imageExportFragmentTotalLateTime:
                 if (MainActivity.kiemTraKetNoiInternet == true){
                     StringBuilder data = new StringBuilder();
-                    data.append("Mã học sinh,Tên học sinh,Số phút,Số tiền,Trạng thái nộp tiền");
+                    data.append("Mã học sinh,Mã giáo viên,Tên học sinh,Tháng,Số phút,Tổng số tiền,Trạng thái nộp,Mã lớp");
 
                     if (arrayThongTinThongKe.size() > 0){
                         for (int i = 0; i < arrayThongTinThongKe.size(); i++){
                             if (arrayThongTinThongKe.get(i).getStatusPayment() == 0){
-                                data.append("\n"+String.valueOf(arrayThongTinThongKe.get(i).getMaHS())+","+String.valueOf(arrayThongTinThongKe.get(i).getHoTen())+","
-                                        +String.valueOf(arrayThongTinThongKe.get(i).getThoiGian())+","+String.valueOf(arrayThongTinThongKe.get(i).getMoney())+",Chưa nộp tiền");
+                                data.append("\n"+arrayThongTinThongKe.get(i).getMaHS()+","+maGiaoVien+","+arrayThongTinThongKe.get(i).getHoTen()+","+ngayThangThongKe+","
+                                        +arrayThongTinThongKe.get(i).getThoiGian()+","+arrayThongTinThongKe.get(i).getMoney()+",Chưa nộp tiền"+","+txtLop);
                             }else if (arrayThongTinThongKe.get(i).getStatusPayment() == 1){
-                                data.append("\n"+String.valueOf(arrayThongTinThongKe.get(i).getMaHS())+","+String.valueOf(arrayThongTinThongKe.get(i).getHoTen())+","
-                                        +String.valueOf(arrayThongTinThongKe.get(i).getThoiGian())+","+String.valueOf(arrayThongTinThongKe.get(i).getMoney())+",Đã nộp tiền");
+                                data.append("\n"+arrayThongTinThongKe.get(i).getMaHS()+","+maGiaoVien+","+arrayThongTinThongKe.get(i).getHoTen()+","+ngayThangThongKe+","
+                                        +arrayThongTinThongKe.get(i).getThoiGian()+","+arrayThongTinThongKe.get(i).getMoney()+",Đã nộp tiền"+","+txtLop);
                             }
                         }
                         try {
@@ -180,111 +198,6 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
         }
     }
 
-    private class GetMinuteLateFromDB extends AsyncTask<String,Void,ArrayList<ThongTinThongKe>> {
-        //ProgressDialog progressDialog;
-
-        public GetMinuteLateFromDB(Context mContext) {
-//            progressDialog = new ProgressDialog(mContext);
-        }
-
-        @SuppressLint("WrongThread")
-        @Override
-        protected ArrayList<ThongTinThongKe> doInBackground(String... strings) {
-            String dateTime = "2020/";
-            ArrayList<String> arrayMaHs = new ArrayList<>();
-            ArrayList<String> arrayName = new ArrayList<>();
-            ArrayList<Integer> arrayPhut = new ArrayList<>();
-            ArrayList<String> arrayMoney = new ArrayList<>();
-            //Dau tien la lay ma hoc sinh va ten hoc sinh trong table ThongTinHocSinh SQLite
-            Cursor dataHs = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinHocSinh WHERE Lop = '"+strings[0] +"'");
-            while (dataHs.moveToNext()){
-                arrayMaHs.add(dataHs.getString(1));
-                arrayName.add(dataHs.getString(2));
-            }
-            //Lay thoi gian de thuc hien cau lenh truy van len SQL Server
-            switch (monthList.getSelectedItemPosition()){
-                case 0:
-                    dateTime += "01";
-                    break;
-                case 1:
-                    dateTime += "02";
-                    break;
-                case 2:
-                    dateTime += "03";
-                    break;
-                case 3:
-                    dateTime += "04";
-                    break;
-                case 4:
-                    dateTime += "05";
-                    break;
-                case 5:
-                    dateTime += "06";
-                    break;
-                case 6:
-                    dateTime += "07";
-                    break;
-                case 7:
-                    dateTime += "08";
-                    break;
-                case 8:
-                    dateTime += "09";
-                    break;
-                case 9:
-                    dateTime += "10";
-                    break;
-                case 10:
-                    dateTime += "11";
-                    break;
-                case 11:
-                    dateTime += "12";
-                    break;
-            }
-            //Thong ke so phut theo ma hoc sinh
-            for (String str : arrayMaHs){
-                arrayPhut.add(dataProvider.getInstance().GetLateMinuteFromMaHs(str,dateTime));
-            }
-            //Tinh tien
-            for (int i = 0; i < arrayPhut.size();i++){
-                String abc = String.valueOf(arrayPhut.get(i)*+5000);
-                arrayMoney.add(abc);
-            }
-            /*Lay danh sach hoc sinh nop tien*/
-            ArrayList<HocSinhNopTien> danhHocSinhNopTien = dataProvider.getInstance().LayDanhSachHocSinhNopTien(txtLop,dateTime);
-            /*
-            * Hien tai toi dang co 2 truong du lieu
-            * Can thong tin trang thai nop tien va ma hoc sinh*/
-            for (int i = 0; i < arrayMoney.size(); i++){
-                ThongTinThongKe thongTinThongKe = new ThongTinThongKe("ABC","ABC",0,"ABC",0);
-                thongTinThongKe.setMaHS(arrayMaHs.get(i));
-                thongTinThongKe.setHoTen(arrayName.get(i));
-                thongTinThongKe.setThoiGian(arrayPhut.get(i));
-                thongTinThongKe.setMoney(arrayMoney.get(i));
-                int checkPayment = 0;
-                for(int j = 0; j < danhHocSinhNopTien.size(); j++){
-                    if (arrayMaHs.get(i).toString().trim().equals(danhHocSinhNopTien.get(j).getMaHocSinh().trim())){
-                        checkPayment = 1;
-                    }
-                }
-                thongTinThongKe.setStatusPayment(checkPayment);
-                arrayThongTinThongKe.add(thongTinThongKe);
-            }
-            return arrayThongTinThongKe;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            /*progressDialog.setMessage("Please wait...");
-            progressDialog.show();*/
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<ThongTinThongKe> thongTinThongKes) {
-            totalLateTimeAdapter.notifyDataSetChanged();
-            //progressDialog.dismiss();
-        }
-    }
-
     private class GetMinuteLateFromDB2 extends AsyncTask<String,Void,ArrayList<ThongTinThongKe>> {
         //ProgressDialog progressDialog;
 
@@ -295,67 +208,77 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
         @SuppressLint("WrongThread")
         @Override
         protected ArrayList<ThongTinThongKe> doInBackground(String... strings) {
-            String dateTime = "2020/";
+            String dateTime = "";
+            String dateTime2 = "";
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
+            String date = dateFormat.format(new Date());
             arrayPhut = new ArrayList<>();
-            arrayMoney = new ArrayList<>();
 
             switch (monthList.getSelectedItemPosition()){
                 case 0:
-                    dateTime += "01";
+                    dateTime = date + "/01";
+                    dateTime2 = "01/" + date;
                     break;
                 case 1:
-                    dateTime += "02";
+                    dateTime = date + "/02";
+                    dateTime2 = "02/" + date;
                     break;
                 case 2:
-                    dateTime += "03";
+                    dateTime = date + "/03";
+                    dateTime2 = "03/" + date;
                     break;
                 case 3:
-                    dateTime += "04";
+                    dateTime = date + "/04";
+                    dateTime2 = "04/" + date;
                     break;
                 case 4:
-                    dateTime += "05";
+                    dateTime = date + "/05";
+                    dateTime2 = "05/" + date;
                     break;
                 case 5:
-                    dateTime += "06";
+                    dateTime = date + "/06";
+                    dateTime2 = "06/" + date;
                     break;
                 case 6:
-                    dateTime += "07";
+                    dateTime = date + "/07";
+                    dateTime2 = "07/" + date;
                     break;
                 case 7:
-                    dateTime += "08";
+                    dateTime = date + "/08";
+                    dateTime2 = "08/" + date;
                     break;
                 case 8:
-                    dateTime += "09";
+                    dateTime = date + "/09";
+                    dateTime2 = "09/" + date;
                     break;
                 case 9:
-                    dateTime += "10";
+                    dateTime = date + "/10";
+                    dateTime2 = "10/" + date;
                     break;
                 case 10:
-                    dateTime += "11";
+                    dateTime = date + "/11";
+                    dateTime2 = "11/" + date;
                     break;
                 case 11:
-                    dateTime += "12";
+                    dateTime = date + "/12";
+                    dateTime2 = "12/" + date;
                     break;
             }
 
             for (int i = 0; i < arrayDanhSachHocSinh.size(); i++){
                 arrayPhut.add(dataProvider.getInstance().GetLateMinuteFromMaHs(arrayDanhSachHocSinh.get(i).getMaHocSinh(),dateTime));
             }
-            for (int i = 0; i < arrayPhut.size();i++){
-                String abc = String.valueOf(arrayPhut.get(i)*+5000);
-                arrayMoney.add(abc);
-            }
-            ArrayList<HocSinhNopTien> danhHocSinhNopTien = dataProvider.getInstance().LayDanhSachHocSinhNopTien(txtLop,dateTime);
-            for (int i = 0; i < arrayMoney.size(); i++){
-                ThongTinThongKe thongTinThongKe = new ThongTinThongKe("ABC","ABC",0,"ABC",0);
+            ArrayList<TrangThaiHocSinhNopTien> danhHocSinhNopTien = dataProvider.getInstance().LayDanhSachHocSinhNopTien(txtLop,dateTime2);
+            for (int i = 0; i < arrayDanhSachHocSinh.size(); i++){
+                ThongTinThongKe thongTinThongKe = new ThongTinThongKe("ABC","ABC",0,"0",0);
                 thongTinThongKe.setMaHS(arrayDanhSachHocSinh.get(i).getMaHocSinh());
                 thongTinThongKe.setHoTen(arrayDanhSachHocSinh.get(i).getHoTen());
                 thongTinThongKe.setThoiGian(arrayPhut.get(i));
-                thongTinThongKe.setMoney(arrayMoney.get(i));
                 int an = 0;
                 for(int j = 0; j < danhHocSinhNopTien.size(); j++){
-                    if (arrayDanhSachHocSinh.get(i).getMaHocSinh().toString().trim().equals(danhHocSinhNopTien.get(j).getMaHocSinh().trim())){
+                    if (arrayDanhSachHocSinh.get(i).getMaHocSinh().toString().trim().equals(danhHocSinhNopTien.get(j).getMaHocSinh().trim()) && danhHocSinhNopTien.get(j).getTrangThaiThu().trim().equals("1")){
                         an = 1;
+                        thongTinThongKe.setMoney(danhHocSinhNopTien.get(j).getSoTien().trim());
                     }
                 }
                 thongTinThongKe.setStatusPayment(an);

@@ -147,6 +147,9 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
                 moveTaskToBack(true);
                 return true;
             case R.id.clearmenudanhsachchamthe:
+                ClearThongTinDonCong clearThongTinDonCong = new ClearThongTinDonCong(MainActivity.this);
+                clearThongTinDonCong.execute();
+
                 ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM UIDTag");
                 ManHinhDangNhapActivity.databaseSQLite.QuerryData("VACUUM");
                 int countDontTakeStudent = FragmentDanhSachChamThe.LoadDuLieu();
@@ -199,6 +202,29 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
                 }
             });
         }else {
+        }
+    }
+
+    private class ClearThongTinDonCong extends AsyncTask<Void,Void,Void>{
+        ProgressDialog progressDialog;
+        public ClearThongTinDonCong(Context mContext){
+            progressDialog = new ProgressDialog(mContext);
+        }
+        @Override
+        protected void onPreExecute() {
+            progressDialog.setMessage("Clearing...");
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            dataProvider.getInstance().ClearThongTin("DELETE FROM ThoiGianDonCon");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            progressDialog.dismiss();
         }
     }
 

@@ -1,0 +1,37 @@
+package com.annguyen.truongmamnon.Model;
+
+public class TrangThaiHocSinhNopTien {
+    private String maHocSinh;
+    private String soTien;
+    private String trangThaiThu;
+
+    public TrangThaiHocSinhNopTien(String maHocSinh, String soTien, String trangThaiThu) {
+        this.maHocSinh = maHocSinh;
+        this.soTien = soTien;
+        this.trangThaiThu = trangThaiThu;
+    }
+
+    public String getMaHocSinh() {
+        return maHocSinh;
+    }
+
+    public void setMaHocSinh(String maHocSinh) {
+        this.maHocSinh = maHocSinh;
+    }
+
+    public String getSoTien() {
+        return soTien;
+    }
+
+    public void setSoTien(String soTien) {
+        this.soTien = soTien;
+    }
+
+    public String getTrangThaiThu() {
+        return trangThaiThu;
+    }
+
+    public void setTrangThaiThu(String trangThaiThu) {
+        this.trangThaiThu = trangThaiThu;
+    }
+}

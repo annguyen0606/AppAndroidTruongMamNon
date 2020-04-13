@@ -28,6 +28,7 @@ import com.annguyen.truongmamnon.Activity.MainActivity;
 import com.annguyen.truongmamnon.Activity.ManHinhDangNhapActivity;
 import com.annguyen.truongmamnon.Controller.DataProvider;
 import com.annguyen.truongmamnon.Controller.SharedPref;
+import com.annguyen.truongmamnon.Model.TrangThaiHocSinhNopTien;
 import com.annguyen.truongmamnon.R;
 
 import java.text.SimpleDateFormat;
@@ -38,7 +39,7 @@ public class FragmentSupportPayment extends Fragment implements View.OnClickList
     private View view;
     private static String textMaGiaoVien = "";
     private static EditText uidPayment,nameParent, nameStudent, codeStudent, totalMoney, nameTeacher, codeTeacher,
-                    reasonPayment;
+                    reasonPayment, statusPayment;
     private static String uidDataSupportPayment = "123456";
     private static SharedPref sharedPref;
     private static Button confirm, getData;
@@ -47,6 +48,7 @@ public class FragmentSupportPayment extends Fragment implements View.OnClickList
     private SwipeRefreshLayout refreshLayout;
     String phoneNumber = "";
     DataProvider dataProvider;
+    boolean kiemTraNopTien = false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -68,6 +70,8 @@ public class FragmentSupportPayment extends Fragment implements View.OnClickList
         totalMoney = view.findViewById(R.id.edtTotalMoneySupportPayment);
         nameTeacher = view.findViewById(R.id.edtNameTeacherSupportPayment);
         codeTeacher = view.findViewById(R.id.edtCodeTeacherSupportPayment);
+        statusPayment = view.findViewById(R.id.edtTrangThaiNopTienSupportPaymentFragment);
+
         confirm = view.findViewById(R.id.btnConfirmSupportFragment);
 
         uidPayment = view.findViewById(R.id.edtUidParentSupportPayment);
@@ -116,10 +120,11 @@ public class FragmentSupportPayment extends Fragment implements View.OnClickList
     }
     void RefreshGetData(){
         if (MainActivity.kiemTraKetNoiInternet == true){
+            ClearDuLieu();
             uidDataSupportPayment = SharedPref.get(ManHinhDangNhapActivity.CURRENT_UID,String.class);
             uidPayment.setText(uidDataSupportPayment);
-            GetMinuteLateFromDB getMinuteLateFromDB = new GetMinuteLateFromDB(view.getContext());
-            getMinuteLateFromDB.execute();
+            LayThongTinTaiKhoan layThongTinTaiKhoan = new LayThongTinTaiKhoan(view.getContext());
+            layThongTinTaiKhoan.execute();
         }else {
             Toast.makeText(view.getContext(),"Xin kiểm tra lại kết nối Internet",Toast.LENGTH_SHORT).show();
         }
@@ -130,10 +135,14 @@ public class FragmentSupportPayment extends Fragment implements View.OnClickList
             case R.id.btnConfirmSupportFragment:
                 if (MainActivity.kiemTraKetNoiInternet == true){
                     if (!uidPayment.getText().toString().trim().equals("") && !uidPayment.getText().toString().trim().equals("123456")){
-                        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy/MM");
-                        String thoiGianKiemTra = dateFormat1.format(new Date());
-                        ConfirmPayment confirmPayment = new ConfirmPayment(view.getContext());
-                        confirmPayment.execute(thoiGianKiemTra);
+                        if (kiemTraNopTien == true){
+                            ConfirmPayment confirmPayment = new ConfirmPayment(view.getContext());
+                            confirmPayment.execute();
+                        }else {
+                            Toast.makeText(view.getContext(),"Không được thu tiền tài khoản này",Toast.LENGTH_SHORT).show();
+                        }
+                        /*ConfirmPayment confirmPayment = new ConfirmPayment(view.getContext());
+                        confirmPayment.execute(thoiGianKiemTra);*/
                     /*Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_SENDTO);
                     intent.putExtra("sms_body",reasonPayment.getText().toString().trim());
@@ -150,10 +159,10 @@ public class FragmentSupportPayment extends Fragment implements View.OnClickList
         }
     }
     /*Lay tong cong so phut muon*/
-    private class GetMinuteLateFromDB extends AsyncTask<Integer,Void,Integer> {
+    private class LayThongTinTaiKhoan extends AsyncTask<Integer,Void,ArrayList<TrangThaiHocSinhNopTien>> {
         //ProgressDialog progressDialog;
 
-        public GetMinuteLateFromDB(Context mContext) {
+        public LayThongTinTaiKhoan(Context mContext) {
             //progressDialog = new ProgressDialog(mContext);
         }
         @Override
@@ -163,120 +172,171 @@ public class FragmentSupportPayment extends Fragment implements View.OnClickList
         }
         @SuppressLint("WrongThread")
         @Override
-        protected Integer doInBackground(Integer... integers) {
-            String dateTime = "2020/";
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM");
+        protected ArrayList<TrangThaiHocSinhNopTien> doInBackground(Integer... integers) {
+            if (!uidDataSupportPayment.equals("")){
+                Cursor DataTeacher = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinGiaoVien WHERE MaGV = '"+textMaGiaoVien+"'");
+                while (DataTeacher.moveToNext()){
+                    nameTeacher.setText(DataTeacher.getString(2));
+                    codeTeacher.setText(DataTeacher.getString(1));
+                }
+                Cursor DataNT = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinNguoiThan WHERE Uid = '"+uidPayment.getText().toString().trim()+"'");
+                while (DataNT.moveToNext()){
+                    nameParent.setText(DataNT.getString(2));
+                    codeStudent.setText(DataNT.getString(5));
+                    phoneNumber = DataNT.getString(6);
+                }
+
+                Cursor DataHS = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinHocSinh WHERE MaHs = '"+codeStudent.getText().toString().trim()+"'");
+                while (DataHS.moveToNext()){
+                    nameStudent.setText(DataHS.getString(2));
+                    classStudent.setText(DataHS.getString(4));
+                }
+            }
+            String dateTime = "";
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
             String date = dateFormat.format(new Date());
 
             switch (monthPayment.getSelectedItemPosition()){
                 case 0:
-                    dateTime += "01";
+                    dateTime = "01/" + date;
                     break;
                 case 1:
-                    dateTime += "02";
+                    dateTime = "02/" + date;
                     break;
                 case 2:
-                    dateTime += "03";
+                    dateTime = "03/" + date;
                     break;
                 case 3:
-                    dateTime += "04";
+                    dateTime = "04/" + date;
                     break;
                 case 4:
-                    dateTime += "05";
+                    dateTime = "05/" + date;
                     break;
                 case 5:
-                    dateTime += "06";
+                    dateTime = "06/" + date;
                     break;
                 case 6:
-                    dateTime += "07";
+                    dateTime = "07/" + date;
                     break;
                 case 7:
-                    dateTime += "08";
+                    dateTime = "08/" + date;
                     break;
                 case 8:
-                    dateTime += "09";
+                    dateTime = "09/" + date;
                     break;
                 case 9:
-                    dateTime += "10";
+                    dateTime = "10/" + date;
                     break;
                 case 10:
-                    dateTime += "11";
+                    dateTime = "11/" + date;
                     break;
                 case 11:
-                    dateTime += "12";
+                    dateTime = "12/" + date;
                     break;
             }
-            if (date.trim().equals(dateTime.trim())){
-                return dataProvider.getInstance().GetLateMinute(uidDataSupportPayment,dateTime);
-            }else {
-                return -1;
-            }
+            return dataProvider.getInstance().CheckConfirmPayment(codeStudent.getText().toString().trim(),dateTime);
         }
 
         @Override
-        protected void onPostExecute(Integer integer) {
-            if (integer == -1){
-                Toast.makeText(view.getContext(),"Kiểm tra lại tháng",Toast.LENGTH_SHORT).show();
-            }else {
-                if (!uidDataSupportPayment.equals("")){
-                    Cursor DataTeacher = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinGiaoVien WHERE MaGV = '"+textMaGiaoVien+"'");
-                    while (DataTeacher.moveToNext()){
-                        nameTeacher.setText(DataTeacher.getString(2));
-                        codeTeacher.setText(DataTeacher.getString(1));
-                    }
-                    Cursor DataNT = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinNguoiThan WHERE Uid = '"+uidPayment.getText().toString().trim()+"'");
-                    while (DataNT.moveToNext()){
-                        nameParent.setText(DataNT.getString(2));
-                        codeStudent.setText(DataNT.getString(5));
-                        phoneNumber = DataNT.getString(6);
-                    }
-
-                    Cursor DataHS = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinHocSinh WHERE MaHs = '"+codeStudent.getText().toString().trim()+"'");
-                    while (DataHS.moveToNext()){
-                        nameStudent.setText(DataHS.getString(2));
-                        classStudent.setText(DataHS.getString(4));
-                    }
+        protected void onPostExecute(ArrayList<TrangThaiHocSinhNopTien> trangThaiHocSinhNopTiens) {
+            if (trangThaiHocSinhNopTiens.size() > 0){
+                totalMoney.setText(trangThaiHocSinhNopTiens.get(0).getSoTien());
+                if (trangThaiHocSinhNopTiens.get(0).getTrangThaiThu().toString().trim().equals("0")){
+                    kiemTraNopTien = true;
+                    statusPayment.setText("Chưa nộp tiền");
+                }else if (trangThaiHocSinhNopTiens.get(0).getTrangThaiThu().toString().trim().equals("1")){
+                    statusPayment.setText("Đã nộp tiền");
+                    kiemTraNopTien = false;
                 }
-                totalMoney.setText(String.valueOf(integer*5000));
+
+            }else {
+                Toast.makeText(view.getContext(),"Không có dữ liệu thanh toán",Toast.LENGTH_SHORT).show();
             }
-            //progressDialog.dismiss();
         }
     }
 
-    private class ConfirmPayment extends AsyncTask<String,Void,String>{
+    private class ConfirmPayment extends AsyncTask<Void,Void,Integer>{
         ProgressDialog progressDialog;
         public ConfirmPayment(Context mContext){
             progressDialog = new ProgressDialog(mContext);
         }
         @Override
         protected void onPreExecute() {
-            progressDialog.setMessage("Please wait...");
+            progressDialog.setMessage("Confirming...");
             progressDialog.show();
         }
 
         @SuppressLint("WrongThread")
         @Override
-        protected String doInBackground(String... strings) {
-            return dataProvider.getInstance().CheckConfirmPayment(codeStudent.getText().toString().trim(),strings[0]);
+        protected Integer doInBackground(Void... voids) {
+            String dateTime = "";
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
+            String date = dateFormat.format(new Date());
+
+            switch (monthPayment.getSelectedItemPosition()){
+                case 0:
+                    dateTime = "01/" + date;
+                    break;
+                case 1:
+                    dateTime = "02/" + date;
+                    break;
+                case 2:
+                    dateTime = "03/" + date;
+                    break;
+                case 3:
+                    dateTime = "04/" + date;
+                    break;
+                case 4:
+                    dateTime = "05/" + date;
+                    break;
+                case 5:
+                    dateTime = "06/" + date;
+                    break;
+                case 6:
+                    dateTime = "07/" + date;
+                    break;
+                case 7:
+                    dateTime = "08/" + date;
+                    break;
+                case 8:
+                    dateTime = "09/" + date;
+                    break;
+                case 9:
+                    dateTime = "10/" + date;
+                    break;
+                case 10:
+                    dateTime = "11/" + date;
+                    break;
+                case 11:
+                    dateTime = "12/" + date;
+                    break;
+            }
+            return dataProvider.getInstance().InsertConfirmPayment(codeStudent.getText().toString().trim(),dateTime);
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            if (s.equals("")){
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-                String date = dateFormat.format(new Date());
-                //ManHinhDangNhapActivity.databaseSQLite.QuerryData("UPDATE ThongTinNopTien SET Status = 1 WHERE MaHs = '"+codeStudent.getText().toString().trim()+"'");
-                if (dataProvider.getInstance().InsertConfirmPayment(codeStudent.getText().toString().trim(),
-                        codeTeacher.getText().toString().trim(),
-                        date,totalMoney.getText().toString().trim(),"1",classStudent.getText().toString().trim()) == 1){
-                    Toast.makeText(view.getContext(),"Xác nhận thành công",Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(view.getContext(),"Xác nhận không thành công",Toast.LENGTH_SHORT).show();
-                }
+        protected void onPostExecute(Integer integer) {
+            if (integer == 1){
+                Toast.makeText(view.getContext(),"Xác nhận thành công",Toast.LENGTH_SHORT).show();
+                kiemTraNopTien = false;
             }else {
-                Toast.makeText(view.getContext(),"Học sinh đã đóng tiền",Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(),"Xác nhận không thành công",Toast.LENGTH_SHORT).show();
             }
+            ClearDuLieu();
             progressDialog.dismiss();
         }
+    }
+
+    void ClearDuLieu(){
+        uidPayment.setText("");
+        nameParent.setText("");
+        nameTeacher.setText("");
+        nameStudent.setText("");
+        codeStudent.setText("");
+        codeTeacher.setText("");
+        classStudent.setText("");
+        totalMoney.setText("");
+        reasonPayment.setText("");
+        statusPayment.setText("");
     }
 }

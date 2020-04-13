@@ -9,6 +9,7 @@ import com.annguyen.truongmamnon.Model.ThongTinGiaoVien;
 import com.annguyen.truongmamnon.Model.ThongTinHocSinh;
 import com.annguyen.truongmamnon.Model.ThongTinNguoiThan;
 import com.annguyen.truongmamnon.Model.ThongTinThongKe;
+import com.annguyen.truongmamnon.Model.TrangThaiHocSinhNopTien;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -259,27 +260,7 @@ public class DataProvider {
         return resultInsert;
     }
 
-    public int InsertConfirmPayment(String mahs, String magv, String ngayThang, String soTien, String status, String maLop){
-        int resultInsert = 0;
-        Connection connection;
-        connection = CONN(userName,passWord,nameDB,ipServer);
-        String querryInsert = "insert into ThongTinNopTien(mahs, magv, thang, sotien, trangthai, malop) values(?, ?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(querryInsert);
-            preparedStatement.setString(1,mahs);
-            preparedStatement.setString(2,magv) ;
-            preparedStatement.setString(3,ngayThang);
-            preparedStatement.setString(4,soTien);
-            preparedStatement.setString(5,status);
-            preparedStatement.setString(6,maLop);
-            resultInsert = preparedStatement.executeUpdate();
-            preparedStatement.close();
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return resultInsert;
-    }
+
     public int GetLateMinute(String uid, String month){
         int lateMinute = 0;
         Connection connection;
@@ -375,19 +356,20 @@ public class DataProvider {
         return arrayDanhSachLop;
     }
 
-    public ArrayList<HocSinhNopTien> LayDanhSachHocSinhNopTien(String maLop, String ngayThang){
+    public ArrayList<TrangThaiHocSinhNopTien> LayDanhSachHocSinhNopTien(String maLop, String ngayThang){
         Connection connection;
-        ArrayList<HocSinhNopTien> arrayDanhSachNopTien = new ArrayList<>();
+        ArrayList<TrangThaiHocSinhNopTien> arrayDanhSachNopTien = new ArrayList<>();
         ResultSet resultSet;
         connection = CONN(userName,passWord,nameDB,ipServer);
         try {
             Statement stmt = connection.createStatement();
-            String query = "SELECT mahs,trangthai FROM ThongTinNopTien WHERE malop = '"+maLop+"' and thang LIKE'"+ngayThang+"%'";
+            String query = "SELECT mahs,sotien,trangthai FROM ThongTinNopTien WHERE malop = '"+maLop+"' and thang LIKE'%"+ngayThang+"%'";
             resultSet = stmt.executeQuery(query);
             while (resultSet != null && resultSet.next()) {
-                HocSinhNopTien hocSinhNopTien = new HocSinhNopTien("ABC","5");
+                TrangThaiHocSinhNopTien hocSinhNopTien = new TrangThaiHocSinhNopTien("ABC","0","5");
                 hocSinhNopTien.setMaHocSinh(resultSet.getString("mahs"));
-                hocSinhNopTien.setStatusPayment(resultSet.getString("trangthai"));
+                hocSinhNopTien.setTrangThaiThu(resultSet.getString("trangthai"));
+                hocSinhNopTien.setSoTien(resultSet.getString("sotien"));
                 arrayDanhSachNopTien.add(hocSinhNopTien);
             }
             resultSet.close();
@@ -397,22 +379,53 @@ public class DataProvider {
         return arrayDanhSachNopTien;
     }
 
-    public String CheckConfirmPayment(String mahs, String ngay){
-        String mahsTemp = "";
+    public ArrayList<TrangThaiHocSinhNopTien> CheckConfirmPayment(String mahs, String ngay){
+        ArrayList<TrangThaiHocSinhNopTien> trangThaiHocSinhNopTiens = new ArrayList<>();
         Connection connection;
         ResultSet resultSet;
-        String query = "SELECT mahs FROM ThongTinNopTien WHERE mahs = '" +mahs+"' and thang LIKE '"+ngay+"%'";
+        String query = "SELECT mahs,sotien,trangthai FROM ThongTinNopTien WHERE mahs = '" +mahs+"' and thang LIKE '%"+ngay+"%'";
         connection = CONN(userName,passWord,nameDB,ipServer);
         try {
             Statement stmt = connection.createStatement();
             resultSet = stmt.executeQuery(query);
             while (resultSet != null && resultSet.next()) {
-                mahsTemp = resultSet.getString("mahs");
+                TrangThaiHocSinhNopTien trangThaiHocSinhNopTien = new TrangThaiHocSinhNopTien("ABC","ABC","ABC");
+                trangThaiHocSinhNopTien.setTrangThaiThu(resultSet.getString("trangthai"));
+                trangThaiHocSinhNopTien.setMaHocSinh(resultSet.getString("mahs"));
+                trangThaiHocSinhNopTien.setSoTien(resultSet.getString("sotien"));
+                trangThaiHocSinhNopTiens.add(trangThaiHocSinhNopTien);
             }
             resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return mahsTemp;
+        return trangThaiHocSinhNopTiens;
+    }
+    public int InsertConfirmPayment(String maHs, String ngayThang){
+        int resultInsert = 0;
+        Connection connection;
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        String querryInsert = "UPDATE ThongTinNopTien SET trangthai = '1' WHERE mahs = '" +maHs+"'and thang like '%"+ngayThang+"%'";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(querryInsert);
+            resultInsert = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultInsert;
+    }
+    public void ClearThongTin(String query){
+        Connection connection;
+        ResultSet resultSet;
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        try {
+            Statement stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(query);
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
