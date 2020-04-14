@@ -135,8 +135,8 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
                             //Toast.makeText(view.getContext(),txtLop,Toast.LENGTH_SHORT).show();
                             arrayDanhSachHocSinh = new ArrayList<>();
                             arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+txtMaLop+"'");
-                            GetMinuteLateFromDB2 getMinuteLateFromDB2 = new GetMinuteLateFromDB2(view.getContext());
-                            getMinuteLateFromDB2.execute(txtMaLop);
+                            LayThongTinTuDB layThongTinTuDB = new LayThongTinTuDB(view.getContext());
+                            layThongTinTuDB.execute(txtMaLop);
                             //Toast.makeText(view.getContext(),arrayThongTinThongKe.get(1).getUid().toString().trim(),Toast.LENGTH_SHORT).show();
                         }else {
                             Toast.makeText(view.getContext(),"Bạn không thể xem dữ liệu lớp khác",Toast.LENGTH_SHORT).show();
@@ -146,8 +146,8 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
                 case 2:
                     arrayDanhSachHocSinh = new ArrayList<>();
                     arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+txtLop+"'");
-                    GetMinuteLateFromDB2 getMinuteLateFromDB3 = new GetMinuteLateFromDB2(view.getContext());
-                    getMinuteLateFromDB3.execute(txtLop);
+                    LayThongTinTuDB layThongTinTuDB = new LayThongTinTuDB(view.getContext());
+                    layThongTinTuDB.execute(txtLop);
                     break;
             }
         }else {
@@ -198,10 +198,10 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
         }
     }
 
-    private class GetMinuteLateFromDB2 extends AsyncTask<String,Void,ArrayList<ThongTinThongKe>> {
+    private class LayThongTinTuDB extends AsyncTask<String,Void,ArrayList<ThongTinThongKe>> {
         //ProgressDialog progressDialog;
 
-        public GetMinuteLateFromDB2(Context mContext) {
+        public LayThongTinTuDB(Context mContext) {
             //progressDialog = new ProgressDialog(mContext);
         }
 

@@ -57,7 +57,7 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
     private TextView codeStudent, dateStudent, addressStudent, sexStudent, classStudent;
     private Spinner nameStudent;
     private Button getDataInsert;
-    private ImageButton chooseCameraParent,chooseImageFolder;
+    private ImageView chooseCameraParent,chooseImageFolder;
 
     private DataProvider dataProvider;
     private SharedPref sharedPref;

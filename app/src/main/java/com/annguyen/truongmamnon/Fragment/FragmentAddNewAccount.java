@@ -52,7 +52,7 @@ import java.util.Calendar;
 public class FragmentAddNewAccount extends Fragment implements View.OnClickListener{
     private static String dataUIDAddAcountFragment = "123456";
     private View view;
-    private ImageButton chooseImageParent, chooseImageStudent, chooseImageParentFolder, chooseImageStudentFolder;
+    private ImageView chooseImageParent, chooseImageStudent, chooseImageParentFolder, chooseImageStudentFolder;
     private ImageView imageParent, imageStudent;
     private Button confirmInsert;
     private EditText nameParent, nameStudent, addressParent, phoneParent, relativeParent, maStudent,

@@ -158,7 +158,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Tên người thân"
-                            android:textColor="#F8FFFFFF"></TextView>
+                            android:textColor="#000"></TextView>
                     </LinearLayout>
 
                     <LinearLayout
@@ -182,7 +182,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Địa chỉ"
-                            android:textColor="#F8FFFFFF"></TextView>
+                            android:textColor="#000"></TextView>
                     </LinearLayout>
 
                     <LinearLayout
@@ -206,7 +206,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Số điện thoại"
-                            android:textColor="#F8FFFFFF"></TextView>
+                            android:textColor="#000"></TextView>
                     </LinearLayout>
 
                     <LinearLayout
@@ -230,7 +230,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Mối quan hệ"
-                            android:textColor="#F8FFFFFF"></TextView>
+                            android:textColor="#000"></TextView>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -262,7 +262,7 @@
                         android:layout_height="wrap_content"
                         android:text="Mã Học Sinh"
                         android:textStyle="bold"
-                        android:textColor="#F8FFFFFF"></TextView>
+                        android:textColor="#000"></TextView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -286,7 +286,7 @@
                         android:layout_height="wrap_content"
                         android:text="Tên học sinh"
                         android:textStyle="bold"
-                        android:textColor="#F8FFFFFF"></TextView>
+                        android:textColor="#000"></TextView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -310,7 +310,7 @@
                         android:layout_height="wrap_content"
                         android:text="Ngày Sinh"
                         android:textStyle="bold"
-                        android:textColor="#F8FFFFFF"></TextView>
+                        android:textColor="#000"></TextView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -334,7 +334,7 @@
                         android:layout_height="wrap_content"
                         android:text="Giới tính"
                         android:textStyle="bold"
-                        android:textColor="#F8FFFFFF"></TextView>
+                        android:textColor="#000"></TextView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -358,7 +358,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Lớp"
-                        android:textColor="#F8FFFFFF"></TextView>
+                        android:textColor="#000"></TextView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -382,7 +382,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Địa chỉ"
-                        android:textColor="#F8FFFFFF"></TextView>
+                        android:textColor="#000"></TextView>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -398,7 +398,7 @@
                 android:gravity="center"
                 android:textStyle="bold"
                 android:text="Trạng thái đón con"
-                android:textColor="#F8FFFFFF"
+                android:textColor="#000"
                 android:textSize="30sp"></TextView>
 
             <Button

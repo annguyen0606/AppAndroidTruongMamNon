@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             app:tabMode="fixed"
             app:tabTextColor="#000"
-            app:tabSelectedTextColor="#fff"
+            app:tabSelectedTextColor="#B66F08"
             android:layout_height="wrap_content">
         </com.google.android.material.tabs.TabLayout>
         <androidx.viewpager.widget.ViewPager

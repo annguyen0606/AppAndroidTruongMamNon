@@ -44,7 +44,7 @@
                 android:background="@drawable/background_textview"
                 android:gravity="center"
                 android:hint="Tên đăng nhập"
-                android:textColor="#F8FFFFFF"
+                android:textColor="#000"
                 android:textStyle="bold"></EditText>
 
             <EditText
@@ -57,7 +57,7 @@
                 android:gravity="center"
                 android:hint="Mật khẩu"
                 android:inputType="textPassword"
-                android:textColor="#F8FFFFFF"
+                android:textColor="#000"
                 android:textStyle="bold"></EditText>
             <LinearLayout
                 android:gravity="center"
@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="Nhớ tài khoản"
-                    android:textColor="#F8FFFFFF"
+                    android:textColor="#000"
                     android:textStyle="bold"></CheckBox>
                 <CheckBox
                     android:id="@+id/chbShowPasswordManHinhDangNhap"
@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="Hiện mật khẩu"
-                    android:textColor="#F8FFFFFF"
+                    android:textColor="#000"
                     android:textStyle="bold"></CheckBox>
             </LinearLayout>
             <Button

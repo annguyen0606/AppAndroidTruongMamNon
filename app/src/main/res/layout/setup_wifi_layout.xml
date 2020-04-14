@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:text="Cài đặt cho thiết bị"
         android:textSize="25sp"
-        android:textColor="#F8FFFFFF"
+        android:textColor="#000"
         android:textStyle="bold" />
     <EditText
         android:id="@+id/edtSSIDSetupWifiLayout"
@@ -22,14 +22,14 @@
         android:gravity="center"
         android:focusable="false"
         android:hint="Nhập tên Wifi"
-        android:textColor="#F8FFFFFF"
+        android:textColor="#000"
         android:inputType="textPersonName">
     </EditText>
 
     <EditText
         android:id="@+id/edtPassSetupWifiLayout"
         android:layout_width="match_parent"
-        android:textColor="#F8FFFFFF"
+        android:textColor="#000"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginBottom="5dp"

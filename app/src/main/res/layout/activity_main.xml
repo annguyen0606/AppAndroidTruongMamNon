@@ -5,27 +5,76 @@
     android:layout_width="match_parent"
     android:background="@drawable/background_login"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".Activity.MainActivity">
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/mainViewpagerMainActivity"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/myTabLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
-    </androidx.viewpager.widget.ViewPager>
+        android:layout_height="0dp"
+        android:layout_above="@id/myTabLayout"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="-4dp"></androidx.viewpager.widget.ViewPager>
 
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/myTabLayout"
-        app:tabBackground="@drawable/background_activity"
         android:layout_alignParentBottom="true"
         app:tabIndicator="@color/tapindicator"
         app:tabMode="fixed"
-        app:tabSelectedTextColor="#fff"
+        app:tabSelectedTextColor="#B66F08"
         app:tabTextColor="#000"
         app:tabIndicatorHeight="2dp"
         android:background="@android:color/transparent">
     </com.google.android.material.tabs.TabLayout>
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/myTabLayout"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        app:menu_labels_showAnimation="@anim/fab_slide_out_to_right"
+        app:menu_showShadow="true"
+        app:menu_icon="@drawable/ic_menu">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/floatSetting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_settings_black"
+            app:fab_colorNormal="#F44336"
+            app:fab_label="Cài đặt"></com.github.clans.fab.FloatingActionButton>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/floatUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_update"
+            app:fab_colorNormal="#673AB7"
+            app:fab_label="Cập nhật"></com.github.clans.fab.FloatingActionButton>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/floatClear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_clear"
+            app:fab_colorNormal="#8BC34A"
+            app:fab_label="Xóa"></com.github.clans.fab.FloatingActionButton>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/floatLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_logout"
+            app:fab_colorNormal="@android:color/transparent"
+            app:fab_label="Thoát"></com.github.clans.fab.FloatingActionButton>
+    </com.github.clans.fab.FloatingActionMenu>
+
 </RelativeLayout>
