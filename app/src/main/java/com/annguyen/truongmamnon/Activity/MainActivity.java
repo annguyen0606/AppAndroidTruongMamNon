@@ -4,11 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -16,34 +18,30 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.annguyen.truongmamnon.Adapter.MainViewPagerAdapter;
 import com.annguyen.truongmamnon.Controller.DataProvider;
 import com.annguyen.truongmamnon.Controller.SharedPref;
 import com.annguyen.truongmamnon.Controller.UdpManage;
-import com.annguyen.truongmamnon.Fragment.FragmentAddAccount;
 import com.annguyen.truongmamnon.Fragment.FragmentDanhSachChamThe;
 import com.annguyen.truongmamnon.Fragment.FragmentDanhSachChuaChamThe;
-import com.annguyen.truongmamnon.Fragment.FragmentDiaryTap;
-import com.annguyen.truongmamnon.Fragment.FragmentTotalLateTime;
 import com.annguyen.truongmamnon.Model.ThongTinHocSinh;
 import com.annguyen.truongmamnon.Model.ThongTinNguoiThan;
 import com.annguyen.truongmamnon.R;
 import com.annguyen.truongmamnon.Service.UdpService;
-import com.annguyen.truongmamnon.Fragment.FragmentSupportPayment;
-import com.github.clans.fab.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements UdpManage.ListenData, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements UdpManage.ListenData, View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     public static TabLayout tabLayout; //Bien tablayout
     public static int namePORT = 0;
     private ViewPager viewPager;//Bien viewpager de cho phep nguoi dung vuot de chuyen fragment
@@ -55,12 +53,17 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
     private DataProvider dataProvider; //Class de moc data from Database sql server
 
     public static boolean kiemTraKetNoiInternet = false;
-
-    FloatingActionButton floatClear, floatUpdate, floatLogout, floatSetting;
+    TextView textHello;
+    FloatingActionButton floatAddAccount;
+    NavigationView navigationMenu;
+    String textMaGiaoVien = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context = this;
+        sharedPref = new SharedPref(context);
+        textMaGiaoVien = SharedPref.get(ManHinhDangNhapActivity.CURRENT_TEACHER,String.class);
         /*
         * Khoi tao truyen du lieu interface*/
         UdpManage.setListener(MainActivity.this);
@@ -72,10 +75,10 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
         * Khoi tao context
         * Khoi tao Intent
         * Lay gia tri ten lop*/
-        context = this;
         intent = new Intent(this, UdpService.class);
-        sharedPref = new SharedPref(context);
+
         textTenLop = SharedPref.get(ManHinhDangNhapActivity.CURRENT_Class,String.class);
+
         /*Bat service*/
         if (SharedPref.get(ManHinhDangNhapActivity.CURRENT_LOGIN_STATUS,Boolean.class) == false){
             SharedPref.put(ManHinhDangNhapActivity.CURRENT_LOGIN_STATUS,true);
@@ -91,10 +94,8 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
         /*Khoi tao viewpager
         * ADD fragments*/
         MainViewPagerAdapter mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
-        mainViewPagerAdapter.addFragment(new FragmentDiaryTap(),"Home");
-        mainViewPagerAdapter.addFragment(new FragmentAddAccount(),"Đăng ký");
-        mainViewPagerAdapter.addFragment(new FragmentSupportPayment(),"Thanh toán");
-        mainViewPagerAdapter.addFragment(new FragmentTotalLateTime(),"Thống kê");
+        mainViewPagerAdapter.addFragment(new FragmentDanhSachChamThe(),"Danh sách đón");
+        mainViewPagerAdapter.addFragment(new FragmentDanhSachChuaChamThe(),"Danh sách chờ");
 
         viewPager.setAdapter(mainViewPagerAdapter);
         /*
@@ -102,9 +103,8 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
         tabLayout.setupWithViewPager(viewPager);
         //tabLayout.getTabAt(0).getOrCreateBadge().setNumber(100);
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_conek2);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_addaccount);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_money_icon);
-        tabLayout.getTabAt(3).setIcon(R.drawable.gettime);
+        tabLayout.getTabAt(1).setIcon(R.drawable.gettime);
+
         /*Tat ca Ringtone khi khoi tao Activity*/
         UdpManage.stopSound();
         /*Lay date dang nhap
@@ -125,24 +125,24 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
         }else {
             tabLayout.getTabAt(0).getOrCreateBadge().setVisible(false);
         }
-
-
     }
-
 
     private void AnhXa() {
         tabLayout = findViewById(R.id.myTabLayout);
         viewPager = findViewById(R.id.mainViewpagerMainActivity);
+        floatAddAccount = findViewById(R.id.floatAddAccount);
+        navigationMenu = findViewById(R.id.navigationMenu);
+        textHello = findViewById(R.id.tvNameMainActivity);
 
-        floatClear = findViewById(R.id.floatClear);
-        floatUpdate = findViewById(R.id.floatUpdate);
-        floatLogout = findViewById(R.id.floatLogout);
-        floatSetting = findViewById(R.id.floatSetting);
+        Cursor DataTeacher = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinGiaoVien WHERE MaGV = '"+textMaGiaoVien+"'");
+        while (DataTeacher.moveToNext()){
+            textHello.setText("Xin chào: "+DataTeacher.getString(2));
+        }
 
-        findViewById(R.id.floatClear).setOnClickListener(this);
-        findViewById(R.id.floatUpdate).setOnClickListener(this);
-        findViewById(R.id.floatSetting).setOnClickListener(this);
-        findViewById(R.id.floatLogout).setOnClickListener(this);
+
+        findViewById(R.id.floatAddAccount).setOnClickListener(this);
+
+        navigationMenu.setNavigationItemSelectedListener(this);
     }
     /*Bat su kien trang thai truyen du lieu interface*/
     @Override
@@ -170,46 +170,8 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.floatClear:
-                ClearThongTinDonCong clearThongTinDonCong = new ClearThongTinDonCong(MainActivity.this);
-                clearThongTinDonCong.execute();
-
-                ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM UIDTag");
-                ManHinhDangNhapActivity.databaseSQLite.QuerryData("VACUUM");
-                int countDontTakeStudent = FragmentDanhSachChamThe.LoadDuLieu();
-                FragmentDanhSachChuaChamThe.LoadDuLieuChuaChamThe();
-                if (countDontTakeStudent > 0){
-                    SharedPref.put(ManHinhDangNhapActivity.CURRENT_STUDENTS_COUNT,countDontTakeStudent);
-                    tabLayout.getTabAt(0).getOrCreateBadge().setVisible(true);
-                    tabLayout.getTabAt(0).getOrCreateBadge().setNumber(countDontTakeStudent);
-                    tabLayout.getTabAt(0).getOrCreateBadge().setMaxCharacterCount(3);
-                }else {
-                    tabLayout.getTabAt(0).getOrCreateBadge().setVisible(false);
-                }
-                FragmentDanhSachChuaChamThe.LoadDuLieuChuaChamThe();
-                break;
-            case R.id.floatLogout:
-                SharedPref.put(ManHinhDangNhapActivity.CURRENT_LOGIN_STATUS,false);
-                stopService(intent);
-                UdpManage.stopMe(this);
-                /*android.os.Process.killProcess(android.os.Process.myPid());
-                System.exit(0);*/
-                finish();
-                moveTaskToBack(true);
-                break;
-            case R.id.floatSetting:
-                startActivity(new Intent(MainActivity.this, SettingDeviceActivity.class));
-                break;
-            case R.id.floatUpdate:
-                if (kiemTraKetNoiInternet == true){
-                    ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM ThongTinHocSinh");
-                    ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM ThongTinNguoiThan");
-                    ManHinhDangNhapActivity.databaseSQLite.QuerryData("VACUUM");
-                    UpdateDataFromDB updateDataFromDB = new UpdateDataFromDB(MainActivity.this);
-                    updateDataFromDB.execute();
-                }else {
-                    Toast.makeText(MainActivity.this,"Lỗi Intertnet, Không thể cập nhật",Toast.LENGTH_SHORT).show();
-                }
+            case R.id.floatAddAccount:
+                startActivity(new Intent(MainActivity.this, AddAccountActivity.class));
                 break;
         }
     }
@@ -217,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
     private class ClearThongTinDonCong extends AsyncTask<Void,Void,Void>{
         ProgressDialog progressDialog;
         public ClearThongTinDonCong(Context mContext){
-            progressDialog = new ProgressDialog(mContext);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_TRADITIONAL);
         }
         @Override
         protected void onPreExecute() {
@@ -242,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
     private class UpdateDataFromDB extends AsyncTask<Void,Void,Void>{
         ProgressDialog progressDialog;
         public UpdateDataFromDB(Context mContext) {
-            progressDialog = new ProgressDialog(mContext);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_TRADITIONAL);
         }
         @Override
         protected void onPreExecute() {
@@ -315,5 +277,59 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
     protected void onStop() {
         super.onStop();
         unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.clearMenu:
+                ClearThongTinDonCong clearThongTinDonCong = new ClearThongTinDonCong(MainActivity.this);
+                clearThongTinDonCong.execute();
+
+                ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM UIDTag");
+                ManHinhDangNhapActivity.databaseSQLite.QuerryData("VACUUM");
+                int countDontTakeStudent = FragmentDanhSachChamThe.LoadDuLieu();
+                FragmentDanhSachChuaChamThe.LoadDuLieuChuaChamThe();
+                if (countDontTakeStudent > 0){
+                    SharedPref.put(ManHinhDangNhapActivity.CURRENT_STUDENTS_COUNT,countDontTakeStudent);
+                    tabLayout.getTabAt(0).getOrCreateBadge().setVisible(true);
+                    tabLayout.getTabAt(0).getOrCreateBadge().setNumber(countDontTakeStudent);
+                    tabLayout.getTabAt(0).getOrCreateBadge().setMaxCharacterCount(3);
+                }else {
+                    tabLayout.getTabAt(0).getOrCreateBadge().setVisible(false);
+                }
+                FragmentDanhSachChuaChamThe.LoadDuLieuChuaChamThe();
+                break;
+            case R.id.settingMenu:
+                startActivity(new Intent(MainActivity.this, SettingDeviceActivity.class));
+                break;
+            case R.id.updateMenu:
+                if (kiemTraKetNoiInternet == true){
+                    ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM ThongTinHocSinh");
+                    ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM ThongTinNguoiThan");
+                    ManHinhDangNhapActivity.databaseSQLite.QuerryData("VACUUM");
+                    UpdateDataFromDB updateDataFromDB = new UpdateDataFromDB(MainActivity.this);
+                    updateDataFromDB.execute();
+                }else {
+                    Toast.makeText(MainActivity.this,"Lỗi Intertnet, Không thể cập nhật",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.logOutMenu:
+                SharedPref.put(ManHinhDangNhapActivity.CURRENT_LOGIN_STATUS,false);
+                stopService(intent);
+                UdpManage.stopMe(this);
+                /*android.os.Process.killProcess(android.os.Process.myPid());
+                System.exit(0);*/
+                finish();
+                moveTaskToBack(true);
+                break;
+            case R.id.statisticMenu:
+                startActivity(new Intent(MainActivity.this, StatisticActivity.class));
+                break;
+            case R.id.paymentMenu:
+                startActivity(new Intent(MainActivity.this, SupportPaymentActivity.class));
+                break;
+        }
+        return true;
     }
 }

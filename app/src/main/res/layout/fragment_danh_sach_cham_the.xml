@@ -5,7 +5,6 @@
     android:paddingRight="10dp"
     android:layout_height="match_parent">
     <ImageView
-        android:id="@+id/backgroundFragmentDanhSachChamThe"
         android:src="@drawable/ic_conek"
         android:layout_gravity="center"
         android:layout_width="wrap_content"

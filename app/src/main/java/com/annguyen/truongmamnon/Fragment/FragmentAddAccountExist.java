@@ -1,6 +1,7 @@
 package com.annguyen.truongmamnon.Fragment;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +14,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.service.voice.VoiceInteractionService;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -266,7 +266,7 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
     private class CheckUidOfParent extends AsyncTask<String,Void,ThongTinNguoiThan>{
         ProgressDialog progressDialog;
         public CheckUidOfParent(Context mContext){
-            progressDialog = new ProgressDialog(mContext);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_TRADITIONAL);
         }
         @Override
         protected void onPreExecute() {

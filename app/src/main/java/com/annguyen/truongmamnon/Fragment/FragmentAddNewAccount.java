@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -304,7 +305,7 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
     private class CheckCodeOfStudent extends AsyncTask<String,Void,ThongTinHocSinh>{
         ProgressDialog progressDialog;
         public CheckCodeOfStudent(Context mContext){
-            progressDialog = new ProgressDialog(mContext);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_TRADITIONAL);
         }
         @Override
         protected void onPreExecute() {

@@ -44,7 +44,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class SettingDeviceActivity extends AppCompatActivity {
+public class SettingDeviceActivity extends AppCompatActivity implements View.OnClickListener {
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listDevices;
     private ArrayList<String> listNameDevices;
@@ -67,7 +67,7 @@ public class SettingDeviceActivity extends AppCompatActivity {
     private int index = 0;
     private SendReceive sendReceive;
 
-    private ImageView pullDown;
+    private ImageView pullDown, backToMainActivity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,6 +89,9 @@ public class SettingDeviceActivity extends AppCompatActivity {
         listDevices = findViewById(R.id.lvListDevicesSettingActivity);
         swipeRefreshLayout = findViewById(R.id.pullToRefreshScanDevices);
         pullDown = findViewById(R.id.imagePullDown);
+        backToMainActivity = findViewById(R.id.backMainActivityAtSettingActivity);
+
+        findViewById(R.id.backMainActivityAtSettingActivity).setOnClickListener(this);
 
         arrayAdapter = new ArrayAdapter(SettingDeviceActivity.this,android.R.layout.simple_list_item_1,listNameDevices);
         listDevices.setAdapter(arrayAdapter);
@@ -198,6 +201,16 @@ public class SettingDeviceActivity extends AppCompatActivity {
             return true;
         }
     });
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.backMainActivityAtSettingActivity:
+                onBackPressed();
+                break;
+        }
+    }
+
     private class ClientClass extends Thread{
         private BluetoothDevice device;
         private BluetoothSocket socket;

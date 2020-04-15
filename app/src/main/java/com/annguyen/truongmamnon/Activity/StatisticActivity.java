@@ -1,34 +1,27 @@
-package com.annguyen.truongmamnon.Fragment;
+package com.annguyen.truongmamnon.Activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.annguyen.truongmamnon.Activity.MainActivity;
-import com.annguyen.truongmamnon.Activity.ManHinhDangNhapActivity;
 import com.annguyen.truongmamnon.Adapter.TotalLateTimeAdapter;
 import com.annguyen.truongmamnon.Controller.DataProvider;
 import com.annguyen.truongmamnon.Controller.SharedPref;
-import com.annguyen.truongmamnon.Model.HocSinhNopTien;
 import com.annguyen.truongmamnon.Model.ThongTinHocSinh;
 import com.annguyen.truongmamnon.Model.ThongTinThongKe;
 import com.annguyen.truongmamnon.Model.TrangThaiHocSinhNopTien;
@@ -40,8 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class FragmentTotalLateTime extends Fragment implements View.OnClickListener {
-    private View view;
+public class StatisticActivity extends AppCompatActivity implements View.OnClickListener {
     private Spinner classList, monthList;
     private ImageView exportCSV;
     private static ListView listViewTotalLateMinute;
@@ -55,18 +47,17 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
     int loaitaikhoan = 5;
     ArrayList<ThongTinHocSinh> arrayDanhSachHocSinh;
     ArrayList<Integer> arrayPhut;
-    ArrayList<String> arrayMoney;
     ArrayAdapter arrayAdapterClass;
 
     String maGiaoVien = "";
     String ngayThangThongKe = "";
-    @Nullable
+    ImageView backMainActivity;
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_total_late_time,container,false);
-        sharedPref = new SharedPref(view.getContext());
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_statistic);
+        sharedPref = new SharedPref(StatisticActivity.this);
         AnhXa();
-        return view;
     }
 
     private void AnhXa() {
@@ -74,18 +65,20 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
         ngayThangThongKe = dateFormat.format(new Date());
         maGiaoVien = SharedPref.get(ManHinhDangNhapActivity.CURRENT_TEACHER,String.class);
 
-        exportCSV = view.findViewById(R.id.imageExportFragmentTotalLateTime);
-        listViewTotalLateMinute = view.findViewById(R.id.lvListTotalLateMinute);
+        exportCSV = findViewById(R.id.imageExportFragmentTotalLateTime);
+        listViewTotalLateMinute = findViewById(R.id.lvListTotalLateMinute);
         arrayThongTinThongKe = new ArrayList<>();
-        totalLateTimeAdapter = new TotalLateTimeAdapter(view.getContext(),R.layout.dong_du_lieu_fragment_total_late_minute,arrayThongTinThongKe);
+        totalLateTimeAdapter = new TotalLateTimeAdapter(StatisticActivity.this,R.layout.dong_du_lieu_fragment_total_late_minute,arrayThongTinThongKe);
         listViewTotalLateMinute.setAdapter(totalLateTimeAdapter);
 
-        classList = view.findViewById(R.id.spinnerClassTotalLateMinute);
-        monthList = view.findViewById(R.id.spinnerMonthTotalLateMinute);
+        classList = findViewById(R.id.spinnerClassTotalLateMinute);
+        monthList = findViewById(R.id.spinnerMonthTotalLateMinute);
+        backMainActivity = findViewById(R.id.backMainActivityAtStatisticActivity);
 
-        refreshLayout = view.findViewById(R.id.pullToGetDataTotalLateTime);
+        refreshLayout = findViewById(R.id.pullToGetDataTotalLateTime);
 
-        view.findViewById(R.id.imageExportFragmentTotalLateTime).setOnClickListener(this);
+        findViewById(R.id.imageExportFragmentTotalLateTime).setOnClickListener(this);
+        findViewById(R.id.backMainActivityAtStatisticActivity).setOnClickListener(this);
         ArrayList<String> arraySpinnerMonth = new ArrayList<>();
         arraySpinnerMonth.add("Tháng 1");
         arraySpinnerMonth.add("Tháng 2");
@@ -99,7 +92,7 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
         arraySpinnerMonth.add("Tháng 10");
         arraySpinnerMonth.add("Tháng 11");
         arraySpinnerMonth.add("Tháng 12");
-        ArrayAdapter arrayAdapterMonth = new ArrayAdapter(view.getContext(),android.R.layout.simple_list_item_1,arraySpinnerMonth);
+        ArrayAdapter arrayAdapterMonth = new ArrayAdapter(StatisticActivity.this,android.R.layout.simple_list_item_1,arraySpinnerMonth);
         monthList.setAdapter(arrayAdapterMonth);
 
         loaitaikhoan = SharedPref.get(ManHinhDangNhapActivity.CURRENT_ACCOUNT,Integer.class);
@@ -121,7 +114,7 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
     void RefreshDataClass(){
         if (MainActivity.kiemTraKetNoiInternet == true){
             if (classList.getCount() == 0){
-                GetClassList getClassList = new GetClassList(view.getContext());
+                GetClassList getClassList = new GetClassList(StatisticActivity.this);
                 getClassList.execute();
             }else {
                 txtLop = classList.getSelectedItem().toString().trim();
@@ -135,28 +128,31 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
                             //Toast.makeText(view.getContext(),txtLop,Toast.LENGTH_SHORT).show();
                             arrayDanhSachHocSinh = new ArrayList<>();
                             arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+txtMaLop+"'");
-                            LayThongTinTuDB layThongTinTuDB = new LayThongTinTuDB(view.getContext());
+                            LayThongTinTuDB layThongTinTuDB = new LayThongTinTuDB(StatisticActivity.this);
                             layThongTinTuDB.execute(txtMaLop);
                             //Toast.makeText(view.getContext(),arrayThongTinThongKe.get(1).getUid().toString().trim(),Toast.LENGTH_SHORT).show();
                         }else {
-                            Toast.makeText(view.getContext(),"Bạn không thể xem dữ liệu lớp khác",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(StatisticActivity.this,"Bạn không thể xem dữ liệu lớp khác",Toast.LENGTH_SHORT).show();
                         }
                     }
                     break;
                 case 2:
                     arrayDanhSachHocSinh = new ArrayList<>();
                     arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+txtLop+"'");
-                    LayThongTinTuDB layThongTinTuDB = new LayThongTinTuDB(view.getContext());
+                    LayThongTinTuDB layThongTinTuDB = new LayThongTinTuDB(StatisticActivity.this);
                     layThongTinTuDB.execute(txtLop);
                     break;
             }
         }else {
-            Toast.makeText(view.getContext(),"Xin kiểm tra lại kết nối Internet",Toast.LENGTH_SHORT).show();
+            Toast.makeText(StatisticActivity.this,"Xin kiểm tra lại kết nối Internet",Toast.LENGTH_SHORT).show();
         }
     }
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.backMainActivityAtStatisticActivity:
+                onBackPressed();
+                break;
             case R.id.imageExportFragmentTotalLateTime:
                 if (MainActivity.kiemTraKetNoiInternet == true){
                     StringBuilder data = new StringBuilder();
@@ -173,12 +169,12 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
                             }
                         }
                         try {
-                            FileOutputStream out = view.getContext().openFileOutput("DuLieuThongKeThuTien.csv",Context.MODE_PRIVATE);
+                            FileOutputStream out = openFileOutput("DuLieuThongKeThuTien.csv",Context.MODE_PRIVATE);
                             out.write((data.toString()).getBytes());
                             out.close();
 
-                            File fileLocation = new File(view.getContext().getApplicationContext().getFilesDir(),"DuLieuThongKeThuTien.csv");
-                            Uri path = FileProvider.getUriForFile(view.getContext().getApplicationContext(),"com.annguyen.truongmamnon.Fragment",fileLocation);
+                            File fileLocation = new File(getApplicationContext().getFilesDir(),"DuLieuThongKeThuTien.csv");
+                            Uri path = FileProvider.getUriForFile(getApplicationContext(),"com.annguyen.truongmamnon.Fragment",fileLocation);
                             Intent fileIntent = new Intent(Intent.ACTION_SEND);
                             fileIntent.setType("text/csv;charset=UTF-8");
                             fileIntent.putExtra(Intent.EXTRA_SUBJECT,"DuLieuThongKe");
@@ -189,10 +185,10 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
                             e.printStackTrace();
                         }
                     }else {
-                        Toast.makeText(view.getContext(),"Bạn chưa lấy dữ liệu",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(StatisticActivity.this,"Bạn chưa lấy dữ liệu",Toast.LENGTH_SHORT).show();
                     }
                 }else {
-                    Toast.makeText(view.getContext(),"Xin kiểm tra lại kết nối Internet!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StatisticActivity.this,"Xin kiểm tra lại kết nối Internet!",Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -279,6 +275,8 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
                     if (arrayDanhSachHocSinh.get(i).getMaHocSinh().toString().trim().equals(danhHocSinhNopTien.get(j).getMaHocSinh().trim()) && danhHocSinhNopTien.get(j).getTrangThaiThu().trim().equals("1")){
                         an = 1;
                         thongTinThongKe.setMoney(danhHocSinhNopTien.get(j).getSoTien().trim());
+                    }else if (arrayDanhSachHocSinh.get(i).getMaHocSinh().toString().trim().equals(danhHocSinhNopTien.get(j).getMaHocSinh().trim()) && danhHocSinhNopTien.get(j).getTrangThaiThu().trim().equals("0")){
+                        thongTinThongKe.setMoney(danhHocSinhNopTien.get(j).getSoTien().trim());
                     }
                 }
                 thongTinThongKe.setStatusPayment(an);
@@ -328,7 +326,7 @@ public class FragmentTotalLateTime extends Fragment implements View.OnClickListe
 
         @Override
         protected void onPostExecute(ArrayList<String> strings) {
-            arrayAdapterClass = new ArrayAdapter(view.getContext(),android.R.layout.simple_list_item_1,strings);
+            arrayAdapterClass = new ArrayAdapter(StatisticActivity.this,android.R.layout.simple_list_item_1,strings);
             classList.setAdapter(arrayAdapterClass);
             txtLop = classList.getSelectedItem().toString().trim();
             //progressDialog.dismiss();

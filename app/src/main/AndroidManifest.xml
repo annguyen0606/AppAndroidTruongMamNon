@@ -38,6 +38,9 @@
             android:name=".Activity.SettingDeviceActivity"
             android:label="Cài đặt"
             android:parentActivityName=".Activity.MainActivity" />
+        <activity android:name=".Activity.StatisticActivity"></activity>
+        <activity android:name=".Activity.SupportPaymentActivity"></activity>
+        <activity android:name=".Activity.AddAccountActivity"></activity>
         <activity
             android:name=".Activity.ManHinhDangNhapActivity"
             android:label="Trường mầm non">

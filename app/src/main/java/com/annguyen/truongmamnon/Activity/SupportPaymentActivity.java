@@ -1,31 +1,28 @@
-package com.annguyen.truongmamnon.Fragment;
+package com.annguyen.truongmamnon.Activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.annguyen.truongmamnon.Activity.MainActivity;
-import com.annguyen.truongmamnon.Activity.ManHinhDangNhapActivity;
 import com.annguyen.truongmamnon.Controller.DataProvider;
 import com.annguyen.truongmamnon.Controller.SharedPref;
 import com.annguyen.truongmamnon.Model.TrangThaiHocSinhNopTien;
@@ -35,8 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class FragmentSupportPayment extends Fragment implements View.OnClickListener {
-    private View view;
+public class SupportPaymentActivity extends AppCompatActivity implements View.OnClickListener {
     private static String textMaGiaoVien = "";
     private static EditText uidPayment,nameParent, nameStudent, codeStudent, totalMoney, nameTeacher, codeTeacher,
                     reasonPayment, statusPayment;
@@ -48,36 +44,39 @@ public class FragmentSupportPayment extends Fragment implements View.OnClickList
     private SwipeRefreshLayout refreshLayout;
     String phoneNumber = "";
     DataProvider dataProvider;
+    ImageView backMainActivity;
     boolean kiemTraNopTien = false;
-    @Nullable
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_support_payment,container,false);
-        sharedPref = new SharedPref(view.getContext());
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_support_payment);
+        sharedPref = new SharedPref(SupportPaymentActivity.this);
         textMaGiaoVien = SharedPref.get(ManHinhDangNhapActivity.CURRENT_TEACHER,String.class);
         AnhXa();
-        return view;
     }
 
     private void AnhXa() {
-        monthPayment = view.findViewById(R.id.spinnerMonthPaymentSupportPaymentFragment);
-        nameParent = view.findViewById(R.id.edtNameParentSupportPayment);
-        nameStudent = view.findViewById(R.id.edtNameStudentSupportPayment);
-        codeStudent = view.findViewById(R.id.edtCodeStudentSupportPayment);
-        reasonPayment = view.findViewById(R.id.edtReasonSupportPaymentFragment);
-        classStudent = view.findViewById(R.id.tvClassStudentSupportPaymentFragment);
+        monthPayment = findViewById(R.id.spinnerMonthPaymentSupportPaymentFragment);
+        nameParent = findViewById(R.id.edtNameParentSupportPayment);
+        nameStudent = findViewById(R.id.edtNameStudentSupportPayment);
+        codeStudent = findViewById(R.id.edtCodeStudentSupportPayment);
+        reasonPayment = findViewById(R.id.edtReasonSupportPaymentFragment);
+        classStudent = findViewById(R.id.tvClassStudentSupportPaymentFragment);
 
-        totalMoney = view.findViewById(R.id.edtTotalMoneySupportPayment);
-        nameTeacher = view.findViewById(R.id.edtNameTeacherSupportPayment);
-        codeTeacher = view.findViewById(R.id.edtCodeTeacherSupportPayment);
-        statusPayment = view.findViewById(R.id.edtTrangThaiNopTienSupportPaymentFragment);
+        totalMoney = findViewById(R.id.edtTotalMoneySupportPayment);
+        nameTeacher = findViewById(R.id.edtNameTeacherSupportPayment);
+        codeTeacher = findViewById(R.id.edtCodeTeacherSupportPayment);
+        statusPayment = findViewById(R.id.edtTrangThaiNopTienSupportPaymentFragment);
+        backMainActivity = findViewById(R.id.backMainActivityAtSupportPaymentActivity);
 
-        confirm = view.findViewById(R.id.btnConfirmSupportFragment);
+        confirm = findViewById(R.id.btnConfirmSupportFragment);
 
-        uidPayment = view.findViewById(R.id.edtUidParentSupportPayment);
-        refreshLayout = view.findViewById(R.id.pullToGetDataSupportPayment);
+        uidPayment = findViewById(R.id.edtUidParentSupportPayment);
+        refreshLayout = findViewById(R.id.pullToGetDataSupportPayment);
 
-        view.findViewById(R.id.btnConfirmSupportFragment).setOnClickListener(this);
+        findViewById(R.id.btnConfirmSupportFragment).setOnClickListener(this);
+        findViewById(R.id.backMainActivityAtSupportPaymentActivity).setOnClickListener(this);
 
         final ArrayList<String> arraySpinnerMonth = new ArrayList<>();
         arraySpinnerMonth.add("Tháng 1");
@@ -92,7 +91,7 @@ public class FragmentSupportPayment extends Fragment implements View.OnClickList
         arraySpinnerMonth.add("Tháng 10");
         arraySpinnerMonth.add("Tháng 11");
         arraySpinnerMonth.add("Tháng 12");
-        ArrayAdapter arrayAdapterMonth = new ArrayAdapter(view.getContext(),android.R.layout.simple_list_item_1,arraySpinnerMonth);
+        ArrayAdapter arrayAdapterMonth = new ArrayAdapter(SupportPaymentActivity.this,android.R.layout.simple_list_item_1,arraySpinnerMonth);
         monthPayment.setAdapter(arrayAdapterMonth);
 
         monthPayment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -123,23 +122,26 @@ public class FragmentSupportPayment extends Fragment implements View.OnClickList
             ClearDuLieu();
             uidDataSupportPayment = SharedPref.get(ManHinhDangNhapActivity.CURRENT_UID,String.class);
             uidPayment.setText(uidDataSupportPayment);
-            LayThongTinTaiKhoan layThongTinTaiKhoan = new LayThongTinTaiKhoan(view.getContext());
+            LayThongTinTaiKhoan layThongTinTaiKhoan = new LayThongTinTaiKhoan(SupportPaymentActivity.this);
             layThongTinTaiKhoan.execute();
         }else {
-            Toast.makeText(view.getContext(),"Xin kiểm tra lại kết nối Internet",Toast.LENGTH_SHORT).show();
+            Toast.makeText(SupportPaymentActivity.this,"Xin kiểm tra lại kết nối Internet",Toast.LENGTH_SHORT).show();
         }
     }
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.backMainActivityAtSupportPaymentActivity:
+                onBackPressed();
+                break;
             case R.id.btnConfirmSupportFragment:
                 if (MainActivity.kiemTraKetNoiInternet == true){
                     if (!uidPayment.getText().toString().trim().equals("") && !uidPayment.getText().toString().trim().equals("123456")){
                         if (kiemTraNopTien == true){
-                            ConfirmPayment confirmPayment = new ConfirmPayment(view.getContext());
+                            ConfirmPayment confirmPayment = new ConfirmPayment(SupportPaymentActivity.this);
                             confirmPayment.execute();
                         }else {
-                            Toast.makeText(view.getContext(),"Không được thu tiền tài khoản này",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SupportPaymentActivity.this,"Không được thu tiền tài khoản này",Toast.LENGTH_SHORT).show();
                         }
                         /*ConfirmPayment confirmPayment = new ConfirmPayment(view.getContext());
                         confirmPayment.execute(thoiGianKiemTra);*/
@@ -150,10 +152,10 @@ public class FragmentSupportPayment extends Fragment implements View.OnClickList
                     view.getContext().startActivity(intent);*/
                     }
                     else {
-                        Toast.makeText(view.getContext(),"Bạn chưa lấy thông tin",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SupportPaymentActivity.this,"Bạn chưa lấy thông tin",Toast.LENGTH_SHORT).show();
                     }
                 }else {
-                    Toast.makeText(view.getContext(),"Xin kiểm tra lại kết nối Internet!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SupportPaymentActivity.this,"Xin kiểm tra lại kết nối Internet!",Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -250,7 +252,7 @@ public class FragmentSupportPayment extends Fragment implements View.OnClickList
                 }
 
             }else {
-                Toast.makeText(view.getContext(),"Không có dữ liệu thanh toán",Toast.LENGTH_SHORT).show();
+                Toast.makeText(SupportPaymentActivity.this,"Không có dữ liệu thanh toán",Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -258,11 +260,12 @@ public class FragmentSupportPayment extends Fragment implements View.OnClickList
     private class ConfirmPayment extends AsyncTask<Void,Void,Integer>{
         ProgressDialog progressDialog;
         public ConfirmPayment(Context mContext){
-            progressDialog = new ProgressDialog(mContext);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_TRADITIONAL);
         }
         @Override
         protected void onPreExecute() {
             progressDialog.setMessage("Confirming...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
         }
 
@@ -317,10 +320,10 @@ public class FragmentSupportPayment extends Fragment implements View.OnClickList
         @Override
         protected void onPostExecute(Integer integer) {
             if (integer == 1){
-                Toast.makeText(view.getContext(),"Xác nhận thành công",Toast.LENGTH_SHORT).show();
+                Toast.makeText(SupportPaymentActivity.this,"Xác nhận thành công",Toast.LENGTH_SHORT).show();
                 kiemTraNopTien = false;
             }else {
-                Toast.makeText(view.getContext(),"Xác nhận không thành công",Toast.LENGTH_SHORT).show();
+                Toast.makeText(SupportPaymentActivity.this,"Xác nhận không thành công",Toast.LENGTH_SHORT).show();
             }
             ClearDuLieu();
             progressDialog.dismiss();

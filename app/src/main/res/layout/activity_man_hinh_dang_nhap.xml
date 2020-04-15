@@ -71,6 +71,7 @@
                     android:layout_marginTop="5dp"
                     android:text="Nhớ tài khoản"
                     android:textColor="#000"
+                    android:buttonTint="#03A9F4"
                     android:textStyle="bold"></CheckBox>
                 <CheckBox
                     android:id="@+id/chbShowPasswordManHinhDangNhap"
@@ -78,6 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="Hiện mật khẩu"
+                    android:buttonTint="#03A9F4"
                     android:textColor="#000"
                     android:textStyle="bold"></CheckBox>
             </LinearLayout>
@@ -89,7 +91,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/background_button"
                 android:text="Đăng nhập"
-                android:textColor="#F8FFFFFF"
+                android:textColor="#000"
                 android:textStyle="bold"></Button>
         </LinearLayout>
     </LinearLayout>

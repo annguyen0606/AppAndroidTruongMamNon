@@ -5,20 +5,24 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_menu">
         <menu>
-            <item android:title="Đăng xuất"
-                android:id="@+id/logOutMainActivity"
-                app:showAsAction="never"
-                android:orderInCategory="100"
-                android:icon="@drawable/ic_logout"></item>
             <item android:title="Xóa dữ liệu"
-                android:id="@+id/clearmenudanhsachchamthe"
+                android:id="@+id/clearMenu"
                 android:icon="@drawable/ic_clear"></item>
             <item android:title="Cập nhật dữ liệu"
-                android:id="@+id/updateFromDB"
+                android:id="@+id/updateMenu"
                 android:icon="@drawable/ic_update"></item>
+            <item android:title="Nộp tiền"
+                android:id="@+id/paymentMenu"
+                android:icon="@drawable/ic_money_icon"></item>
+            <item android:title="Thống kê"
+                android:id="@+id/statisticMenu"
+                android:icon="@drawable/ic_pie_chart"></item>
             <item android:title="Cài đặt"
-                android:id="@+id/settingDevice"
+                android:id="@+id/settingMenu"
                 android:icon="@drawable/ic_settings_black"></item>
+            <item android:title="Đăng xuất"
+                android:id="@+id/logOutMenu"
+                android:icon="@drawable/ic_logout"></item>
         </menu>
     </item>
 </menu>

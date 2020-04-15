@@ -2,12 +2,15 @@ package com.annguyen.truongmamnon.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -175,7 +178,7 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
         ProgressDialog progressDialog;
 
         public LoadDataFromDataBase(Context mContext) {
-            progressDialog = new ProgressDialog(mContext);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_TRADITIONAL);
         }
 
         @Override

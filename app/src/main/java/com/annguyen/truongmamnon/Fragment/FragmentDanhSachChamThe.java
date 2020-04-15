@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -36,7 +37,7 @@ public class FragmentDanhSachChamThe extends Fragment{
     private SharedPref sharedPref; //Class de moc du lieu tu SharedPreferences
     private static String textLop = "";//Chua ten lop de tac dong
     private static DiaryTapAdapter nhatKyChamTheAdapter;//Adapter de do du lieu tu bang arrayHocSinh vao List view
-    private static ImageView imageViewBackground;//Logo conek
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,7 +62,6 @@ public class FragmentDanhSachChamThe extends Fragment{
     private void AnhXa() {
         refreshLayout = view.findViewById(R.id.pullToRefreshNhatKyChamThe);
         listViewHocSinh = view.findViewById(R.id.lvListNhatKyChamTheActivity);
-        imageViewBackground = view.findViewById(R.id.backgroundFragmentDanhSachChamThe);
 
         nhatKyChamTheAdapter = new DiaryTapAdapter(view.getContext(),R.layout.dong_du_lieu_fragment_danh_sach_cham_the,arrayHocSinh);
         listViewHocSinh.setAdapter(nhatKyChamTheAdapter);
@@ -124,7 +124,6 @@ public class FragmentDanhSachChamThe extends Fragment{
         /*Neu co du lieu thi an logo conek di
         * Moc tat ca cac data can thiet tu table ThongTinNguoiThan roi do bao mang arrayHocSinh*/
         if (arrayData.size() > 0){
-            imageViewBackground.setVisibility(View.INVISIBLE);
             int index = 0;
             for (String str : arrayData){
                 Cursor dataNT = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinNguoiThan WHERE Uid = '"+str+"'");
@@ -146,7 +145,6 @@ public class FragmentDanhSachChamThe extends Fragment{
                 index++;
             }
         }else {
-            imageViewBackground.setVisibility(View.VISIBLE);
         }
         nhatKyChamTheAdapter.notifyDataSetChanged();
         return countConfirmTakeStudent;

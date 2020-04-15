@@ -10,7 +10,7 @@
         android:layout_weight="1.6"
         android:id="@+id/tvCodeFragmentTotalLateMinute"
         android:layout_width="match_parent"
-        android:textColor="#F8FFFFFF"
+        android:textColor="#000"
         android:textSize="15sp"
         android:gravity="start"
         android:layout_height="wrap_content"></TextView>
@@ -18,14 +18,14 @@
         android:id="@+id/tvNameFragmentTotalLateMinute"
         android:textSize="15sp"
         android:layout_weight="1.3"
-        android:textColor="#F8FFFFFF"
+        android:textColor="#000"
         android:gravity="start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></TextView>
     <TextView
         android:textSize="15sp"
         android:layout_weight="1.8"
-        android:textColor="#F8FFFFFF"
+        android:textColor="#000"
         android:gravity="start"
         android:id="@+id/tvMinuteFragmentTotalLateMinute"
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
         android:textSize="15sp"
         android:gravity="start"
         android:layout_weight="1.5"
-        android:textColor="#F8FFFFFF"
+        android:textColor="#000"
         android:id="@+id/tvMoneyFragmentTotalLateMinute"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></TextView>

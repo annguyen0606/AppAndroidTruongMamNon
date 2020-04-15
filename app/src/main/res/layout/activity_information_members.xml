@@ -8,6 +8,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.InformationMembersActivity">
+    <ImageView
+        android:id="@+id/backMainActivityAtInforActivity"
+        android:layout_alignParentLeft="true"
+        android:layout_width="30dp"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_back_black_24dp"
+        android:layout_height="30dp"></ImageView>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/containerImagePeople"
         android:layout_width="match_parent"
@@ -410,7 +417,7 @@
                 android:background="@drawable/background_button"
                 android:text="Xác nhận"
                 android:textAllCaps="false"
-                android:textColor="#F8FFFFFF"></Button>
+                android:textColor="#000"></Button>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

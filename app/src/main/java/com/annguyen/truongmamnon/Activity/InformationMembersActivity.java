@@ -3,6 +3,7 @@ package com.annguyen.truongmamnon.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +53,7 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
     DataProvider dataProvider; //Class de moc data tu database sql server
     String dateStr = ""; //Bien luu tru ngay
     String txtUid = "";
+    ImageView backToMainActivity;
 
     boolean kiemTraKetNoiInternet = false;
     @Override
@@ -199,6 +202,8 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
         thoiGianMuon = findViewById(R.id.txtThoiGianDonConMuonMembersActivity);
         confirmTakeStudent = findViewById(R.id.btnConfirmImformationActivity);
 
+        backToMainActivity = findViewById(R.id.backMainActivityAtInforActivity);
+
         circleImageViewParent = findViewById(R.id.circleViewParentFragmentInformation);
         circleImageViewStudent = findViewById(R.id.circleViewStudentFragmentInformation);
         circleImageViewParent2 = findViewById(R.id.circleViewParent2FragmentInformation);
@@ -208,6 +213,7 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
         circleImageViewCheckParent3 = findViewById(R.id.circleViewCheck3ParentFragmentInformation);
         //Khoi tao su kien cho button
         findViewById(R.id.btnConfirmImformationActivity).setOnClickListener(this);
+        findViewById(R.id.backMainActivityAtInforActivity).setOnClickListener(this);
     }
 
     @Override
@@ -223,18 +229,23 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
                     Toast.makeText(InformationMembersActivity.this,"Xin kiểm tra lại Internet!",Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.backMainActivityAtInforActivity:
+                //startActivity(new Intent(InformationMembersActivity.this,MainActivity.class));
+                onBackPressed();
+                break;
         }
     }
     /*Class de insert du lieu vao Database sql server khi nguoi dung bam xac nhan*/
     private class InsertIntoDataBase extends AsyncTask<Integer,Void,Integer> {
         ProgressDialog progressDialog;
         public InsertIntoDataBase(Context mContext) {
-            progressDialog = new ProgressDialog(mContext);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_TRADITIONAL);
         }
 
         @Override
         protected void onPreExecute() {
             progressDialog.setMessage("Please wait...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
         }
 
