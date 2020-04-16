@@ -5,11 +5,27 @@
     android:padding="10dp"
     android:background="@drawable/background_login"
     android:layout_height="match_parent">
-    <ImageView
-        android:id="@+id/backMainActivityAtSupportPaymentActivity"
-        android:src="@drawable/ic_back_black_24dp"
-        android:layout_width="30dp"
-        android:layout_height="30dp"></ImageView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/backMainActivityAtSupportPaymentActivity"
+            android:src="@drawable/ic_back_black_24dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"></ImageView>
+        <ImageView
+            android:src="@drawable/ic_canhcay"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></ImageView>
+        <ImageView
+            android:src="@drawable/ic_canhcay2"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"></ImageView>
+    </LinearLayout>
     <FrameLayout
         android:padding="20dp"
         android:layout_width="match_parent"
@@ -31,20 +47,21 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:orientation="vertical">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/circleHinhAnhHocSinhSupportPaymentActivity"
+                        android:layout_gravity="center"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"></de.hdodenhof.circleimageview.CircleImageView>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <ImageView
-                            android:src="@drawable/ic_card"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"></ImageView>
-
                         <EditText
                             android:id="@+id/edtUidParentSupportPayment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
+                            android:drawableLeft="@drawable/ic_card"
                             android:gravity="center"
                             android:textColor="#000"
                             android:hint="123456"
@@ -55,18 +72,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
-                        <ImageView
-                            android:src="@drawable/ic_account"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"></ImageView>
-
                         <EditText
                             android:id="@+id/edtNameParentSupportPayment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:gravity="center"
+                            android:drawableLeft="@drawable/ic_account"
                             android:textColor="#000"
                             android:hint="Nguyễn Văn A"
                             android:textStyle="italic"></EditText>
@@ -76,18 +88,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
-                        <ImageView
-                            android:src="@drawable/ic_account"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"></ImageView>
-
                         <EditText
                             android:id="@+id/edtNameStudentSupportPayment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:textColor="#000"
+                            android:drawableLeft="@drawable/ic_account"
                             android:gravity="center"
                             android:hint="Nguyễn Văn B"
                             android:textStyle="italic"></EditText>
@@ -97,17 +104,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
-                        <ImageView
-                            android:src="@drawable/ic_card"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"></ImageView>
-
                         <EditText
                             android:id="@+id/edtCodeStudentSupportPayment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
+                            android:drawableLeft="@drawable/ic_card"
                             android:gravity="center"
                             android:textColor="#000"
                             android:hint="Mã học sinh"
@@ -119,18 +121,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
-                        <ImageView
-                            android:src="@drawable/ic_school_black_24dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"></ImageView>
-
                         <TextView
                             android:id="@+id/tvClassStudentSupportPaymentFragment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:layout_marginBottom="20dp"
                             android:textColor="#000"
+                            android:padding="3dp"
+                            android:drawableLeft="@drawable/ic_school_black_24dp"
                             android:gravity="center"
                             android:textAlignment="center"></TextView>
                     </LinearLayout>
@@ -142,8 +140,8 @@
                         <ImageView
                             android:src="@drawable/ic_date_range"
                             android:layout_width="wrap_content"
+                            android:layout_marginLeft="3dp"
                             android:layout_height="match_parent"></ImageView>
-
                         <LinearLayout
                             android:orientation="vertical"
                             android:layout_width="match_parent"
@@ -162,17 +160,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
-                        <ImageView
-                            android:src="@drawable/ic_attach_money"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"></ImageView>
-
                         <EditText
                             android:id="@+id/edtTotalMoneySupportPayment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
+                            android:drawableLeft="@drawable/ic_attach_money"
                             android:hint="660000"
                             android:focusable="false"
                             android:textColor="#000"
@@ -185,17 +178,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
-                        <ImageView
-                            android:src="@drawable/ic_account"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"></ImageView>
-
                         <EditText
                             android:id="@+id/edtNameTeacherSupportPayment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
+                            android:drawableLeft="@drawable/ic_account"
                             android:textColor="#000"
                             android:gravity="center"
                             android:hint="Nguyễn Văn C"
@@ -206,18 +194,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
-                        <ImageView
-                            android:src="@drawable/ic_card"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"></ImageView>
-
                         <EditText
                             android:id="@+id/edtCodeTeacherSupportPayment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:textColor="#000"
+                            android:drawableLeft="@drawable/ic_card"
                             android:gravity="center"
                             android:hint="Mã số người thu tiền"
                             android:textStyle="italic"></EditText>
@@ -227,17 +210,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
-                        <ImageView
-                            android:src="@drawable/ic_info_black_24dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"></ImageView>
-
                         <EditText
                             android:id="@+id/edtReasonSupportPaymentFragment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
+                            android:drawableLeft="@drawable/ic_info_black_24dp"
                             android:textColor="#000"
                             android:focusable="false"
                             android:hint="Lý do nộp tiền"
@@ -248,17 +226,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
-                        <ImageView
-                            android:src="@drawable/ic_info_black_24dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"></ImageView>
-
                         <EditText
                             android:id="@+id/edtTrangThaiNopTienSupportPaymentFragment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
+                            android:drawableLeft="@drawable/ic_info_black_24dp"
                             android:textColor="#000"
                             android:focusable="false"
                             android:hint="Trạng thái nộp tiền"

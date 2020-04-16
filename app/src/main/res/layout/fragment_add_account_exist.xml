@@ -77,14 +77,11 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_card"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <EditText
                                     android:id="@+id/edtUidParentAddAccountFragmentExist"
                                     android:layout_width="wrap_content"
                                     android:hint="123456"
+                                    android:drawableLeft="@drawable/ic_card"
                                     android:focusable="false"
                                     android:textStyle="italic"
                                     android:textColor="#000"
@@ -102,14 +99,11 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_account"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <EditText
                                     android:id="@+id/edtNameParentAddAccountFragmentExist"
                                     android:layout_width="match_parent"
                                     android:singleLine="true"
+                                    android:drawableLeft="@drawable/ic_account"
                                     android:textColor="#000"
                                     android:hint="Nguyễn Văn A"
                                     android:textStyle="italic"
@@ -120,13 +114,10 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_place_black_24dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <EditText
                                     android:id="@+id/edtAddressParentAddAccountFragmentExist"
                                     android:gravity="center"
+                                    android:drawableLeft="@drawable/ic_place_black_24dp"
                                     android:hint="Địa chỉ phụ huynh"
                                     android:textStyle="italic"
                                     android:maxLength="50"
@@ -139,13 +130,10 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_local_phone"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <EditText
                                     android:id="@+id/edtPhoneParentAddAccountFragmentExist"
                                     android:gravity="center"
+                                    android:drawableLeft="@drawable/ic_local_phone"
                                     android:inputType="numberSigned"
                                     android:maxLength="10"
                                     android:textColor="#000"
@@ -160,14 +148,11 @@
                                 android:paddingBottom="5dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_people_outline"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <EditText
                                     android:id="@+id/edtRelavtiveParentAddAccountFragmentExist"
                                     android:gravity="center"
                                     android:hint="Ông/bà/bố,me/..."
+                                    android:drawableLeft="@drawable/ic_people_outline"
                                     android:singleLine="true"
                                     android:textColor="#000"
                                     android:textStyle="italic"
@@ -179,12 +164,9 @@
                                 android:paddingBottom="15dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_card"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <TextView
                                     android:hint="14020001"
+                                    android:drawableLeft="@drawable/ic_card"
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:textSize="18sp"
@@ -222,14 +204,11 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_date_range"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <TextView
                                     android:hint="dd/mm/yyy"
                                     android:gravity="center"
                                     android:textSize="18sp"
+                                    android:drawableLeft="@drawable/ic_date_range"
                                     android:textColor="#000"
                                     android:id="@+id/tvDateOfBirthStudentAddAccountFragmentExist"
                                     android:layout_width="match_parent"
@@ -240,14 +219,11 @@
                                 android:paddingBottom="15dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_school_black_24dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <TextView
                                     android:hint="HN"
                                     android:layout_gravity="center"
                                     android:textSize="18sp"
+                                    android:drawableLeft="@drawable/ic_school_black_24dp"
                                     android:gravity="center"
                                     android:textColor="#000"
                                     android:textStyle="italic"
@@ -260,17 +236,13 @@
                                 android:paddingBottom="15dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_sex"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
-
                                 <TextView
                                     android:hint="Nam"
                                     android:textSize="18sp"
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:textColor="#000"
+                                    android:drawableLeft="@drawable/ic_sex"
                                     android:textStyle="italic"
                                     android:id="@+id/tvSexStudentAddAccountExist"
                                     android:layout_width="match_parent"
@@ -281,14 +253,11 @@
                                 android:paddingBottom="15dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_place_black_24dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <TextView
                                     android:hint="Hà Nội"
                                     android:layout_gravity="center"
                                     android:gravity="center"
+                                    android:drawableLeft="@drawable/ic_place_black_24dp"
                                     android:textColor="#000"
                                     android:textSize="18sp"
                                     android:textStyle="italic"

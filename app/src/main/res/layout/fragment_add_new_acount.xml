@@ -99,15 +99,12 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_card"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <EditText
                                     android:id="@+id/edtUidParentAddAccountFragment"
                                     android:layout_width="wrap_content"
                                     android:hint="123456"
                                     android:textColor="#000"
+                                    android:drawableLeft="@drawable/ic_card"
                                     android:focusable="false"
                                     android:textStyle="italic"
                                     android:layout_weight="2.5"
@@ -123,14 +120,11 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_account"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <EditText
                                     android:id="@+id/edtNameParentAddAccountFragment"
                                     android:layout_width="match_parent"
                                     android:singleLine="true"
+                                    android:drawableLeft="@drawable/ic_account"
                                     android:textColor="#000"
                                     android:hint="Nguyễn Văn A"
                                     android:textStyle="italic"
@@ -141,13 +135,10 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_place_black_24dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <EditText
                                     android:id="@+id/edtAddressParentAddAccountFragment"
                                     android:gravity="center"
+                                    android:drawableLeft="@drawable/ic_place_black_24dp"
                                     android:hint="Địa chỉ phụ huynh"
                                     android:textStyle="italic"
                                     android:textColor="#000"
@@ -160,16 +151,13 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_local_phone"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <EditText
                                     android:id="@+id/edtPhoneParentAddAccountFragment"
                                     android:gravity="center"
                                     android:inputType="numberSigned"
                                     android:maxLength="10"
                                     android:textColor="#000"
+                                    android:drawableLeft="@drawable/ic_local_phone"
                                     android:singleLine="true"
                                     android:hint="0987654321"
                                     android:textStyle="italic"
@@ -180,14 +168,11 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_people_outline"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <EditText
                                     android:id="@+id/edtRelavtiveParentAddAccountFragment"
                                     android:gravity="center"
                                     android:hint="Ông/bà/bố,me/..."
+                                    android:drawableLeft="@drawable/ic_people_outline"
                                     android:textColor="#000"
                                     android:singleLine="true"
                                     android:textStyle="italic"
@@ -199,15 +184,12 @@
                                 android:weightSum="3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_card"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <EditText
                                     android:id="@+id/edtCodeStudentAddAccountFragment"
                                     android:layout_width="wrap_content"
                                     android:hint="14020001"
                                     android:textColor="#000"
+                                    android:drawableLeft="@drawable/ic_card"
                                     android:singleLine="true"
                                     android:textStyle="italic"
                                     android:gravity="center"
@@ -226,13 +208,10 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_account"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <EditText
                                     android:id="@+id/edtNameStudentAddAccountFragment"
                                     android:hint="Nguyễn Văn B"
+                                    android:drawableLeft="@drawable/ic_account"
                                     android:textStyle="italic"
                                     android:singleLine="true"
                                     android:textColor="#000"
@@ -246,12 +225,8 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:id="@+id/imgPicDataAddAccountFragment"
-                                    android:src="@drawable/ic_date_range"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <TextView
+                                    android:drawableLeft="@drawable/ic_date_range"
                                     android:hint="dd/mm/yyy"
                                     android:gravity="center"
                                     android:textColor="#000"
@@ -264,16 +239,13 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_school_black_24dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <LinearLayout
                                     android:orientation="horizontal"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
                                     <TextView
                                         android:hint="Class"
+                                        android:drawableLeft="@drawable/ic_school_black_24dp"
                                         android:textStyle="italic"
                                         android:textSize="18sp"
                                         android:textColor="#000"
@@ -310,13 +282,10 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <ImageView
-                                    android:src="@drawable/ic_place_black_24dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"></ImageView>
                                 <EditText
                                     android:id="@+id/edtAddressStudentAddAccountFragment"
                                     android:maxLength="50"
+                                    android:drawableLeft="@drawable/ic_place_black_24dp"
                                     android:gravity="center"
                                     android:hint="Địa chỉ học sinh"
                                     android:singleLine="true"

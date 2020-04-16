@@ -9,20 +9,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -51,7 +46,7 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
 
     private EditText userName, passWord; //Edit text luu username va password
     private Button loginSystem; //Button login
-    private CheckBox hideShowPass,saveDataPref; //Check box cho phep luu thong tin dang nhap va hien thi mat khau dang nhap
+    private CheckBox saveDataPref; //Check box cho phep luu thong tin dang nhap va hien thi mat khau dang nhap
     private static SharedPref sharedPref; //Class luu mot vai thong tin nhu voi SharedPreferences
     private Context context; // bien context
 
@@ -117,7 +112,6 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
         userName = findViewById(R.id.edtUserNameManHinhDangNhap);
         passWord = findViewById(R.id.edtPasswordManHinhDangNhap);
         loginSystem = findViewById(R.id.btnLoginSystemManHinhDangNhap);
-        hideShowPass = findViewById(R.id.chbShowPasswordManHinhDangNhap);
         saveDataPref = findViewById(R.id.chbNhoThongTinDangNhapManHinhDangNhap);
         /*Lay username va password va checkbox save data da luu*/
         userName.setText(SharedPref.get(CURRENT_NAME,String.class));
@@ -127,23 +121,6 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
         findViewById(R.id.btnLoginSystemManHinhDangNhap).setOnClickListener(this);
         /*
         * Bat su kien khi nguoi dung checkbox vao show pass*/
-        hideShowPass.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int start, end;
-                if (isChecked){
-                    start= passWord.getSelectionStart();
-                    end= passWord.getSelectionEnd();
-                    passWord.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                    passWord.setSelection(start,end);
-                }else {
-                    start= passWord.getSelectionStart();
-                    end= passWord.getSelectionEnd();
-                    passWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    passWord.setSelection(start,end);
-                }
-            }
-        });
     }
     /*Luu thong tin username va password*/
     void CheckSave(){
@@ -178,7 +155,7 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
         ProgressDialog progressDialog;
 
         public LoadDataFromDataBase(Context mContext) {
-            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_TRADITIONAL);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_HOLO_DARK);
         }
 
         @Override

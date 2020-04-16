@@ -114,7 +114,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
     void RefreshDataClass(){
         if (MainActivity.kiemTraKetNoiInternet == true){
             if (classList.getCount() == 0){
-                GetClassList getClassList = new GetClassList(StatisticActivity.this);
+                GetClassList getClassList = new GetClassList();
                 getClassList.execute();
             }else {
                 txtLop = classList.getSelectedItem().toString().trim();
@@ -125,12 +125,10 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                 case 3:
                     if (classList.getCount() > 0){
                         if (classList.getSelectedItem().toString().trim().equals(txtMaLop)){
-                            //Toast.makeText(view.getContext(),txtLop,Toast.LENGTH_SHORT).show();
                             arrayDanhSachHocSinh = new ArrayList<>();
                             arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+txtMaLop+"'");
-                            LayThongTinTuDB layThongTinTuDB = new LayThongTinTuDB(StatisticActivity.this);
+                            LayThongTinTuDB layThongTinTuDB = new LayThongTinTuDB();
                             layThongTinTuDB.execute(txtMaLop);
-                            //Toast.makeText(view.getContext(),arrayThongTinThongKe.get(1).getUid().toString().trim(),Toast.LENGTH_SHORT).show();
                         }else {
                             Toast.makeText(StatisticActivity.this,"Bạn không thể xem dữ liệu lớp khác",Toast.LENGTH_SHORT).show();
                         }
@@ -139,7 +137,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                 case 2:
                     arrayDanhSachHocSinh = new ArrayList<>();
                     arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+txtLop+"'");
-                    LayThongTinTuDB layThongTinTuDB = new LayThongTinTuDB(StatisticActivity.this);
+                    LayThongTinTuDB layThongTinTuDB = new LayThongTinTuDB();
                     layThongTinTuDB.execute(txtLop);
                     break;
             }
@@ -195,16 +193,12 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
     }
 
     private class LayThongTinTuDB extends AsyncTask<String,Void,ArrayList<ThongTinThongKe>> {
-        //ProgressDialog progressDialog;
-
-        public LayThongTinTuDB(Context mContext) {
-            //progressDialog = new ProgressDialog(mContext);
+        public LayThongTinTuDB() {
         }
 
         @SuppressLint("WrongThread")
         @Override
         protected ArrayList<ThongTinThongKe> doInBackground(String... strings) {
-            String dateTime = "";
             String dateTime2 = "";
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
             String date = dateFormat.format(new Date());
@@ -212,57 +206,45 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
 
             switch (monthList.getSelectedItemPosition()){
                 case 0:
-                    dateTime = date + "/01";
                     dateTime2 = "01/" + date;
                     break;
                 case 1:
-                    dateTime = date + "/02";
                     dateTime2 = "02/" + date;
                     break;
                 case 2:
-                    dateTime = date + "/03";
                     dateTime2 = "03/" + date;
                     break;
                 case 3:
-                    dateTime = date + "/04";
                     dateTime2 = "04/" + date;
                     break;
                 case 4:
-                    dateTime = date + "/05";
                     dateTime2 = "05/" + date;
                     break;
                 case 5:
-                    dateTime = date + "/06";
                     dateTime2 = "06/" + date;
                     break;
                 case 6:
-                    dateTime = date + "/07";
                     dateTime2 = "07/" + date;
                     break;
                 case 7:
-                    dateTime = date + "/08";
                     dateTime2 = "08/" + date;
                     break;
                 case 8:
-                    dateTime = date + "/09";
                     dateTime2 = "09/" + date;
                     break;
                 case 9:
-                    dateTime = date + "/10";
                     dateTime2 = "10/" + date;
                     break;
                 case 10:
-                    dateTime = date + "/11";
                     dateTime2 = "11/" + date;
                     break;
                 case 11:
-                    dateTime = date + "/12";
                     dateTime2 = "12/" + date;
                     break;
             }
 
             for (int i = 0; i < arrayDanhSachHocSinh.size(); i++){
-                arrayPhut.add(dataProvider.getInstance().GetLateMinuteFromMaHs(arrayDanhSachHocSinh.get(i).getMaHocSinh(),dateTime));
+                arrayPhut.add(dataProvider.getInstance().GetLateMinuteFromMaHs(arrayDanhSachHocSinh.get(i).getMaHocSinh(),dateTime2));
             }
             ArrayList<TrangThaiHocSinhNopTien> danhHocSinhNopTien = dataProvider.getInstance().LayDanhSachHocSinhNopTien(txtLop,dateTime2);
             for (int i = 0; i < arrayDanhSachHocSinh.size(); i++){
@@ -287,22 +269,17 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
 
         @Override
         protected void onPreExecute() {
-            //progressDialog.setMessage("Please wait...");
-            //progressDialog.show();
         }
 
         @Override
         protected void onPostExecute(ArrayList<ThongTinThongKe> thongTinThongKes) {
             totalLateTimeAdapter.notifyDataSetChanged();
-            //progressDialog.dismiss();
         }
     }
 
     private class GetClassList extends AsyncTask<Void,Void,ArrayList<String>> {
-        //ProgressDialog progressDialog;
 
-        public GetClassList(Context mContext) {
-            //progressDialog = new ProgressDialog(mContext);
+        public GetClassList() {
         }
 
         @SuppressLint("WrongThread")
@@ -320,8 +297,6 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
 
         @Override
         protected void onPreExecute() {
-            /*progressDialog.setMessage("Please wait...");
-            progressDialog.show();*/
         }
 
         @Override
@@ -329,7 +304,6 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
             arrayAdapterClass = new ArrayAdapter(StatisticActivity.this,android.R.layout.simple_list_item_1,strings);
             classList.setAdapter(arrayAdapterClass);
             txtLop = classList.getSelectedItem().toString().trim();
-            //progressDialog.dismiss();
         }
     }
 }

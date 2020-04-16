@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,6 +34,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class SupportPaymentActivity extends AppCompatActivity implements View.OnClickListener {
     private static String textMaGiaoVien = "";
     private static EditText uidPayment,nameParent, nameStudent, codeStudent, totalMoney, nameTeacher, codeTeacher,
@@ -45,13 +49,16 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
     String phoneNumber = "";
     DataProvider dataProvider;
     ImageView backMainActivity;
+    CircleImageView circleImageStudent;
     boolean kiemTraNopTien = false;
+    byte[] byteImageStudent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_support_payment);
         sharedPref = new SharedPref(SupportPaymentActivity.this);
+        byteImageStudent = new byte[0];
         textMaGiaoVien = SharedPref.get(ManHinhDangNhapActivity.CURRENT_TEACHER,String.class);
         AnhXa();
     }
@@ -69,7 +76,7 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
         codeTeacher = findViewById(R.id.edtCodeTeacherSupportPayment);
         statusPayment = findViewById(R.id.edtTrangThaiNopTienSupportPaymentFragment);
         backMainActivity = findViewById(R.id.backMainActivityAtSupportPaymentActivity);
-
+        circleImageStudent = findViewById(R.id.circleHinhAnhHocSinhSupportPaymentActivity);
         confirm = findViewById(R.id.btnConfirmSupportFragment);
 
         uidPayment = findViewById(R.id.edtUidParentSupportPayment);
@@ -94,16 +101,6 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
         ArrayAdapter arrayAdapterMonth = new ArrayAdapter(SupportPaymentActivity.this,android.R.layout.simple_list_item_1,arraySpinnerMonth);
         monthPayment.setAdapter(arrayAdapterMonth);
 
-        monthPayment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                reasonPayment.setText("Thanh toán tiền học " + arraySpinnerMonth.get(position).trim());
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -122,7 +119,7 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
             ClearDuLieu();
             uidDataSupportPayment = SharedPref.get(ManHinhDangNhapActivity.CURRENT_UID,String.class);
             uidPayment.setText(uidDataSupportPayment);
-            LayThongTinTaiKhoan layThongTinTaiKhoan = new LayThongTinTaiKhoan(SupportPaymentActivity.this);
+            LayThongTinTaiKhoan layThongTinTaiKhoan = new LayThongTinTaiKhoan();
             layThongTinTaiKhoan.execute();
         }else {
             Toast.makeText(SupportPaymentActivity.this,"Xin kiểm tra lại kết nối Internet",Toast.LENGTH_SHORT).show();
@@ -162,38 +159,14 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
     }
     /*Lay tong cong so phut muon*/
     private class LayThongTinTaiKhoan extends AsyncTask<Integer,Void,ArrayList<TrangThaiHocSinhNopTien>> {
-        //ProgressDialog progressDialog;
-
-        public LayThongTinTaiKhoan(Context mContext) {
-            //progressDialog = new ProgressDialog(mContext);
+        public LayThongTinTaiKhoan() {
         }
         @Override
         protected void onPreExecute() {
-            //progressDialog.setMessage("Please wait...");
-            //progressDialog.show();
         }
         @SuppressLint("WrongThread")
         @Override
         protected ArrayList<TrangThaiHocSinhNopTien> doInBackground(Integer... integers) {
-            if (!uidDataSupportPayment.equals("")){
-                Cursor DataTeacher = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinGiaoVien WHERE MaGV = '"+textMaGiaoVien+"'");
-                while (DataTeacher.moveToNext()){
-                    nameTeacher.setText(DataTeacher.getString(2));
-                    codeTeacher.setText(DataTeacher.getString(1));
-                }
-                Cursor DataNT = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinNguoiThan WHERE Uid = '"+uidPayment.getText().toString().trim()+"'");
-                while (DataNT.moveToNext()){
-                    nameParent.setText(DataNT.getString(2));
-                    codeStudent.setText(DataNT.getString(5));
-                    phoneNumber = DataNT.getString(6);
-                }
-
-                Cursor DataHS = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinHocSinh WHERE MaHs = '"+codeStudent.getText().toString().trim()+"'");
-                while (DataHS.moveToNext()){
-                    nameStudent.setText(DataHS.getString(2));
-                    classStudent.setText(DataHS.getString(4));
-                }
-            }
             String dateTime = "";
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
             String date = dateFormat.format(new Date());
@@ -241,6 +214,30 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
 
         @Override
         protected void onPostExecute(ArrayList<TrangThaiHocSinhNopTien> trangThaiHocSinhNopTiens) {
+            reasonPayment.setText("Thanh toán tiền học " + monthPayment.getSelectedItem().toString().trim());
+            if (!uidDataSupportPayment.equals("")){
+                Cursor DataTeacher = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinGiaoVien WHERE MaGV = '"+textMaGiaoVien+"'");
+                while (DataTeacher.moveToNext()){
+                    nameTeacher.setText(DataTeacher.getString(2));
+                    codeTeacher.setText(DataTeacher.getString(1));
+                }
+                Cursor DataNT = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinNguoiThan WHERE Uid = '"+uidPayment.getText().toString().trim()+"'");
+                while (DataNT.moveToNext()){
+                    nameParent.setText(DataNT.getString(2));
+                    codeStudent.setText(DataNT.getString(5));
+                    phoneNumber = DataNT.getString(6);
+                }
+
+                Cursor DataHS = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinHocSinh WHERE MaHs = '"+codeStudent.getText().toString().trim()+"'");
+                while (DataHS.moveToNext()){
+                    nameStudent.setText(DataHS.getString(2));
+                    classStudent.setText(DataHS.getString(4));
+                    byteImageStudent = DataHS.getBlob(7);
+                }
+            }
+            Bitmap decodebitmap = BitmapFactory.decodeByteArray(byteImageStudent,
+                    0, byteImageStudent.length);
+            circleImageStudent.setImageBitmap(decodebitmap);
             if (trangThaiHocSinhNopTiens.size() > 0){
                 totalMoney.setText(trangThaiHocSinhNopTiens.get(0).getSoTien());
                 if (trangThaiHocSinhNopTiens.get(0).getTrangThaiThu().toString().trim().equals("0")){
@@ -260,12 +257,11 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
     private class ConfirmPayment extends AsyncTask<Void,Void,Integer>{
         ProgressDialog progressDialog;
         public ConfirmPayment(Context mContext){
-            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_TRADITIONAL);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_HOLO_DARK);
         }
         @Override
         protected void onPreExecute() {
             progressDialog.setMessage("Confirming...");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
         }
 

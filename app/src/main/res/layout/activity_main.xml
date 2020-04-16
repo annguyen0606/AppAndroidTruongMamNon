@@ -10,23 +10,39 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
-            android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/tvNameMainActivity"
-                android:text="Xin chào An Nguyễn"
-                android:gravity="center"
-                android:textColor="#000"
-                android:textStyle="bold"
-                android:layout_alignParentTop="true"
-                android:textSize="18sp"
+            <LinearLayout
+                android:id="@+id/layoutTitleWelcome"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"></TextView>
+                android:padding="5dp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@drawable/ic_canhcay"
+                    android:layout_weight="1.2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></ImageView>
+                <TextView
+                    android:id="@+id/tvNameMainActivity"
+                    android:text="Xin chào An Nguyễn"
+                    android:textColor="#000"
+                    android:layout_weight="0.6"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"></TextView>
+                <ImageView
+                    android:src="@drawable/ic_canhcay2"
+                    android:layout_weight="1.2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></ImageView>
+            </LinearLayout>
+
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/mainViewpagerMainActivity"
                 android:layout_width="match_parent"
-                android:layout_below="@id/tvNameMainActivity"
+                android:layout_below="@id/layoutTitleWelcome"
                 android:layout_height="match_parent"
                 android:layout_above="@id/myTabLayout"
                 android:layout_marginBottom="-4dp"></androidx.viewpager.widget.ViewPager>
@@ -62,7 +78,8 @@
             android:id="@+id/navigationMenu"
             android:layout_gravity="start|left"
             app:menu="@menu/menumainactivity"
-            android:layout_height="match_parent"></com.google.android.material.navigation.NavigationView>
+            android:layout_height="match_parent">
+        </com.google.android.material.navigation.NavigationView>
     </androidx.drawerlayout.widget.DrawerLayout>
 
 </RelativeLayout>

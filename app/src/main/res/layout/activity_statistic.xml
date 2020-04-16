@@ -5,13 +5,30 @@
     android:padding="10dp"
     android:background="@drawable/background_login"
     android:layout_height="match_parent">
-    <ImageView
-        android:id="@+id/backMainActivityAtStatisticActivity"
-        android:src="@drawable/ic_back_black_24dp"
-        android:layout_width="30dp"
-        android:layout_height="30dp"></ImageView>
+
+    <LinearLayout
+        android:id="@+id/layoutTitleWelcomeStatistic"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/backMainActivityAtStatisticActivity"
+            android:src="@drawable/ic_back_black_24dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"></ImageView>
+        <ImageView
+            android:src="@drawable/ic_canhcay"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></ImageView>
+        <ImageView
+            android:src="@drawable/ic_canhcay2"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"></ImageView>
+    </LinearLayout>
     <FrameLayout
-        android:layout_below="@+id/backMainActivityAtStatisticActivity"
+        android:layout_below="@+id/layoutTitleWelcomeStatistic"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView

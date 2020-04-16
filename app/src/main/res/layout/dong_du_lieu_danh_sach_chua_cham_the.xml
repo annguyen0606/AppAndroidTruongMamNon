@@ -15,7 +15,7 @@
             android:id="@+id/circleHinhAnhDongDuLieuLayout"
             android:layout_width="45dp"
             app:civ_border_width="2dp"
-            app:civ_border_color="#AF4C58"
+            app:civ_border_color="#607D8B"
             android:layout_marginLeft="30dp"
             android:layout_height="45dp"></de.hdodenhof.circleimageview.CircleImageView>
         <LinearLayout

@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
         tabLayout.setupWithViewPager(viewPager);
         //tabLayout.getTabAt(0).getOrCreateBadge().setNumber(100);
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_conek2);
-        tabLayout.getTabAt(1).setIcon(R.drawable.gettime);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_access_time_black_24dp);
 
         /*Tat ca Ringtone khi khoi tao Activity*/
         UdpManage.stopSound();
@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
     private class ClearThongTinDonCong extends AsyncTask<Void,Void,Void>{
         ProgressDialog progressDialog;
         public ClearThongTinDonCong(Context mContext){
-            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_TRADITIONAL);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_HOLO_DARK);
         }
         @Override
         protected void onPreExecute() {
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
     private class UpdateDataFromDB extends AsyncTask<Void,Void,Void>{
         ProgressDialog progressDialog;
         public UpdateDataFromDB(Context mContext) {
-            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_TRADITIONAL);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_HOLO_DARK);
         }
         @Override
         protected void onPreExecute() {

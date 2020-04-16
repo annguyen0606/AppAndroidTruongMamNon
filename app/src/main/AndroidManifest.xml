@@ -20,19 +20,15 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_conek2"
+        android:icon="@drawable/ic_conek3"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ic_conek2"
+        android:roundIcon="@drawable/ic_conek3"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Fragment.FragmentAddNewAccount"></activity>
         <activity
             android:name=".Activity.InformationMembersActivity"
             android:label="Thông tin chi tiết"
-            android:parentActivityName=".Activity.MainActivity" />
-        <activity
-            android:name=".Fragment.FragmentDiaryTap"
-            android:label="Danh sách chạm thẻ"
             android:parentActivityName=".Activity.MainActivity" />
         <activity
             android:name=".Activity.SettingDeviceActivity"

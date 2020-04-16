@@ -284,7 +284,7 @@ public class DataProvider {
         int lateMinute = 0;
         Connection connection;
         ResultSet resultSet;
-        String query = "SELECT phut FROM ThoiGianDonCon WHERE mahs = '" +mahs+"' and ngay LIKE '"+month+"%'";
+        String query = "SELECT phut FROM ThoiGianDonCon WHERE mahs = '" +mahs+"' and ngay LIKE '%"+month+"%'";
         connection = CONN(userName,passWord,nameDB,ipServer);
         try {
             Statement stmt = connection.createStatement();

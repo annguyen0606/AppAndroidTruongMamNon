@@ -266,7 +266,7 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
     private class CheckUidOfParent extends AsyncTask<String,Void,ThongTinNguoiThan>{
         ProgressDialog progressDialog;
         public CheckUidOfParent(Context mContext){
-            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_TRADITIONAL);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_HOLO_DARK);
         }
         @Override
         protected void onPreExecute() {
@@ -296,7 +296,7 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
     private class KiemTraSoTaiKhoanDaDangKy extends AsyncTask<String,Void,ArrayList<ThongTinNguoiThan>>{
         ProgressDialog progressDialog;
         public KiemTraSoTaiKhoanDaDangKy(Context mContext){
-            progressDialog = new ProgressDialog(mContext);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_HOLO_DARK);
         }
         @Override
         protected void onPreExecute() {

@@ -20,8 +20,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -73,7 +71,6 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
         byte[] byteImageParent3 = new byte[0];
         byte[] byteImageStudent = new byte[0];
 
-        final Animation animation = AnimationUtils.loadAnimation(this,R.anim.scale);
         /*Tim kiem thong tin hoc sinh tuong uong trong table ThongTinHocSinh SQLite theo ma so hoc sinh
         * Do nhung du lieu can thiet ra cac text view*/
         Cursor dataCongViec = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinHocSinh WHERE MaHs ='"+maHocSinh.getText().toString()+"'");
@@ -105,12 +102,6 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
             thongTinNguoiThan.setHinhAnh(dataNT.getBlob(7));
             thongTinNguoiThan.setLop(dataNT.getString(8));
             danhSachNguoiThan.add(thongTinNguoiThan);
-            /*
-            tenNguoiThan.setText(dataNT.getString(2));
-            diaChiNguoiThan.setText(dataNT.getString(3));
-            quanHeHocSinh.setText(dataNT.getString(4));
-            soDienThoai.setText(dataNT.getString(6));
-            byteImageParent = dataNT.getBlob(7);*/
         }
         ArrayList<ThongTinNguoiThan> danhSachNguoiThanLienQuan = new ArrayList<>();
         for (int i = 0; i < danhSachNguoiThan.size(); i++){
@@ -138,7 +129,6 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
 
                         circleImageViewCheckParent2.setVisibility(View.INVISIBLE);
                         circleImageViewCheckParent3.setVisibility(View.INVISIBLE);
-                        //circleImageViewParent.startAnimation(animation);
                     }
                     Bitmap decodebitmapnt = BitmapFactory.decodeByteArray(byteImageParent,
                             0, byteImageParent.length);
@@ -154,7 +144,6 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
 
                         circleImageViewCheckParent.setVisibility(View.INVISIBLE);
                         circleImageViewCheckParent3.setVisibility(View.INVISIBLE);
-                        //circleImageViewParent2.startAnimation(animation);
                     }
                     decodebitmapnt = BitmapFactory.decodeByteArray(byteImageParent2,
                             0, byteImageParent2.length);
@@ -170,14 +159,12 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
 
                         circleImageViewCheckParent2.setVisibility(View.INVISIBLE);
                         circleImageViewCheckParent.setVisibility(View.INVISIBLE);
-                        //circleImageViewParent3.startAnimation(animation);
                     }
                     decodebitmapnt = BitmapFactory.decodeByteArray(byteImageParent3,
                             0, byteImageParent3.length);
                     circleImageViewParent3.setImageBitmap(decodebitmapnt);
                     break;
             }
-
         }
         //Lay thoi so phut don con muon
         Cursor thoigian = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM UIDTag WHERE Uid = '"+intent.getStringExtra("data2").trim()+"'");
@@ -239,13 +226,12 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
     private class InsertIntoDataBase extends AsyncTask<Integer,Void,Integer> {
         ProgressDialog progressDialog;
         public InsertIntoDataBase(Context mContext) {
-            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_TRADITIONAL);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_HOLO_DARK);
         }
 
         @Override
         protected void onPreExecute() {
             progressDialog.setMessage("Please wait...");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
         }
 
@@ -253,7 +239,7 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
         @Override
         protected Integer doInBackground(Integer... integers) {
             //Lay ngay gio
-            SimpleDateFormat Date = new SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat Date = new SimpleDateFormat("dd/MM/yyyy");
             dateStr = Date.format(new Date());
             /*
             * Kiem tra xem dia chi UID nay da don con chua

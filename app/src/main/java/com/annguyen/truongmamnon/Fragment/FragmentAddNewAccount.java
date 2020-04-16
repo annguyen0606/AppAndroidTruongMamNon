@@ -26,15 +26,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
+
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.annguyen.truongmamnon.Activity.MainActivity;
 import com.annguyen.truongmamnon.Activity.ManHinhDangNhapActivity;
@@ -59,7 +57,7 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
     private EditText nameParent, nameStudent, addressParent, phoneParent, relativeParent, maStudent,
                      addressStudent;
     private static EditText uidParent;
-    private ImageView imagePicDate, imageCheckCodeStudent, imageCheckCodeParent;
+    private ImageView imageCheckCodeStudent, imageCheckCodeParent;
     private Spinner spinnerSex;
     private TextView txtDateBirth, txtClass;
     private byte[] imageByteParent;
@@ -102,7 +100,7 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
         txtClass = view.findViewById(R.id.tvClassStudentAddAccountFragment);
         spinnerSex = view.findViewById(R.id.spinnerSexStudentAddAccountFragment);
         txtDateBirth = view.findViewById(R.id.tvDateOfBirthStudentAddAccountFragment);
-        imagePicDate = view.findViewById(R.id.imgPicDataAddAccountFragment);
+
         imageCheckCodeStudent = view.findViewById(R.id.imageCheckCodeStudentAddAccountFragment);
         imageCheckCodeParent = view.findViewById(R.id.imageCheckCodeParentAddAccountFragment);
 
@@ -124,11 +122,12 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
         chooseImageParentFolder = view.findViewById(R.id.chooseImageFromFolderAddAccountFragment);
         chooseImageStudentFolder = view.findViewById(R.id.chooseImageStudentFromFolderAddAccountFragment);
 
+        view.findViewById(R.id.tvDateOfBirthStudentAddAccountFragment).setOnClickListener(this);
         view.findViewById(R.id.chooseImageStudentFromFolderAddAccountFragment).setOnClickListener(this);
         view.findViewById(R.id.chooseImageFromFolderAddAccountFragment).setOnClickListener(this);
         view.findViewById(R.id.chooseCameraStusendAddAccountFragment).setOnClickListener(this);
         view.findViewById(R.id.chooseCameraAddAccountFragment).setOnClickListener(this);
-        view.findViewById(R.id.imgPicDataAddAccountFragment).setOnClickListener(this);
+
         ArrayList<String> arraySpinnerSex = new ArrayList<>();
         arraySpinnerSex.add("Nam");
         arraySpinnerSex.add("Nữ");
@@ -284,7 +283,7 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
                     Toast.makeText(view.getContext(),"Xin kiểm tra lại kết nối Internet!",Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.imgPicDataAddAccountFragment:
+            case R.id.tvDateOfBirthStudentAddAccountFragment:
                 final Calendar calendar = Calendar.getInstance();
                 year = calendar.get(Calendar.YEAR);
                 month = calendar.get(Calendar.MONTH);
@@ -305,7 +304,7 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
     private class CheckCodeOfStudent extends AsyncTask<String,Void,ThongTinHocSinh>{
         ProgressDialog progressDialog;
         public CheckCodeOfStudent(Context mContext){
-            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_TRADITIONAL);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_HOLO_DARK);
         }
         @Override
         protected void onPreExecute() {
@@ -335,7 +334,7 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
     private class CheckUidOfParent extends AsyncTask<String,Void,ThongTinNguoiThan>{
         ProgressDialog progressDialog;
         public CheckUidOfParent(Context mContext){
-            progressDialog = new ProgressDialog(mContext);
+            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_HOLO_DARK);
         }
         @Override
         protected void onPreExecute() {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1668A7</color>
+    <color name="colorPrimary">#B0BEC5</color>
     <color name="colorPrimaryDark">#151A74</color>
     <color name="colorAccent">#000</color>
     <color name="tapindicator">#000</color>
