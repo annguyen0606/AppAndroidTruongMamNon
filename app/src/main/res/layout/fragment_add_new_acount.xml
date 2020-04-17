@@ -111,7 +111,7 @@
                                     android:gravity="center"
                                     android:layout_height="wrap_content"></EditText>
                                 <ImageView
-                                    android:layout_weight="0.5"
+                                    android:src="@drawable/ic_autorenew"
                                     android:id="@+id/imageCheckCodeParentAddAccountFragment"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"></ImageView>
@@ -181,7 +181,6 @@
                             </LinearLayout>
                             <LinearLayout
                                 android:orientation="horizontal"
-                                android:weightSum="3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
                                 <EditText
@@ -199,7 +198,7 @@
                                     android:layout_height="wrap_content">
                                 </EditText>
                                 <ImageView
-                                    android:layout_weight="0.5"
+                                    android:src="@drawable/ic_autorenew"
                                     android:id="@+id/imageCheckCodeStudentAddAccountFragment"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"></ImageView>
@@ -221,11 +220,11 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_weight="10"
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
                                 <TextView
+                                    android:layout_marginLeft="4dp"
                                     android:drawableLeft="@drawable/ic_date_range"
                                     android:hint="dd/mm/yyy"
                                     android:gravity="center"
@@ -245,6 +244,7 @@
                                     android:layout_height="wrap_content">
                                     <TextView
                                         android:hint="Class"
+                                        android:layout_marginLeft="4dp"
                                         android:drawableLeft="@drawable/ic_school_black_24dp"
                                         android:textStyle="italic"
                                         android:textSize="18sp"
@@ -262,6 +262,7 @@
                                 android:layout_height="wrap_content">
                                 <ImageView
                                     android:src="@drawable/ic_sex"
+                                    android:layout_marginLeft="4dp"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"></ImageView>
                                 <LinearLayout

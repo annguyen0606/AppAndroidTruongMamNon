@@ -34,7 +34,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.annguyen.truongmamnon.Activity.MainActivity;
+import com.annguyen.truongmamnon.Activity.AddAccountActivity;
 import com.annguyen.truongmamnon.Activity.ManHinhDangNhapActivity;
 import com.annguyen.truongmamnon.Controller.DataProvider;
 import com.annguyen.truongmamnon.Controller.SharedPref;
@@ -100,25 +100,19 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
         txtClass = view.findViewById(R.id.tvClassStudentAddAccountFragment);
         spinnerSex = view.findViewById(R.id.spinnerSexStudentAddAccountFragment);
         txtDateBirth = view.findViewById(R.id.tvDateOfBirthStudentAddAccountFragment);
-
         imageCheckCodeStudent = view.findViewById(R.id.imageCheckCodeStudentAddAccountFragment);
         imageCheckCodeParent = view.findViewById(R.id.imageCheckCodeParentAddAccountFragment);
-
         imageParent = view.findViewById(R.id.imgHinhAnhCamreFramentAddAccount);
         imageStudent = view.findViewById(R.id.imgHinhAnhStudentCamreFramentAddAccount);
-
         confirmInsert = view.findViewById(R.id.btnInsertImageAddAccountFragment);
-
         nameParent = view.findViewById(R.id.edtNameParentAddAccountFragment);
         nameStudent = view.findViewById(R.id.edtNameStudentAddAccountFragment);
         addressParent = view.findViewById(R.id.edtAddressParentAddAccountFragment);
         phoneParent = view.findViewById(R.id.edtPhoneParentAddAccountFragment);
         relativeParent = view.findViewById(R.id.edtRelavtiveParentAddAccountFragment);
         maStudent = view.findViewById(R.id.edtCodeStudentAddAccountFragment);
-
         addressStudent = view.findViewById(R.id.edtAddressStudentAddAccountFragment);
         getDataUID = view.findViewById(R.id.pullToGetDataAddNewAccount);
-
         chooseImageParentFolder = view.findViewById(R.id.chooseImageFromFolderAddAccountFragment);
         chooseImageStudentFolder = view.findViewById(R.id.chooseImageStudentFromFolderAddAccountFragment);
 
@@ -128,21 +122,6 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
         view.findViewById(R.id.chooseCameraStusendAddAccountFragment).setOnClickListener(this);
         view.findViewById(R.id.chooseCameraAddAccountFragment).setOnClickListener(this);
 
-        ArrayList<String> arraySpinnerSex = new ArrayList<>();
-        arraySpinnerSex.add("Nam");
-        arraySpinnerSex.add("Nữ");
-        ArrayAdapter arrayAdapterSex = new ArrayAdapter(view.getContext(),android.R.layout.simple_list_item_1,arraySpinnerSex);
-        spinnerSex.setAdapter(arrayAdapterSex);
-
-        dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                txtDateBirth.setText(dayOfMonth+"/"+(month +1)+"/"+year);
-            }
-        };
-
-        imageCheckCodeStudent.setImageResource(R.drawable.ic_autorenew);
-        imageCheckCodeParent.setImageResource(R.drawable.ic_autorenew);
         view.findViewById(R.id.imageCheckCodeStudentAddAccountFragment).setOnClickListener(this);
         view.findViewById(R.id.imageCheckCodeParentAddAccountFragment).setOnClickListener(this);
         view.findViewById(R.id.btnInsertImageAddAccountFragment).setOnClickListener(this);
@@ -162,6 +141,18 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
                 },1000);
             }
         });
+
+        ArrayList<String> arraySpinnerSex = new ArrayList<>();
+        arraySpinnerSex.add("Nam");
+        arraySpinnerSex.add("Nữ");
+        ArrayAdapter arrayAdapterSex = new ArrayAdapter(view.getContext(),android.R.layout.simple_list_item_1,arraySpinnerSex);
+        spinnerSex.setAdapter(arrayAdapterSex);
+        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                txtDateBirth.setText(dayOfMonth+"/"+(month +1)+"/"+year);
+            }
+        };
     }
 
     @Override
@@ -209,7 +200,7 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
                 startActivityForResult(intent3,RESQUEST_CODE_FOLDER_STUDENT);
                 break;
             case R.id.btnInsertImageAddAccountFragment:
-                if (MainActivity.kiemTraKetNoiInternet == true){
+                if (AddAccountActivity.kiemTraKetNoiInternet == true){
                     if (imageParent.getDrawable() != null && imageStudent.getDrawable() != null
                             && !maStudent.getText().toString().trim().equals("")
                             && !uidParent.getText().toString().trim().equals("")
@@ -260,7 +251,7 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
                 startActivityForResult(intent2,RESQUEST_CODE_CAMERA_2);
                 break;
             case R.id.imageCheckCodeStudentAddAccountFragment:
-                if (MainActivity.kiemTraKetNoiInternet == true){
+                if (AddAccountActivity.kiemTraKetNoiInternet == true){
                     if (!maStudent.getText().toString().trim().equals("")){
                         CheckCodeOfStudent checkCodeOfStudent = new CheckCodeOfStudent(view.getContext());
                         checkCodeOfStudent.execute(maStudent.getText().toString().trim());
@@ -272,7 +263,7 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
                 }
                 break;
             case R.id.imageCheckCodeParentAddAccountFragment:
-                if (MainActivity.kiemTraKetNoiInternet == true){
+                if (AddAccountActivity.kiemTraKetNoiInternet == true){
                     if (!uidParent.getText().toString().trim().equals("123456")){
                         CheckUidOfParent checkUidOfParent = new CheckUidOfParent(view.getContext());
                         checkUidOfParent.execute(uidParent.getText().toString().trim());
@@ -365,7 +356,7 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
         ProgressDialog progressDialog;
 
         public InsertIntoDataBase(Context mContext) {
-            progressDialog = new ProgressDialog(mContext);
+            progressDialog = new ProgressDialog(mContext,AlertDialog.THEME_HOLO_DARK);
         }
 
         @Override

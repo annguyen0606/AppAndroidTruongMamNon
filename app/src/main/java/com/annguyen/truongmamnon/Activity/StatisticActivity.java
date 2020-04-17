@@ -1,8 +1,12 @@
 package com.annguyen.truongmamnon.Activity;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -52,6 +56,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
     String maGiaoVien = "";
     String ngayThangThongKe = "";
     ImageView backMainActivity;
+    boolean kiemTraKetNoiInternet = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,18 +117,13 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
     }
 
     void RefreshDataClass(){
-        if (MainActivity.kiemTraKetNoiInternet == true){
-            if (classList.getCount() == 0){
-                GetClassList getClassList = new GetClassList();
-                getClassList.execute();
-            }else {
+        if (kiemTraKetNoiInternet == true){
+            if (classList.getCount() > 0){
                 txtLop = classList.getSelectedItem().toString().trim();
-            }
-            arrayThongTinThongKe.clear();
-            totalLateTimeAdapter.notifyDataSetChanged();
-            switch (loaitaikhoan){
-                case 3:
-                    if (classList.getCount() > 0){
+                arrayThongTinThongKe.clear();
+                totalLateTimeAdapter.notifyDataSetChanged();
+                switch (loaitaikhoan){
+                    case 3:
                         if (classList.getSelectedItem().toString().trim().equals(txtMaLop)){
                             arrayDanhSachHocSinh = new ArrayList<>();
                             arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+txtMaLop+"'");
@@ -132,14 +132,17 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                         }else {
                             Toast.makeText(StatisticActivity.this,"Bạn không thể xem dữ liệu lớp khác",Toast.LENGTH_SHORT).show();
                         }
-                    }
-                    break;
-                case 2:
-                    arrayDanhSachHocSinh = new ArrayList<>();
-                    arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+txtLop+"'");
-                    LayThongTinTuDB layThongTinTuDB = new LayThongTinTuDB();
-                    layThongTinTuDB.execute(txtLop);
-                    break;
+                        break;
+                    case 2:
+                        arrayDanhSachHocSinh = new ArrayList<>();
+                        arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+txtLop+"'");
+                        LayThongTinTuDB layThongTinTuDB = new LayThongTinTuDB();
+                        layThongTinTuDB.execute(txtLop);
+                        break;
+                }
+            }else {
+                GetClassList getClassList = new GetClassList();
+                getClassList.execute();
             }
         }else {
             Toast.makeText(StatisticActivity.this,"Xin kiểm tra lại kết nối Internet",Toast.LENGTH_SHORT).show();
@@ -152,7 +155,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                 onBackPressed();
                 break;
             case R.id.imageExportFragmentTotalLateTime:
-                if (MainActivity.kiemTraKetNoiInternet == true){
+                if (kiemTraKetNoiInternet == true){
                     StringBuilder data = new StringBuilder();
                     data.append("Mã học sinh,Mã giáo viên,Tên học sinh,Tháng,Số phút,Tổng số tiền,Trạng thái nộp,Mã lớp");
 
@@ -203,7 +206,6 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
             String date = dateFormat.format(new Date());
             arrayPhut = new ArrayList<>();
-
             switch (monthList.getSelectedItemPosition()){
                 case 0:
                     dateTime2 = "01/" + date;
@@ -254,10 +256,10 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                 thongTinThongKe.setThoiGian(arrayPhut.get(i));
                 int an = 0;
                 for(int j = 0; j < danhHocSinhNopTien.size(); j++){
-                    if (arrayDanhSachHocSinh.get(i).getMaHocSinh().toString().trim().equals(danhHocSinhNopTien.get(j).getMaHocSinh().trim()) && danhHocSinhNopTien.get(j).getTrangThaiThu().trim().equals("1")){
+                    if (arrayDanhSachHocSinh.get(i).getMaHocSinh().trim().equals(danhHocSinhNopTien.get(j).getMaHocSinh().trim()) && danhHocSinhNopTien.get(j).getTrangThaiThu().trim().equals("1")){
                         an = 1;
                         thongTinThongKe.setMoney(danhHocSinhNopTien.get(j).getSoTien().trim());
-                    }else if (arrayDanhSachHocSinh.get(i).getMaHocSinh().toString().trim().equals(danhHocSinhNopTien.get(j).getMaHocSinh().trim()) && danhHocSinhNopTien.get(j).getTrangThaiThu().trim().equals("0")){
+                    }else if (arrayDanhSachHocSinh.get(i).getMaHocSinh().trim().equals(danhHocSinhNopTien.get(j).getMaHocSinh().trim()) && danhHocSinhNopTien.get(j).getTrangThaiThu().trim().equals("0")){
                         thongTinThongKe.setMoney(danhHocSinhNopTien.get(j).getSoTien().trim());
                     }
                 }
@@ -305,5 +307,33 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
             classList.setAdapter(arrayAdapterClass);
             txtLop = classList.getSelectedItem().toString().trim();
         }
+    }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)){
+                NetworkInfo networkInfo = intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
+                if (networkInfo != null && networkInfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED){
+                    kiemTraKetNoiInternet = true;
+                }else if (networkInfo != null && networkInfo.getDetailedState() == NetworkInfo.DetailedState.DISCONNECTED){
+                    kiemTraKetNoiInternet = false;
+                    Toast.makeText(StatisticActivity.this,"Lỗi Intertnet, Vui lòng kiểm tra lại!",Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(broadcastReceiver,intentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(broadcastReceiver);
     }
 }

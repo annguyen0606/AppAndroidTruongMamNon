@@ -225,7 +225,7 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
             progressDialog.dismiss();
         }
     }
-
+    //Broadcast kiem tra internet
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -239,13 +239,6 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
                     Toast.makeText(ManHinhDangNhapActivity.this,"Lỗi Intertnet, Vui lòng kiểm tra lại!",Toast.LENGTH_SHORT).show();
                 }
             }
-            /*int wifiStateExtra = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,WifiManager.WIFI_STATE_UNKNOWN);
-            if (wifiStateExtra == WifiManager.WIFI_STATE_ENABLED){
-                *//*Neu co Internet thi co phep khoi tao*//*
-                init();
-            }else if(wifiStateExtra == WifiManager.WIFI_STATE_DISABLED) {
-                Toast.makeText(ManHinhDangNhapActivity.this,"Lỗi Intertnet, Vui lòng kiểm tra lại!",Toast.LENGTH_SHORT).show();
-            }*/
         }
     };
 
@@ -254,8 +247,6 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
         super.onStart();
         IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(broadcastReceiver,intentFilter);
-        /*IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
-        registerReceiver(broadcastReceiver,intentFilter);*/
     }
 
     @Override

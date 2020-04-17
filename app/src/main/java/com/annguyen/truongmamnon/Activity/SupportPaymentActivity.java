@@ -3,10 +3,15 @@ package com.annguyen.truongmamnon.Activity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,7 +57,7 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
     CircleImageView circleImageStudent;
     boolean kiemTraNopTien = false;
     byte[] byteImageStudent;
-
+    boolean kiemTraKetNoiInternet = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,7 +120,7 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
         });
     }
     void RefreshGetData(){
-        if (MainActivity.kiemTraKetNoiInternet == true){
+        if (kiemTraKetNoiInternet == true){
             ClearDuLieu();
             uidDataSupportPayment = SharedPref.get(ManHinhDangNhapActivity.CURRENT_UID,String.class);
             uidPayment.setText(uidDataSupportPayment);
@@ -132,7 +137,7 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
                 onBackPressed();
                 break;
             case R.id.btnConfirmSupportFragment:
-                if (MainActivity.kiemTraKetNoiInternet == true){
+                if (kiemTraKetNoiInternet == true){
                     if (!uidPayment.getText().toString().trim().equals("") && !uidPayment.getText().toString().trim().equals("123456")){
                         if (kiemTraNopTien == true){
                             ConfirmPayment confirmPayment = new ConfirmPayment(SupportPaymentActivity.this);
@@ -337,5 +342,33 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
         totalMoney.setText("");
         reasonPayment.setText("");
         statusPayment.setText("");
+    }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)){
+                NetworkInfo networkInfo = intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
+                if (networkInfo != null && networkInfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED){
+                    kiemTraKetNoiInternet = true;
+                }else if (networkInfo != null && networkInfo.getDetailedState() == NetworkInfo.DetailedState.DISCONNECTED){
+                    kiemTraKetNoiInternet = false;
+                    Toast.makeText(SupportPaymentActivity.this,"Lỗi Intertnet, Vui lòng kiểm tra lại!",Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(broadcastReceiver,intentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(broadcastReceiver);
     }
 }

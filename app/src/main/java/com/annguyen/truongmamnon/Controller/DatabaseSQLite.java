@@ -17,15 +17,6 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
         SQLiteDatabase database = getWritableDatabase();
         database.execSQL(sql);
     }
-    public void InsertAccountLogin(String magv, int status){
-        SQLiteDatabase database = getWritableDatabase();
-        String sql = "INSERT INTO CheckLoadData VALUES(null,?,?)";
-        SQLiteStatement statement = database.compileStatement(sql);
-        statement.clearBindings();
-        statement.bindString(1,magv);
-        statement.bindLong(2,status);
-        statement.executeInsert();
-    }
 
     public void InsertPayment(String mahs, String malop, Integer status){
         SQLiteDatabase database = getWritableDatabase();

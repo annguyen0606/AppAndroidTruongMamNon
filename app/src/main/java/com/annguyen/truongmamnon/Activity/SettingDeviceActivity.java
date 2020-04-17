@@ -56,17 +56,14 @@ public class SettingDeviceActivity extends AppCompatActivity implements View.OnC
     private ProgressDialog dialog;
     private static final String APP_NAME = "Kindergarten";
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
     private static final int STATE_LISTENING = 1;
     private static final int STATE_CONNECTING = 2;
     private static final int STATE_CONNECTED = 3;
     private static final int STATE_CONNECTION_FAILED = 4;
     private static final int STATE_MESSAGE_RECEVIED = 5;
-
     private String portConnect,passWifi,ssidWifi;
     private int index = 0;
     private SendReceive sendReceive;
-
     private ImageView pullDown, backToMainActivity;
 
     @Override

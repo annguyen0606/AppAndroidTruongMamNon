@@ -26,8 +26,7 @@ public class DataProvider {
     private final String passWord = "Conek@123";
     private final String nameDB = "NFC";
 
-    private DataProvider() {
-    }
+    private DataProvider() { }
 
     public static DataProvider getInstance(){
         if (instance == null){

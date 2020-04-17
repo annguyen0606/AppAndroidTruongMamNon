@@ -32,7 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.annguyen.truongmamnon.Activity.MainActivity;
+import com.annguyen.truongmamnon.Activity.AddAccountActivity;
 import com.annguyen.truongmamnon.Activity.ManHinhDangNhapActivity;
 import com.annguyen.truongmamnon.Controller.DataProvider;
 import com.annguyen.truongmamnon.Controller.SharedPref;
@@ -91,18 +91,14 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
         addressParent = view.findViewById(R.id.edtAddressParentAddAccountFragmentExist);
         phoneParent = view.findViewById(R.id.edtPhoneParentAddAccountFragmentExist);
         relativeParent = view.findViewById(R.id.edtRelavtiveParentAddAccountFragmentExist);
-
         imageParent = view.findViewById(R.id.imgHinhAnhCamreFramentAddAccountExist);
         imageStudent = view.findViewById(R.id.circleHinhAnhStudentAddAccountExist);
-
         codeStudent = view.findViewById(R.id.tvCodeStudentAddAccountExist);
         dateStudent = view.findViewById(R.id.tvDateOfBirthStudentAddAccountFragmentExist);
         addressStudent = view.findViewById(R.id.tvAddressStudentAddAccountExist);
         sexStudent = view.findViewById(R.id.tvSexStudentAddAccountExist);
         classStudent = view.findViewById(R.id.tvClassStudentAddAccountExist);
-
         nameStudent = view.findViewById(R.id.spinnerNameStudentAddAccountExistFragment);
-
         getDataInsert = view.findViewById(R.id.btnInsertImageAddAccountFragmentExist);
         chooseCameraParent = view.findViewById(R.id.chooseCameraAddAccountFragmentExist);
         chooseImageFolder = view.findViewById(R.id.chooseImageFromFolderAddAccountFragmentExist);
@@ -113,8 +109,8 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
         view.findViewById(R.id.chooseCameraAddAccountFragmentExist).setOnClickListener(this);
         view.findViewById(R.id.btnInsertImageAddAccountFragmentExist).setOnClickListener(this);
         view.findViewById(R.id.chooseImageFromFolderAddAccountFragmentExist).setOnClickListener(this);
-        classStudent.setText(txtMaLop);
 
+        classStudent.setText(txtMaLop);
         getDataUID.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -127,23 +123,19 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
                 },1000);
             }
         });
-
         nameStudent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (MainActivity.kiemTraKetNoiInternet == true){
+                if (AddAccountActivity.kiemTraKetNoiInternet == true){
                     codeStudent.setText(danhSachHocSinh.get(position).getMaHocSinh());
                     dateStudent.setText(danhSachHocSinh.get(position).getNgaySinh());
                     sexStudent.setText(danhSachHocSinh.get(position).getGioiTinh());
                     addressStudent.setText(danhSachHocSinh.get(position).getDiaChi());
-
                     Bitmap decodebitmapnt = BitmapFactory.decodeByteArray(danhSachHocSinh.get(position).getHinhAnh(),
                             0, danhSachHocSinh.get(position).getHinhAnh().length);
                     imageStudent.setImageBitmap(decodebitmapnt);
-
                     KiemTraSoTaiKhoanDaDangKy kiemTraSoTaiKhoanDaDangKy = new KiemTraSoTaiKhoanDaDangKy(view.getContext());
                     kiemTraSoTaiKhoanDaDangKy.execute(codeStudent.getText().toString().trim());
-                    //Toast.makeText(view.getContext(),nameStudent.getSelectedItem().toString().trim(),Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(view.getContext(),"Xin kiểm tra lại kết nối Internet!",Toast.LENGTH_SHORT).show();
                 }
@@ -155,7 +147,7 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
     }
 
     private void RefreshGetData() {
-        if (MainActivity.kiemTraKetNoiInternet == true){
+        if (AddAccountActivity.kiemTraKetNoiInternet == true){
             codeParent.setText(SharedPref.get(ManHinhDangNhapActivity.CURRENT_UID,String.class));
             danhSachHocSinh = new ArrayList<>();
             Cursor dataHs = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinHocSinh");
@@ -185,7 +177,7 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btnInsertImageAddAccountFragmentExist:
-                if (MainActivity.kiemTraKetNoiInternet == true){
+                if (AddAccountActivity.kiemTraKetNoiInternet == true){
                     if (taiKhoanDangKy == true){
                         if (checkUIDParent == true){
                             if (imageParent.getDrawable() != null
@@ -225,7 +217,7 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
                 startActivityForResult(intent,RESQUEST_CODE_CAMERA);
                 break;
             case R.id.imageCheckCodeParentAddAccountFragmentExist:
-                if (MainActivity.kiemTraKetNoiInternet == true){
+                if (AddAccountActivity.kiemTraKetNoiInternet == true){
                     if (!codeParent.getText().toString().trim().equals("123456")){
                         CheckUidOfParent checkUidOfParent = new CheckUidOfParent(view.getContext());
                         checkUidOfParent.execute(codeParent.getText().toString().trim());
@@ -327,7 +319,7 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
         ProgressDialog progressDialog;
 
         public InsertIntoDataBase(Context mContext) {
-            progressDialog = new ProgressDialog(mContext);
+            progressDialog = new ProgressDialog(mContext,AlertDialog.THEME_HOLO_DARK);
         }
 
         @Override

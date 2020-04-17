@@ -89,7 +89,6 @@
                                     android:gravity="center"
                                     android:layout_height="wrap_content"></EditText>
                                 <ImageView
-                                    android:layout_weight="0.5"
                                     android:src="@drawable/ic_autorenew"
                                     android:id="@+id/imageCheckCodeParentAddAccountFragmentExist"
                                     android:layout_width="wrap_content"
