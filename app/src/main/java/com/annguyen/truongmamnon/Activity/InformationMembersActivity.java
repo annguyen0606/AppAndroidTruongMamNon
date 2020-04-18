@@ -171,6 +171,7 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
         while (thoigian.moveToNext()){
             thoiGianMuon.setText(thoigian.getString(2));
         }
+//        ManHinhDangNhapActivity.databaseSQLite.QuerryData("UPDATE UIDTag SET MaHs = '"+maHocSinh.getText().toString().trim()+"' WHERE Uid = '"+intent.getStringExtra("data2").trim()+"'");
     }
 
     private void AnhXa() {

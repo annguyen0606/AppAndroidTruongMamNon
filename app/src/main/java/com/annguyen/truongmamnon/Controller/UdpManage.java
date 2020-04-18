@@ -79,7 +79,7 @@ public class UdpManage extends BroadcastReceiver {
                     // send the response to the client at "address" and "port"
                     InetAddress address = packet.getAddress();
                     int port = packet.getPort();
-                    System.out.println(port);
+                    //System.out.println(port);
                     SharedPref.put(ManHinhDangNhapActivity.CURRENT_UID,message);
                     if (dataList.size() > 0){
                         for (int i = 0; i < dataList.size(); i++){
@@ -99,7 +99,7 @@ public class UdpManage extends BroadcastReceiver {
                         String thoigianStr = GetLateMinute();
                         Cursor dataNguoiThan = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM UIDTag WHERE Uid = '"+message+"'");
                         if (dataNguoiThan.getCount() == 0){
-                            ManHinhDangNhapActivity.databaseSQLite.QuerryData("INSERT INTO UIDTag VALUES(null,'"+message+ "','"+thoigianStr +"',"+0+")");
+                            ManHinhDangNhapActivity.databaseSQLite.QuerryData("INSERT INTO UIDTag VALUES(null,'"+message+"',"+"'"+thoigianStr +"',"+0+")");
                             if (ringtone == null){
                                 ringtone = RingtoneManager.getRingtone(mcontext,RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
                             }

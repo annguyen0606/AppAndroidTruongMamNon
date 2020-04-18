@@ -182,8 +182,8 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
                 //Luu mot vai gia tri hay dung nhu Lop, Ma so giao vien, Ten cong ket noi voi thiet bi
                 SharedPref.put(CURRENT_Class,thongTinGiaoVien.getLop().trim());
                 SharedPref.put(CURRENT_TEACHER,thongTinGiaoVien.getMaGiaoVien().trim());
-                SharedPref.put(CURRENT_PORT,thongTinGiaoVien.getPortName().trim());
                 SharedPref.put(CURRENT_ACCOUNT,thongTinGiaoVien.getLoaiTaiKhoan());
+                SharedPref.put(CURRENT_PORT,thongTinGiaoVien.getPortName().trim());
                 if (dataGiaoVienLogin.getCount() < 1){
                     databaseSQLite.QuerryData("DELETE FROM ThongTinHocSinh");
                     databaseSQLite.QuerryData("DELETE FROM ThongTinNguoiThan");

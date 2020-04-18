@@ -203,7 +203,7 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
                                 Toast.makeText(view.getContext(),"Chưa nhập đủ thông tin",Toast.LENGTH_SHORT).show();
                             }
                         }else {
-                            Toast.makeText(view.getContext(),"Mã số thẻ đã tồn tài!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(view.getContext(),"Mã số thẻ đã đăng ký đủ lượng người!",Toast.LENGTH_SHORT).show();
                         }
                     }else {
                         Toast.makeText(view.getContext(),"Tài khoản không thể đăng ký thêm",Toast.LENGTH_SHORT).show();
@@ -255,7 +255,7 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
         }
     }
 
-    private class CheckUidOfParent extends AsyncTask<String,Void,ThongTinNguoiThan>{
+    private class CheckUidOfParent extends AsyncTask<String,Void,ArrayList<ThongTinNguoiThan>>{
         ProgressDialog progressDialog;
         public CheckUidOfParent(Context mContext){
             progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_HOLO_DARK);
@@ -267,21 +267,37 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
         }
 
         @Override
-        protected ThongTinNguoiThan doInBackground(String... strings) {
-            ThongTinNguoiThan thongTinNguoiThan = dataProvider.getInstance().LayThongTinNguoiThan("SELECT *FROM ThongTinNguoiThan WHERE uid = '"+strings[0]+"'");
-            return thongTinNguoiThan;
+        protected ArrayList<ThongTinNguoiThan> doInBackground(String... strings) {
+            ArrayList<ThongTinNguoiThan> danhSachNguoiThanDangKy = new ArrayList<>();
+            danhSachNguoiThanDangKy = dataProvider.getInstance().LayDanhSachThongTinNguoiThan("SELECT *FROM ThongTinNguoiThan WHERE uid = '"+strings[0]+"'");
+            return danhSachNguoiThanDangKy;
         }
 
         @Override
-        protected void onPostExecute(ThongTinNguoiThan thongTinNguoiThan) {
-            if (thongTinNguoiThan.getMaUID().trim().equals("ABC")){
+        protected void onPostExecute(ArrayList<ThongTinNguoiThan> thongTinNguoiThans) {
+            //Toast.makeText(view.getContext(),String.valueOf(thongTinNguoiThans.size()),Toast.LENGTH_SHORT).show();
+            if (thongTinNguoiThans.size() >= 3){
+                checkCodeParent.setImageResource(R.drawable.ic_priority_high);
+            }else {
+                ArrayList<ThongTinNguoiThan> danhSachNguoiThanDangKy = new ArrayList<>();
+                danhSachNguoiThanDangKy = dataProvider.getInstance().LayDanhSachThongTinNguoiThan("SELECT *FROM ThongTinNguoiThan WHERE uid = '"+codeParent.getText().toString().trim()+"' AND mahs = '"+codeStudent.getText().toString().trim()+"'");
+                //Toast.makeText(view.getContext(),String.valueOf(danhSachNguoiThanDangKy.size()),Toast.LENGTH_SHORT).show();
+                if (danhSachNguoiThanDangKy.size() > 0){
+                    checkCodeParent.setImageResource(R.drawable.ic_priority_high);
+                }else {
+                    checkCodeParent.setImageResource(R.drawable.ic_check);
+                    checkUIDParent = true;
+                }
+            }
+            progressDialog.dismiss();
+            /*if (thongTinNguoiThan.getMaUID().trim().equals("ABC")){
                 checkCodeParent.setImageResource(R.drawable.ic_check);
                 checkUIDParent = true;
             }else {
                 Toast.makeText(view.getContext(),"Mã người thân đã tồn tại",Toast.LENGTH_SHORT).show();
                 checkCodeParent.setImageResource(R.drawable.ic_priority_high);
             }
-            progressDialog.dismiss();
+            progressDialog.dismiss();*/
         }
     }
 
@@ -306,7 +322,7 @@ public class FragmentAddAccountExist extends Fragment implements View.OnClickLis
 
         @Override
         protected void onPostExecute(ArrayList<ThongTinNguoiThan> thongTinNguoiThans) {
-            if (thongTinNguoiThans.size() > 3){
+            if (thongTinNguoiThans.size() >= 3){
                 Toast.makeText(view.getContext(),"Đã đăng ký đủ số tài khoản",Toast.LENGTH_SHORT).show();
             }else {
                 Toast.makeText(view.getContext(),"Được phép thêm thẻ cho học sinh này",Toast.LENGTH_SHORT).show();

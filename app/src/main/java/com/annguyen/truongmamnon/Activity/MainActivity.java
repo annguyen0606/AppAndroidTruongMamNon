@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
         intent = new Intent(this, UdpService.class);
 
         textTenLop = SharedPref.get(ManHinhDangNhapActivity.CURRENT_Class,String.class);
-
+        namePORT = Integer.parseInt(SharedPref.get(ManHinhDangNhapActivity.CURRENT_PORT,String.class));
         /*Bat service*/
         if (SharedPref.get(ManHinhDangNhapActivity.CURRENT_LOGIN_STATUS,Boolean.class) == false){
             SharedPref.put(ManHinhDangNhapActivity.CURRENT_LOGIN_STATUS,true);
@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
                 startService(intent);
             }
         }
-        namePORT = Integer.parseInt(SharedPref.get(ManHinhDangNhapActivity.CURRENT_PORT,String.class));
     }
     private void init() {
         /*Khoi tao viewpager
