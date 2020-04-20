@@ -150,7 +150,7 @@ public class FragmentAddNewAccount extends Fragment implements View.OnClickListe
         dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                txtDateBirth.setText(dayOfMonth+"/"+(month +1)+"/"+year);
+                txtDateBirth.setText(year+"-"+(month +1)+"-"+dayOfMonth);
             }
         };
     }

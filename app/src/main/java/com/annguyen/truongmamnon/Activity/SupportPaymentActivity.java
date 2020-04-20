@@ -124,6 +124,29 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
             ClearDuLieu();
             uidDataSupportPayment = SharedPref.get(ManHinhDangNhapActivity.CURRENT_UID,String.class);
             uidPayment.setText(uidDataSupportPayment);
+            if (!uidDataSupportPayment.equals("")){
+                Cursor DataTeacher = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinGiaoVien WHERE MaGV = '"+textMaGiaoVien+"'");
+                while (DataTeacher.moveToNext()){
+                    nameTeacher.setText(DataTeacher.getString(2));
+                    codeTeacher.setText(DataTeacher.getString(1));
+                }
+                Cursor DataNT = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinNguoiThan WHERE Uid = '"+uidPayment.getText().toString().trim()+"'");
+                while (DataNT.moveToNext()){
+                    nameParent.setText(DataNT.getString(2));
+                    codeStudent.setText(DataNT.getString(5));
+                    phoneNumber = DataNT.getString(6);
+                }
+
+                Cursor DataHS = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinHocSinh WHERE MaHs = '"+codeStudent.getText().toString().trim()+"'");
+                while (DataHS.moveToNext()){
+                    nameStudent.setText(DataHS.getString(2));
+                    classStudent.setText(DataHS.getString(4));
+                    byteImageStudent = DataHS.getBlob(7);
+                }
+            }
+            Bitmap decodebitmap = BitmapFactory.decodeByteArray(byteImageStudent,
+                    0, byteImageStudent.length);
+            circleImageStudent.setImageBitmap(decodebitmap);
             LayThongTinTaiKhoan layThongTinTaiKhoan = new LayThongTinTaiKhoan();
             layThongTinTaiKhoan.execute();
         }else {
@@ -178,71 +201,48 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
 
             switch (monthPayment.getSelectedItemPosition()){
                 case 0:
-                    dateTime = "01/" + date;
+                    dateTime = date+"-01";
                     break;
                 case 1:
-                    dateTime = "02/" + date;
+                    dateTime = date+"-02";
                     break;
                 case 2:
-                    dateTime = "03/" + date;
+                    dateTime = date+"-03";
                     break;
                 case 3:
-                    dateTime = "04/" + date;
+                    dateTime = date+"-04";
                     break;
                 case 4:
-                    dateTime = "05/" + date;
+                    dateTime = date+"-05";
                     break;
                 case 5:
-                    dateTime = "06/" + date;
+                    dateTime = date+"-06";
                     break;
                 case 6:
-                    dateTime = "07/" + date;
+                    dateTime = date+"-07";
                     break;
                 case 7:
-                    dateTime = "08/" + date;
+                    dateTime = date+"-08";
                     break;
                 case 8:
-                    dateTime = "09/" + date;
+                    dateTime = date+"-09";
                     break;
                 case 9:
-                    dateTime = "10/" + date;
+                    dateTime = date+"-10";
                     break;
                 case 10:
-                    dateTime = "11/" + date;
+                    dateTime = date+"-11";
                     break;
                 case 11:
-                    dateTime = "12/" + date;
+                    dateTime = date+"-12";
                     break;
             }
-            return dataProvider.getInstance().CheckConfirmPayment(codeStudent.getText().toString().trim(),dateTime);
+            return dataProvider.getInstance().CheckConfirmPayment(codeStudent.getText().toString().trim(),dateTime.trim());
         }
 
         @Override
         protected void onPostExecute(ArrayList<TrangThaiHocSinhNopTien> trangThaiHocSinhNopTiens) {
             reasonPayment.setText("Thanh toán tiền học " + monthPayment.getSelectedItem().toString().trim());
-            if (!uidDataSupportPayment.equals("")){
-                Cursor DataTeacher = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinGiaoVien WHERE MaGV = '"+textMaGiaoVien+"'");
-                while (DataTeacher.moveToNext()){
-                    nameTeacher.setText(DataTeacher.getString(2));
-                    codeTeacher.setText(DataTeacher.getString(1));
-                }
-                Cursor DataNT = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinNguoiThan WHERE Uid = '"+uidPayment.getText().toString().trim()+"'");
-                while (DataNT.moveToNext()){
-                    nameParent.setText(DataNT.getString(2));
-                    codeStudent.setText(DataNT.getString(5));
-                    phoneNumber = DataNT.getString(6);
-                }
-
-                Cursor DataHS = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinHocSinh WHERE MaHs = '"+codeStudent.getText().toString().trim()+"'");
-                while (DataHS.moveToNext()){
-                    nameStudent.setText(DataHS.getString(2));
-                    classStudent.setText(DataHS.getString(4));
-                    byteImageStudent = DataHS.getBlob(7);
-                }
-            }
-            Bitmap decodebitmap = BitmapFactory.decodeByteArray(byteImageStudent,
-                    0, byteImageStudent.length);
-            circleImageStudent.setImageBitmap(decodebitmap);
             if (trangThaiHocSinhNopTiens.size() > 0){
                 totalMoney.setText(trangThaiHocSinhNopTiens.get(0).getSoTien());
                 if (trangThaiHocSinhNopTiens.get(0).getTrangThaiThu().toString().trim().equals("0")){
@@ -252,7 +252,6 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
                     statusPayment.setText("Đã nộp tiền");
                     kiemTraNopTien = false;
                 }
-
             }else {
                 Toast.makeText(SupportPaymentActivity.this,"Không có dữ liệu thanh toán",Toast.LENGTH_SHORT).show();
             }
@@ -279,40 +278,40 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
 
             switch (monthPayment.getSelectedItemPosition()){
                 case 0:
-                    dateTime = "01/" + date;
+                    dateTime = date+"-01";
                     break;
                 case 1:
-                    dateTime = "02/" + date;
+                    dateTime = date+"-02";
                     break;
                 case 2:
-                    dateTime = "03/" + date;
+                    dateTime = date+"-03";
                     break;
                 case 3:
-                    dateTime = "04/" + date;
+                    dateTime = date+"-04";
                     break;
                 case 4:
-                    dateTime = "05/" + date;
+                    dateTime = date+"-05";
                     break;
                 case 5:
-                    dateTime = "06/" + date;
+                    dateTime = date+"-06";
                     break;
                 case 6:
-                    dateTime = "07/" + date;
+                    dateTime = date+"-07";
                     break;
                 case 7:
-                    dateTime = "08/" + date;
+                    dateTime = date+"-08";
                     break;
                 case 8:
-                    dateTime = "09/" + date;
+                    dateTime = date+"-09";
                     break;
                 case 9:
-                    dateTime = "10/" + date;
+                    dateTime = date+"-10";
                     break;
                 case 10:
-                    dateTime = "11/" + date;
+                    dateTime = date+"-11";
                     break;
                 case 11:
-                    dateTime = "12/" + date;
+                    dateTime = date+"-12";
                     break;
             }
             return dataProvider.getInstance().InsertConfirmPayment(codeStudent.getText().toString().trim(),dateTime);

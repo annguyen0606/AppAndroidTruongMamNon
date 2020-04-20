@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
         if (!date.equals(SharedPref.get(ManHinhDangNhapActivity.CURRENT_DATE,String.class))){
             SharedPref.put(ManHinhDangNhapActivity.CURRENT_DATE,date);
             ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM UIDTag");
+            ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM KiemTraDonCon");
             ManHinhDangNhapActivity.databaseSQLite.QuerryData("VACUUM");
         }
 
@@ -214,8 +215,8 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
         protected Void doInBackground(Void... voids) {
             ArrayList<ThongTinHocSinh> arrayDanhSachHocSinh = new ArrayList<>();
             ArrayList<ThongTinNguoiThan> arrayDanhSachNguoiThan = new ArrayList<>();
-            arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+textTenLop+"'");
-            arrayDanhSachNguoiThan = dataProvider.getInstance().LayDanhSachThongTinNguoiThan("SELECT *FROM ThongTinNguoiThan WHERE lop ='"+textTenLop+"'");
+            arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE malop ='"+textTenLop+"'");
+            arrayDanhSachNguoiThan = dataProvider.getInstance().LayDanhSachThongTinNguoiThan("SELECT *FROM ThongTinNguoiThan WHERE malop ='"+textTenLop+"'");
             for (int i = 0; i < arrayDanhSachHocSinh.size(); i++){
                 ManHinhDangNhapActivity.databaseSQLite.InsertThongTinHocSinh(arrayDanhSachHocSinh.get(i).getMaHocSinh().trim(),arrayDanhSachHocSinh.get(i).getHoTen().trim(),
                         arrayDanhSachHocSinh.get(i).getNgaySinh().trim(), arrayDanhSachHocSinh.get(i).getLopHocSinh().trim(),
@@ -286,6 +287,7 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
                 clearThongTinDonCong.execute();
 
                 ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM UIDTag");
+                ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM KiemTraDonCon");
                 ManHinhDangNhapActivity.databaseSQLite.QuerryData("VACUUM");
                 int countDontTakeStudent = FragmentDanhSachChamThe.LoadDuLieu();
                 FragmentDanhSachChuaChamThe.LoadDuLieuChuaChamThe();

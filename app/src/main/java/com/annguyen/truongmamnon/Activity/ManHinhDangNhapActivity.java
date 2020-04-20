@@ -97,6 +97,8 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
                 //ThongTinNopTien
                 databaseSQLite.QuerryData("CREATE TABLE IF NOT EXISTS ThongTinNopTien(Id INTEGER PRIMARY KEY AUTOINCREMENT,MaHs VARCHAR(10)," +
                         "MaLop VARCHAR(10),Status INTEGER)");
+                //Bang kiem tra don hoc sinh
+                databaseSQLite.QuerryData("CREATE TABLE IF NOT EXISTS KiemTraDonCon(Id INTEGER PRIMARY KEY AUTOINCREMENT,Uid VARCHAR(20),MaHs VARCHAR(10))");
             }catch (Exception ex){
                 ex.printStackTrace();
             }
@@ -196,8 +198,8 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
                     arrayDanhSachHocSinh = new ArrayList<>();
                     arrayDanhSachNguoiThan = new ArrayList<>();
                     //Lay du lieu tren DB roi luu vao SQLITE
-                    arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+thongTinGiaoVien.getLop().trim()+"'");
-                    arrayDanhSachNguoiThan = dataProvider.getInstance().LayDanhSachThongTinNguoiThan("SELECT *FROM ThongTinNguoiThan WHERE lop ='"+thongTinGiaoVien.getLop().trim()+"'");
+                    arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE malop ='"+thongTinGiaoVien.getLop().trim()+"'");
+                    arrayDanhSachNguoiThan = dataProvider.getInstance().LayDanhSachThongTinNguoiThan("SELECT *FROM ThongTinNguoiThan WHERE malop ='"+thongTinGiaoVien.getLop().trim()+"'");
                     for (int i = 0; i < arrayDanhSachHocSinh.size(); i++){
                         databaseSQLite.InsertThongTinHocSinh(arrayDanhSachHocSinh.get(i).getMaHocSinh().trim(),arrayDanhSachHocSinh.get(i).getHoTen().trim(),
                                 arrayDanhSachHocSinh.get(i).getNgaySinh().trim(), arrayDanhSachHocSinh.get(i).getLopHocSinh().trim(),

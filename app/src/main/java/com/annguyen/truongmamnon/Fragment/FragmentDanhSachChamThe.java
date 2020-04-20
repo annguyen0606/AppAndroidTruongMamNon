@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +27,7 @@ import com.annguyen.truongmamnon.R;
 import java.util.ArrayList;
 
 public class FragmentDanhSachChamThe extends Fragment{
-    private View view;//Bien view chinh la fragment
+    private static View view;//Bien view chinh la fragment
     private static SwipeRefreshLayout refreshLayout;//Refresh list view
     private static ListView listViewHocSinh;//list view hoc sinh
     private static ArrayList<ThongTinHocSinhRutGon> arrayHocSinh; //Chua nhung thong tin hien thi co ban
@@ -102,27 +103,20 @@ public class FragmentDanhSachChamThe extends Fragment{
         /*Khoi tao 2 mang chua UID va 2 mang chua status*/
         arrayData = new ArrayList<String>();
         arrayDataTemp = new ArrayList<String>();
-        ArrayList<Integer> arrayStatus = new ArrayList<>();
-        ArrayList<Integer> arrayStatusTemp = new ArrayList<>();
         arrayHocSinh.clear();
         /*Moc tat ca du lieu tu UIDTag table trong sqlite o 2 truong la uid va trang thai xac nhan*/
         Cursor dataNguoiThan = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM UIDTag");
         while (dataNguoiThan.moveToNext()){
             String dataUid = dataNguoiThan.getString(1).trim();
             arrayDataTemp.add(dataUid);
-            arrayStatusTemp.add(dataNguoiThan.getInt(3));
         }
         /*Dao nguoc lai mang arrayDataTemp va luu vao arrayData, mang Status like that*/
         for (int i = 0; i < arrayDataTemp.size(); i++){
             String abc = String.valueOf(arrayDataTemp.get(arrayDataTemp.size() - i - 1));
-            int cde = arrayStatusTemp.get(arrayDataTemp.size() - i - 1);
             arrayData.add(abc);
-            arrayStatus.add(cde);
         }
-        /*Neu co du lieu thi an logo conek di
-        * Moc tat ca cac data can thiet tu table ThongTinNguoiThan roi do bao mang arrayHocSinh*/
+        /* Moc tat ca cac data can thiet tu table ThongTinNguoiThan roi do bao mang arrayHocSinh*/
         if (arrayData.size() > 0){
-            int index = 0;
             for (String str : arrayData){
                 Cursor dataNT = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinNguoiThan WHERE Uid = '"+str+"'");
                 while (dataNT.moveToNext()){
@@ -133,14 +127,15 @@ public class FragmentDanhSachChamThe extends Fragment{
                         String quanHe = dataNT.getString(4);
                         byte[] abc = dataNT.getBlob(7);
                         String maUid = dataNT.getString(1);
-                        arrayHocSinh.add(new ThongTinHocSinhRutGon(name,mahs,quanHe,maUid,arrayStatus.get(index),abc));
-                        if (arrayStatus.get(index) == 0){
-                            countConfirmTakeStudent++;
+                        Cursor kiemTraTrangThaiDonCon = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM KiemTraDonCon WHERE Uid = '"+maUid+"' and MaHs = '"+mahs.trim()+"'");
+                        if (kiemTraTrangThaiDonCon.getCount() >= 1){
+                            arrayHocSinh.add(new ThongTinHocSinhRutGon(name,mahs,quanHe,maUid,1,abc));
+                        }else {
+                            arrayHocSinh.add(new ThongTinHocSinhRutGon(name,mahs,quanHe,maUid,0,abc));
                         }
                     }else {
                     }
                 }
-                index++;
             }
         }else {
         }

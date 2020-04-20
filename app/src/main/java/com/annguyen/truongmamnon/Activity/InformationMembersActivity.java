@@ -240,7 +240,7 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
         @Override
         protected Integer doInBackground(Integer... integers) {
             //Lay ngay gio
-            SimpleDateFormat Date = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat Date = new SimpleDateFormat("yyyy-MM-dd");
             dateStr = Date.format(new Date());
             /*
             * Kiem tra xem dia chi UID nay da don con chua
@@ -261,6 +261,8 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
         @Override
         protected void onPostExecute(Integer integer) {
             ManHinhDangNhapActivity.databaseSQLite.QuerryData("UPDATE UIDTag SET Confirm = 1 WHERE Uid = '"+intent.getStringExtra("data2").trim()+"'");
+            //ManHinhDangNhapActivity.databaseSQLite.QuerryData("UPDATE KiemTraDonCon SET Status = 1 WHERE Uid = '"+intent.getStringExtra("data2").trim()+"' and MaHs = '"+maHocSinh.getText().toString().trim()+"'");
+            ManHinhDangNhapActivity.databaseSQLite.QuerryData("INSERT INTO KiemTraDonCon VALUES(null,'"+intent.getStringExtra("data2").trim()+"','"+maHocSinh.getText().toString().trim()+"')");
             if (integer == 1){
                 Toast.makeText(InformationMembersActivity.this,"Xác nhận thành công",Toast.LENGTH_SHORT).show();
                 Drawable d = getResources().getDrawable(R.drawable.background_button_choose);

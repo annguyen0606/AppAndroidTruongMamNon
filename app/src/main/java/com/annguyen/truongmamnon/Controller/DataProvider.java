@@ -75,7 +75,7 @@ public class DataProvider {
                 thongTinNguoiThan.setMaHocSinh(resultSet.getString("mahs"));
                 thongTinNguoiThan.setSoDienThoai(resultSet.getString("sodienthoai"));
                 thongTinNguoiThan.setHinhAnh(resultSet.getBytes("hinhanh"));
-                thongTinNguoiThan.setLop(resultSet.getString("lop"));
+                thongTinNguoiThan.setLop(resultSet.getString("malop"));
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -96,7 +96,7 @@ public class DataProvider {
                 thongTinHocSinh.setMaHocSinh(resultSet.getString("mahs"));
                 thongTinHocSinh.setHoTen(resultSet.getString("hoten"));
                 thongTinHocSinh.setNgaySinh(resultSet.getString("ngaysinh"));
-                thongTinHocSinh.setLopHocSinh(resultSet.getString("lop"));
+                thongTinHocSinh.setLopHocSinh(resultSet.getString("malop"));
                 thongTinHocSinh.setGioiTinh(resultSet.getString("gioitinh"));
                 thongTinHocSinh.setDiaChi(resultSet.getString("diachi"));
                 thongTinHocSinh.setHinhAnh(resultSet.getBytes("hinhanh"));
@@ -124,7 +124,7 @@ public class DataProvider {
                 thongTinGiaoVien.setUserName(resultSet.getString("username"));
                 thongTinGiaoVien.setPassWord(resultSet.getString("password"));
                 thongTinGiaoVien.setPortName(resultSet.getString("port"));
-                thongTinGiaoVien.setLop(resultSet.getString("lop"));
+                thongTinGiaoVien.setLop(resultSet.getString("malop"));
                 thongTinGiaoVien.setLoaiTaiKhoan(resultSet.getInt("loaitaikhoan"));
             }
             resultSet.close();
@@ -148,7 +148,7 @@ public class DataProvider {
                 thongTinHocSinh.setMaHocSinh(resultSet.getString("mahs"));
                 thongTinHocSinh.setHoTen(resultSet.getString("hoten"));
                 thongTinHocSinh.setNgaySinh(resultSet.getString("ngaysinh"));
-                thongTinHocSinh.setLopHocSinh(resultSet.getString("lop"));
+                thongTinHocSinh.setLopHocSinh(resultSet.getString("malop"));
                 thongTinHocSinh.setGioiTinh(resultSet.getString("gioitinh"));
                 thongTinHocSinh.setDiaChi(resultSet.getString("diachi"));
                 thongTinHocSinh.setHinhAnh(resultSet.getBytes("hinhanh"));
@@ -180,7 +180,7 @@ public class DataProvider {
                 thongTinNguoiThan.setMaHocSinh(resultSet.getString("mahs"));
                 thongTinNguoiThan.setSoDienThoai(resultSet.getString("sodienthoai"));
                 thongTinNguoiThan.setHinhAnh(resultSet.getBytes("hinhanh"));
-                thongTinNguoiThan.setLop(resultSet.getString("lop"));
+                thongTinNguoiThan.setLop(resultSet.getString("malop"));
                 danhSachThongTinNguoiThan.add(thongTinNguoiThan);
             }
             resultSet.close();
@@ -194,7 +194,7 @@ public class DataProvider {
         int resultInsert = 0;
         Connection connection;
         connection = CONN(userName,passWord,nameDB,ipServer);
-        String querryInsert = "insert into ThongTinHocSinh(mahs, hoten, ngaysinh, lop, gioitinh, diachi, hinhanh, magv) values(?, ?, ?, ?, ?, ?, ?, ?)";
+        String querryInsert = "insert into ThongTinHocSinh(mahs, hoten, ngaysinh, malop, gioitinh, diachi, magv, hinhanh) values(?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(querryInsert);
             preparedStatement.setString(1,maHs);
@@ -203,8 +203,8 @@ public class DataProvider {
             preparedStatement.setString(4,lop);
             preparedStatement.setString(5,gioiTinh);
             preparedStatement.setString(6,diaChi);
-            preparedStatement.setBytes(7,hinhAnh);
-            preparedStatement.setString(8,magv);
+            preparedStatement.setString(7,magv);
+            preparedStatement.setBytes(8,hinhAnh);
             resultInsert = preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
@@ -218,7 +218,7 @@ public class DataProvider {
         int resultInsert = 0;
         Connection connection;
         connection = CONN(userName,passWord,nameDB,ipServer);
-        String querryInsert = "insert into ThongTinNguoiThan(uid, hoten, diachi, quanhe, mahs, sodienthoai, hinhanh, lop) values(?, ?, ?, ?, ?, ?, ?, ?)";
+        String querryInsert = "insert into ThongTinNguoiThan(uid, hoten, diachi, quanhe, mahs, sodienthoai, malop, hinhanh) values(?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(querryInsert);
             preparedStatement.setString(1,uid);
@@ -227,8 +227,8 @@ public class DataProvider {
             preparedStatement.setString(4,quanHe);
             preparedStatement.setString(5,mahs);
             preparedStatement.setString(6,sodienthoai);
-            preparedStatement.setBytes(7,hinhAnh);
-            preparedStatement.setString(8,lop);
+            preparedStatement.setString(7,lop);
+            preparedStatement.setBytes(8,hinhAnh);
             resultInsert = preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
@@ -242,7 +242,7 @@ public class DataProvider {
         int resultInsert = 0;
         Connection connection;
         connection = CONN(userName,passWord,nameDB,ipServer);
-        String querryInsert = "insert into ThoiGianDonCon(uid, mahs, lop, ngay, phut) values(?, ?, ?, ?, ?)";
+        String querryInsert = "insert into ThoiGianDonCon(uid, mahs, malop, ngay, phut) values(?, ?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(querryInsert);
             preparedStatement.setString(1,uid);

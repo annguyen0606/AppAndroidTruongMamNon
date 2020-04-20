@@ -66,7 +66,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void AnhXa() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         ngayThangThongKe = dateFormat.format(new Date());
         maGiaoVien = SharedPref.get(ManHinhDangNhapActivity.CURRENT_TEACHER,String.class);
 
@@ -126,7 +126,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                     case 3:
                         if (classList.getSelectedItem().toString().trim().equals(txtMaLop)){
                             arrayDanhSachHocSinh = new ArrayList<>();
-                            arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+txtMaLop+"'");
+                            arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE malop ='"+txtMaLop+"'");
                             LayThongTinTuDB layThongTinTuDB = new LayThongTinTuDB();
                             layThongTinTuDB.execute(txtMaLop);
                         }else {
@@ -135,7 +135,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                         break;
                     case 2:
                         arrayDanhSachHocSinh = new ArrayList<>();
-                        arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE lop ='"+txtLop+"'");
+                        arrayDanhSachHocSinh = dataProvider.getInstance().LayDanhSachThongTinHocSinh("SELECT *FROM ThongTinHocSinh WHERE malop ='"+txtLop+"'");
                         LayThongTinTuDB layThongTinTuDB = new LayThongTinTuDB();
                         layThongTinTuDB.execute(txtLop);
                         break;
@@ -202,53 +202,53 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
         @SuppressLint("WrongThread")
         @Override
         protected ArrayList<ThongTinThongKe> doInBackground(String... strings) {
-            String dateTime2 = "";
+            String dateTime = "";
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
             String date = dateFormat.format(new Date());
             arrayPhut = new ArrayList<>();
             switch (monthList.getSelectedItemPosition()){
                 case 0:
-                    dateTime2 = "01/" + date;
+                    dateTime = date+"-01";
                     break;
                 case 1:
-                    dateTime2 = "02/" + date;
+                    dateTime = date+"-02";
                     break;
                 case 2:
-                    dateTime2 = "03/" + date;
+                    dateTime = date+"-03";
                     break;
                 case 3:
-                    dateTime2 = "04/" + date;
+                    dateTime = date+"-04";
                     break;
                 case 4:
-                    dateTime2 = "05/" + date;
+                    dateTime = date+"-05";
                     break;
                 case 5:
-                    dateTime2 = "06/" + date;
+                    dateTime = date+"-06";
                     break;
                 case 6:
-                    dateTime2 = "07/" + date;
+                    dateTime = date+"-07";
                     break;
                 case 7:
-                    dateTime2 = "08/" + date;
+                    dateTime = date+"-08";
                     break;
                 case 8:
-                    dateTime2 = "09/" + date;
+                    dateTime = date+"-09";
                     break;
                 case 9:
-                    dateTime2 = "10/" + date;
+                    dateTime = date+"-10";
                     break;
                 case 10:
-                    dateTime2 = "11/" + date;
+                    dateTime = date+"-11";
                     break;
                 case 11:
-                    dateTime2 = "12/" + date;
+                    dateTime = date+"-12";
                     break;
             }
 
             for (int i = 0; i < arrayDanhSachHocSinh.size(); i++){
-                arrayPhut.add(dataProvider.getInstance().GetLateMinuteFromMaHs(arrayDanhSachHocSinh.get(i).getMaHocSinh(),dateTime2));
+                arrayPhut.add(dataProvider.getInstance().GetLateMinuteFromMaHs(arrayDanhSachHocSinh.get(i).getMaHocSinh(),dateTime));
             }
-            ArrayList<TrangThaiHocSinhNopTien> danhHocSinhNopTien = dataProvider.getInstance().LayDanhSachHocSinhNopTien(txtLop,dateTime2);
+            ArrayList<TrangThaiHocSinhNopTien> danhHocSinhNopTien = dataProvider.getInstance().LayDanhSachHocSinhNopTien(txtLop,dateTime);
             for (int i = 0; i < arrayDanhSachHocSinh.size(); i++){
                 ThongTinThongKe thongTinThongKe = new ThongTinThongKe("ABC","ABC",0,"0",0);
                 thongTinThongKe.setMaHS(arrayDanhSachHocSinh.get(i).getMaHocSinh());
