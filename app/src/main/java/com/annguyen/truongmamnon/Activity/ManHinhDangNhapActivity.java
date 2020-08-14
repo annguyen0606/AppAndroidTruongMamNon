@@ -65,7 +65,7 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
     }
 
     private void init() {
-        //Khoi tao SQLite
+        //Khoi tao SQLit
         databaseSQLite = new DatabaseSQLite(this,"ConekKindergaten.sqlite",null,1);
         sharedPref = new SharedPref(context); //Khoi tao SharedPreferences
         /*Kiem tra ket noi voi database

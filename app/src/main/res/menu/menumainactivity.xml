@@ -14,10 +14,10 @@
             <item android:title="Nộp tiền"
                 android:id="@+id/paymentMenu"
                 android:icon="@drawable/ic_money_icon"></item>
-            <item android:title="Thống kê"
+            <item android:title="Thống kê thu tiền"
                 android:id="@+id/statisticMenu"
                 android:icon="@drawable/ic_pie_chart"></item>
-            <item android:title="Cài đặt"
+            <item android:title="Cài đặt thiết bị"
                 android:id="@+id/settingMenu"
                 android:icon="@drawable/ic_settings_black"></item>
             <item android:title="Đăng xuất"
