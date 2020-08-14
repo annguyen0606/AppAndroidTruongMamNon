@@ -51,7 +51,7 @@
             android:label="Trường mầm non" />
 
         <service
-            android:name=".Service.UdpService"
+            android:name=".Service.FirebaseService"
             android:enabled="true"
             android:exported="true"
             android:stopWithTask="false" />

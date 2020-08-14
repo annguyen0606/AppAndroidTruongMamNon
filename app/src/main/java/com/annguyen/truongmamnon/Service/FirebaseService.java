@@ -11,9 +11,9 @@ import androidx.annotation.Nullable;
 
 import com.annguyen.truongmamnon.Activity.MainActivity;
 import com.annguyen.truongmamnon.Controller.NotifyManage;
-import com.annguyen.truongmamnon.Controller.UdpManage;
+import com.annguyen.truongmamnon.Controller.FirebaseManage;
 
-public class UdpService extends Service {
+public class FirebaseService extends Service {
 
     @Nullable
     @Override
@@ -24,8 +24,8 @@ public class UdpService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        registerReceiver(new UdpManage(),new IntentFilter(UdpManage.BOARD_CAST_NAME));
-        UdpManage.startMe(this);
+        registerReceiver(new FirebaseManage(),new IntentFilter(FirebaseManage.BOARD_CAST_NAME));
+        FirebaseManage.startMe(this);
     }
 
     private void initFore() {

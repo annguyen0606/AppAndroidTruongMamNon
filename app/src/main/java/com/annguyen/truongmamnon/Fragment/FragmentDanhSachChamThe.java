@@ -127,6 +127,7 @@ public class FragmentDanhSachChamThe extends Fragment{
                         String quanHe = dataNT.getString(4);
                         byte[] abc = dataNT.getBlob(7);
                         String maUid = dataNT.getString(1);
+                        countConfirmTakeStudent++;
                         Cursor kiemTraTrangThaiDonCon = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM KiemTraDonCon WHERE Uid = '"+maUid+"' and MaHs = '"+mahs.trim()+"'");
                         if (kiemTraTrangThaiDonCon.getCount() >= 1){
                             arrayHocSinh.add(new ThongTinHocSinhRutGon(name,mahs,quanHe,maUid,1,abc));

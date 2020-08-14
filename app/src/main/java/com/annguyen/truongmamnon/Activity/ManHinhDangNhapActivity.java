@@ -89,7 +89,7 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
                 databaseSQLite.QuerryData("CREATE TABLE IF NOT EXISTS ThongTinNguoiThan(Id INTEGER PRIMARY KEY AUTOINCREMENT,Uid VARCHAR(20)," +
                         "HoTen VARCHAR(50),DiaChi VARCHAR(50),quanhe VARCHAR(50),MaHs VARCHAR(20),SoDienThoai VARCHAR(12),HinhAnh BLOB,Lop VARCHAR(10))");
                 //ThongTinHocSinh chua thong tin hoc sinh
-                databaseSQLite.QuerryData("CREATE TABLE IF NOT EXISTS ThongTinHocSinh(Id INTEGER PRIMARY KEY AUTOINCREMENT,MaHs VARCHAR(10)," +
+                databaseSQLite.QuerryData("CREATE TABLE IF NOT EXISTS ThongTinHocSinh(Id INTEGER PRIMARY KEY AUTOINCREMENT,MaHs VARCHAR(20)," +
                         "HoTen VARCHAR(50),NgaySinh VARCHAR(12),Lop VARCHAR(10),GioiTinh VARCHAR(10),DiaChi VARCHAR(50),HinhAnh BLOB,MaGV VARCHAR(10))");
                 //ThongTinGiaoVien chua thong tin giao vien
                 databaseSQLite.QuerryData("CREATE TABLE IF NOT EXISTS ThongTinGiaoVien(Id INTEGER PRIMARY KEY AUTOINCREMENT,MaGV VARCHAR(10)," +

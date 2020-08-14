@@ -78,6 +78,7 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
         SQLiteDatabase database = getReadableDatabase();
         return database.rawQuery(sql,null);
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
 

@@ -26,13 +26,13 @@ import android.widget.Toast;
 import com.annguyen.truongmamnon.Adapter.MainViewPagerAdapter;
 import com.annguyen.truongmamnon.Controller.DataProvider;
 import com.annguyen.truongmamnon.Controller.SharedPref;
-import com.annguyen.truongmamnon.Controller.UdpManage;
+import com.annguyen.truongmamnon.Controller.FirebaseManage;
 import com.annguyen.truongmamnon.Fragment.FragmentDanhSachChamThe;
 import com.annguyen.truongmamnon.Fragment.FragmentDanhSachChuaChamThe;
 import com.annguyen.truongmamnon.Model.ThongTinHocSinh;
 import com.annguyen.truongmamnon.Model.ThongTinNguoiThan;
 import com.annguyen.truongmamnon.R;
-import com.annguyen.truongmamnon.Service.UdpService;
+import com.annguyen.truongmamnon.Service.FirebaseService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -41,7 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements UdpManage.ListenData, View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements FirebaseManage.ListenData, View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     public static TabLayout tabLayout; //Bien tablayout
     public static int namePORT = 0;
     private ViewPager viewPager;//Bien viewpager de cho phep nguoi dung vuot de chuyen fragment
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
         textMaGiaoVien = SharedPref.get(ManHinhDangNhapActivity.CURRENT_TEACHER,String.class);
         /*
         * Khoi tao truyen du lieu interface*/
-        UdpManage.setListener(MainActivity.this);
+        FirebaseManage.setListener(MainActivity.this);
         /*Ham Anh xa*/
         AnhXa();
         /*Ham Init*/
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
         * Khoi tao context
         * Khoi tao Intent
         * Lay gia tri ten lop*/
-        intent = new Intent(this, UdpService.class);
+        intent = new Intent(this, FirebaseService.class);
 
         textTenLop = SharedPref.get(ManHinhDangNhapActivity.CURRENT_Class,String.class);
         namePORT = Integer.parseInt(SharedPref.get(ManHinhDangNhapActivity.CURRENT_PORT,String.class));
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_access_time_black_24dp);
 
         /*Tat ca Ringtone khi khoi tao Activity*/
-        UdpManage.stopSound();
+        FirebaseManage.stopSound();
         /*Lay date dang nhap
         * Neu dang nhap vao mot ngay moi se clear du lieu o table UIDTag trong sqlite*/
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -318,7 +318,6 @@ public class MainActivity extends AppCompatActivity implements UdpManage.ListenD
             case R.id.logOutMenu:
                 SharedPref.put(ManHinhDangNhapActivity.CURRENT_LOGIN_STATUS,false);
                 stopService(intent);
-                UdpManage.stopMe(this);
                 /*android.os.Process.killProcess(android.os.Process.myPid());
                 System.exit(0);*/
                 finish();
