@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,8 +30,8 @@ public class FragmentDanhSachChamThe extends Fragment{
     private static SwipeRefreshLayout refreshLayout;//Refresh list view
     private static ListView listViewHocSinh;//list view hoc sinh
     private static ArrayList<ThongTinHocSinhRutGon> arrayHocSinh; //Chua nhung thong tin hien thi co ban
-    private static ArrayList<String> arrayData; //Array se chua cac UID trong table UIDTag sqlite
-    private static ArrayList<String> arrayDataTemp;//Array se chua cac UID tam thoi trong table UIDTag sqlite
+    private static ArrayList<ThongTinHocSinhRutGon> arrayHocSinhTemp; //Chua nhung thong tin hien thi co ban
+    private static ArrayList<ThongTinHocSinhRutGon> arrayHocSinhTemp2; //Chua nhung thong tin hien thi co ban
     private SharedPref sharedPref; //Class de moc du lieu tu SharedPreferences
     private static String textLop = "";//Chua ten lop de tac dong
     private static DiaryTapAdapter nhatKyChamTheAdapter;//Adapter de do du lieu tu bang arrayHocSinh vao List view
@@ -100,45 +99,34 @@ public class FragmentDanhSachChamThe extends Fragment{
 
     public static int LoadDuLieu() {
         int countConfirmTakeStudent = 0;
-        /*Khoi tao 2 mang chua UID va 2 mang chua status*/
-        arrayData = new ArrayList<String>();
-        arrayDataTemp = new ArrayList<String>();
+        arrayHocSinhTemp = new ArrayList<>();
+        arrayHocSinhTemp2 = new ArrayList<>();
         arrayHocSinh.clear();
         /*Moc tat ca du lieu tu UIDTag table trong sqlite o 2 truong la uid va trang thai xac nhan*/
-        Cursor dataNguoiThan = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM UIDTag");
+        Cursor dataNguoiThan = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM UIDTag ut INNER JOIN ThongTinNguoiThan nt on TRIM(ut.Uid) = TRIM(nt.Uid) " +
+                "where TRIM(nt.Lop) = '"+textLop.trim()+"'");
         while (dataNguoiThan.moveToNext()){
-            String dataUid = dataNguoiThan.getString(1).trim();
-            arrayDataTemp.add(dataUid);
+            String mahs = dataNguoiThan.getString(9);
+            String name = dataNguoiThan.getString(6);
+            String quanHe = dataNguoiThan.getString(8);
+            byte[] abc = dataNguoiThan.getBlob(11);
+            String maUid = dataNguoiThan.getString(1);
+            arrayHocSinhTemp.add(new ThongTinHocSinhRutGon(name,mahs,quanHe,maUid,0,abc));
         }
-        /*Dao nguoc lai mang arrayDataTemp va luu vao arrayData, mang Status like that*/
-        for (int i = 0; i < arrayDataTemp.size(); i++){
-            String abc = String.valueOf(arrayDataTemp.get(arrayDataTemp.size() - i - 1));
-            arrayData.add(abc);
-        }
-        /* Moc tat ca cac data can thiet tu table ThongTinNguoiThan roi do bao mang arrayHocSinh*/
-        if (arrayData.size() > 0){
-            for (String str : arrayData){
-                Cursor dataNT = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinNguoiThan WHERE Uid = '"+str+"'");
-                while (dataNT.moveToNext()){
-                    String lop = dataNT.getString(8);
-                    if (lop.trim().equals(textLop)){
-                        String mahs = dataNT.getString(5);
-                        String name = dataNT.getString(2);
-                        String quanHe = dataNT.getString(4);
-                        byte[] abc = dataNT.getBlob(7);
-                        String maUid = dataNT.getString(1);
-                        countConfirmTakeStudent++;
-                        Cursor kiemTraTrangThaiDonCon = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM KiemTraDonCon WHERE Uid = '"+maUid+"' and MaHs = '"+mahs.trim()+"'");
-                        if (kiemTraTrangThaiDonCon.getCount() >= 1){
-                            arrayHocSinh.add(new ThongTinHocSinhRutGon(name,mahs,quanHe,maUid,1,abc));
-                        }else {
-                            arrayHocSinh.add(new ThongTinHocSinhRutGon(name,mahs,quanHe,maUid,0,abc));
-                        }
-                    }else {
-                    }
+        if (arrayHocSinhTemp.size() > 0){
+            for (int i = arrayHocSinhTemp.size() - 1; i >= 0; i--){
+                arrayHocSinhTemp2.add(new ThongTinHocSinhRutGon(arrayHocSinhTemp.get(i).getTen(),arrayHocSinhTemp.get(i).getMaHs(),arrayHocSinhTemp.get(i).getDiaChi(),
+                        arrayHocSinhTemp.get(i).getMaUid(),0,arrayHocSinhTemp.get(i).getHinhAnh()));
+            }
+            for (ThongTinHocSinhRutGon rutGon : arrayHocSinhTemp2){
+                Cursor kiemTraTrangThaiDonCon = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM KiemTraDonCon WHERE TRIM(Uid) = '"+rutGon.getMaUid().trim()+"' and TRIM(MaHs) = '"+rutGon.getMaHs().trim()+"'");
+                if (kiemTraTrangThaiDonCon.getCount() >= 1){
+                    arrayHocSinh.add(new ThongTinHocSinhRutGon(rutGon.getTen(),rutGon.getMaHs(),rutGon.getDiaChi(),rutGon.getMaUid(),1,rutGon.getHinhAnh()));
+                }else {
+                    countConfirmTakeStudent++;
+                    arrayHocSinh.add(new ThongTinHocSinhRutGon(rutGon.getTen(),rutGon.getMaHs(),rutGon.getDiaChi(),rutGon.getMaUid(),0,rutGon.getHinhAnh()));
                 }
             }
-        }else {
         }
         nhatKyChamTheAdapter.notifyDataSetChanged();
         return countConfirmTakeStudent;

@@ -43,12 +43,13 @@ public class FirebaseManage extends BroadcastReceiver {
     private static ListenData listenData;
     SharedPref sharedPref;
     static Ringtone ringtone;
+    String textLop = "";
 
     void init(){
         sharedPref = new SharedPref(mcontext);
+        textLop = SharedPref.get(ManHinhDangNhapActivity.CURRENT_CLASS_NAME,String.class);
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        databaseReference.child("DuLieuMamNonDemo").child("1A").addChildEventListener(new ChildEventListener() {
+        databaseReference.child("DuLieuMamNonDemo").child(textLop).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
@@ -58,33 +59,32 @@ public class FirebaseManage extends BroadcastReceiver {
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Intent i = new Intent(mcontext, ManHinhDangNhapActivity.class);
                 String tenPhuHuynh = "";
-                String maHS = "";
                 String tenHocSinh = "";
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 PendingIntent pendingIntent = PendingIntent.getActivity(mcontext,
                         0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                Cursor dataNguoiThan = ManHinhDangNhapActivity.databaseSQLite.GetData("Select *from ThongTinNguoiThan nt, ThongTinHocSinh hs where TRIM(nt.MaHs) = TRIM(hs.MaHs) and TRIM(nt.Uid) = '" + snapshot.getKey().trim() +"'");
-                while (dataNguoiThan.moveToNext()){
-                    tenPhuHuynh = dataNguoiThan.getString(2);
-                    maHS = dataNguoiThan.getString(11);
-                    NotifyManage.callNotify(mcontext,pendingIntent,idNotify++,NOTIFY_ID,"Có tài khoản tương tác", tenPhuHuynh + " take " + maHS);
-
-                    Cursor dataNguoiThan2 = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM UIDTag WHERE Trim(Uid) = '"+snapshot.getKey().trim()+"'");
-                    if (dataNguoiThan2.getCount() == 0){
-                        ManHinhDangNhapActivity.databaseSQLite.QuerryData("INSERT INTO UIDTag VALUES(null,'"+snapshot.getKey()+"',"+"'17:00:00',"+0+")");
-                        if (listenData!=null){
-                            listenData.onUIChange(true);
-                        }
-                    }else{ }
+                Cursor dataNguoiThan2 = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM UIDTag WHERE Trim(Uid) = '"+snapshot.getKey().trim()+"'");
+                if (dataNguoiThan2.getCount() == 0){
+                    String[] minuteLate = snapshot.getValue().toString().split(",");
+                    if(Integer.parseInt(minuteLate[1]) > 0){
+                        ManHinhDangNhapActivity.databaseSQLite.QuerryData("INSERT INTO UIDTag VALUES(null,'"+snapshot.getKey()+"','"+minuteLate[1]+"',"+0+")");
+                    }else {
+                        ManHinhDangNhapActivity.databaseSQLite.QuerryData("INSERT INTO UIDTag VALUES(null,'"+snapshot.getKey()+"','"+0+"',"+0+")");
+                    }
+                    if (listenData!=null){
+                        listenData.onUIChange(true);
+                    }
+                    Cursor dataNguoiThan = ManHinhDangNhapActivity.databaseSQLite.GetData("Select *from ThongTinNguoiThan nt, ThongTinHocSinh hs where TRIM(nt.MaHs) = TRIM(hs.MaHs) and TRIM(nt.Uid) = '" + snapshot.getKey().trim() +"'");
+                    while (dataNguoiThan.moveToNext()){
+                        tenPhuHuynh = dataNguoiThan.getString(2);
+                        tenHocSinh = dataNguoiThan.getString(11);
+                        NotifyManage.callNotify(mcontext,pendingIntent,idNotify++,NOTIFY_ID,"Có tài khoản tương tác", tenPhuHuynh + " take " + tenHocSinh);
 //                    if (ringtone == null){
 //                        ringtone = RingtoneManager.getRingtone(mcontext,RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
 //                    }
 //                    playSound();
-                }
-
-
-
+                    }
+                }else{ }
             }
 
             @Override

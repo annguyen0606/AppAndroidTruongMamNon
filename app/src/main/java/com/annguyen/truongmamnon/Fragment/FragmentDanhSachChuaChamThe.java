@@ -25,14 +25,15 @@ import com.annguyen.truongmamnon.Controller.SharedPref;
 import com.annguyen.truongmamnon.Model.ThongTinHocSinhRutGon;
 import com.annguyen.truongmamnon.R;
 
+import org.w3c.dom.CDATASection;
+
 import java.util.ArrayList;
 
 public class FragmentDanhSachChuaChamThe extends Fragment {
     private View view;
     private static SwipeRefreshLayout refreshLayout;
     private static ListView listViewHocSinh;
-    private static ArrayList<ThongTinHocSinhRutGon> arrayHocSinh;
-    private static ArrayList<String> arrayUIDDataTemp;
+    private static ArrayList<ThongTinHocSinhRutGon> arrayHocSinh; //Chua nhung thong tin hien thi co ban
     private static ArrayList<String> arrayMaHsTemp;
     private SharedPref sharedPref;
     private static DiaryNotTapAdapter nhatKyChamTheAdapter;
@@ -114,43 +115,26 @@ public class FragmentDanhSachChuaChamThe extends Fragment {
     }
 
     public static void LoadDuLieuChuaChamThe() {
-        arrayUIDDataTemp = new ArrayList<String>();
         arrayMaHsTemp = new ArrayList<>();
         arrayHocSinh.clear();
+        ArrayList<String> fullStudents = new ArrayList<>();
         //Moc tat ca cac UID data tu table UIDTag
-        Cursor dataNguoiThan = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM UIDTag");
-        while (dataNguoiThan.moveToNext()){
-            String dataUid = dataNguoiThan.getString(1).trim();
-            arrayUIDDataTemp.add(dataUid);
+        Cursor fullST = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT * FROM ThongTinHocSinh where TRIM(Lop) = '"+tenLop.trim()+"'");
+        while (fullST.moveToNext()){
+            fullStudents.add(fullST.getString(1).trim());
         }
-        /*Du vao du lieu moc duoc o tren
-        * Moc tat ca cac Ma hoc sinh data tu table ThongTinNguoiThan thong qua cac UID parent moc duoc o tren*/
-        if (arrayUIDDataTemp.size() > 0){
-            for (String str : arrayUIDDataTemp){
-                Cursor dataNT = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinNguoiThan WHERE Uid = '"+str+"'");
-                while (dataNT.moveToNext()){
-                    arrayMaHsTemp.add(dataNT.getString(5));
-                }
-            }
-        }
-        //Moc tat ca cac ma hoc sinh tu cua lop ma giao vien dang nhap
-        ArrayList<String> arrayMaHs = new ArrayList<>();
-        Cursor dataHS = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinHocSinh WHERE Lop = '"+tenLop +"'");
-        while (dataHS.moveToNext()){
-            arrayMaHs.add(dataHS.getString(1));
-        }
-        //Dem so sach cac ma hoc sinh dc cham the voi tong tat ca cac ma hoc sinh
-        for (int i = 0; i < arrayMaHsTemp.size(); i++){
-            for (int j = 0; j < arrayMaHs.size(); j++){
-                if(arrayMaHsTemp.get(i).trim().equals(arrayMaHs.get(j).trim())){
-                    arrayMaHs.set(j,"an");
-                }
-            }
-        }
+        for (String strMaHS : fullStudents){
+            Cursor dataNguoiThan = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM UIDTag ut INNER JOIN ThongTinNguoiThan nt on TRIM(ut.Uid) = TRIM(nt.Uid) " +
+                    "where TRIM(nt.Lop) = '"+tenLop.trim()+"' and TRIM(nt.MaHs) = '"+strMaHS+"'");
+            if(dataNguoiThan.getCount() >= 1){
 
-        for (int i = 0; i < arrayMaHs.size(); i++){
-            if (!arrayMaHs.get(i).trim().equals("an")){
-                Cursor dataNT = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinHocSinh WHERE MaHs = '"+arrayMaHs.get(i).trim()+"'");
+            }else{
+                arrayMaHsTemp.add(strMaHS);
+            }
+        }
+        if (arrayMaHsTemp.size() > 0){
+            for (String strUID : arrayMaHsTemp){
+                Cursor dataNT = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinHocSinh WHERE TRIM(MaHs) = '"+strUID+"'");
                 while (dataNT.moveToNext()){
                     String mahs = dataNT.getString(1);
                     String name = dataNT.getString(2);

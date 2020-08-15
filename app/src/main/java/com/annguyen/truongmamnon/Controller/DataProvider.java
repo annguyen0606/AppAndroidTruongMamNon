@@ -335,6 +335,24 @@ public class DataProvider {
         }
         return matruong;
     }
+    public String LayTenLop(String malop){
+        String tenLop = "";
+        Connection connection;
+        ResultSet resultSet;
+        String query = "SELECT tenlop FROM ThongTinLop WHERE malop = '" +malop+"'";
+        connection = CONN(userName,passWord,nameDB,ipServer);
+        try {
+            Statement stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(query);
+            if (resultSet != null && resultSet.next()) {
+                tenLop = resultSet.getString("tenlop");
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tenLop;
+    }
 
     public ArrayList<String> LayDanhSachLop(String maTruong){
         Connection connection;

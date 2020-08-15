@@ -52,7 +52,7 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
     String dateStr = ""; //Bien luu tru ngay
     String txtUid = "";
     ImageView backToMainActivity;
-
+    private SharedPref sharedPref; //Bien sharedPreferences de truy mot vai thong tin data luu
     boolean kiemTraKetNoiInternet = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +61,7 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
         getSupportActionBar();
         AnhXa();
         intent = this.getIntent();
+        sharedPref = new SharedPref(this);
         /*
         * Lay ma hoc sinh*/
         maHocSinh.setText(intent.getStringExtra("data").trim());
@@ -267,6 +268,7 @@ public class InformationMembersActivity extends AppCompatActivity implements Vie
                 Toast.makeText(InformationMembersActivity.this,"Xác nhận thành công",Toast.LENGTH_SHORT).show();
                 Drawable d = getResources().getDrawable(R.drawable.background_button_choose);
                 confirmTakeStudent.setBackground(d);
+
             }else {
                 Drawable d = getResources().getDrawable(R.drawable.background_button_choose);
                 confirmTakeStudent.setBackground(d);

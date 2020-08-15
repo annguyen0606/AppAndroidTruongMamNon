@@ -2,6 +2,7 @@ package com.annguyen.truongmamnon.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -16,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -38,6 +40,7 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
     public static final String CURRENT_NAME = "current_username"; //Luu user name
     public static final String CURRENT_CHECK = "current_check"; //Luu trang thai co muon luu username va password
     public static final String CURRENT_Class = "current_class"; //Luu ten lop nguoi giao vien
+    public static final String CURRENT_CLASS_NAME = "current_class_name"; //Luu ten lop nguoi giao vien
     public static final String CURRENT_TEACHER = "current_teacher"; //Luu ma so giao vien
     public static final String CURRENT_PORT = "current_port"; //Luu PORT ket noi
     public static final String CURRENT_DATE = "current_date"; //Luu ngay de phuc vu clear data theo ngay
@@ -188,6 +191,8 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
                 SharedPref.put(CURRENT_TEACHER,thongTinGiaoVien.getMaGiaoVien().trim());
                 SharedPref.put(CURRENT_ACCOUNT,thongTinGiaoVien.getLoaiTaiKhoan());
                 SharedPref.put(CURRENT_PORT,thongTinGiaoVien.getPortName().trim());
+                String tenLop = dataProvider.getInstance().LayTenLop(thongTinGiaoVien.getLop().trim());
+                SharedPref.put(CURRENT_CLASS_NAME,tenLop);
                 if (dataGiaoVienLogin.getCount() < 1){
                     databaseSQLite.QuerryData("DELETE FROM ThongTinHocSinh");
                     databaseSQLite.QuerryData("DELETE FROM ThongTinNguoiThan");
@@ -229,6 +234,7 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
             progressDialog.dismiss();
         }
     }
+
     //Broadcast kiem tra internet
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
