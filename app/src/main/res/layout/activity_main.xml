@@ -17,11 +17,11 @@
                 android:layout_width="match_parent"
                 android:padding="5dp"
                 android:layout_height="wrap_content">
-                <ImageView
+                <!--ImageView
                     android:src="@drawable/ic_canhcay"
                     android:layout_weight="1.2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></ImageView>
+                    android:layout_height="wrap_content"></ImageView-->
                 <TextView
                     android:id="@+id/tvNameMainActivity"
                     android:text="Xin chào An Nguyễn"
@@ -32,11 +32,11 @@
                     android:textSize="18sp"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"></TextView>
-                <ImageView
+                <!--ImageView
                     android:src="@drawable/ic_canhcay2"
                     android:layout_weight="1.2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></ImageView>
+                    android:layout_height="wrap_content"></ImageView-->
             </LinearLayout>
 
             <androidx.viewpager.widget.ViewPager

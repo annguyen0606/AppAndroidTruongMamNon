@@ -110,13 +110,18 @@ public class MainActivity extends AppCompatActivity implements FirebaseManage.Li
         * Neu dang nhap vao mot ngay moi se clear du lieu o table UIDTag trong sqlite*/
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String date = dateFormat.format(new Date());
+        String date2 = new SimpleDateFormat("MM").format(new Date()).trim();
+        String thang = SharedPref.get(ManHinhDangNhapActivity.CURRENT_DATE,String.class);
+        String[] checkThang = thang.split("/");
         if (!date.equals(SharedPref.get(ManHinhDangNhapActivity.CURRENT_DATE,String.class))){
             SharedPref.put(ManHinhDangNhapActivity.CURRENT_DATE,date);
             ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM UIDTag");
             ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM KiemTraDonCon");
             ManHinhDangNhapActivity.databaseSQLite.QuerryData("VACUUM");
         }
-
+        if(!date2.equals(checkThang[1].trim())){
+            ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM KiemTraDongTien");
+        }
         int countDontTakeStudent = SharedPref.get(ManHinhDangNhapActivity.CURRENT_STUDENTS_COUNT,Integer.class);
         if (countDontTakeStudent > 0){
             tabLayout.getTabAt(0).getOrCreateBadge().setVisible(true);
@@ -283,11 +288,11 @@ public class MainActivity extends AppCompatActivity implements FirebaseManage.Li
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.clearMenu:
-                ClearThongTinDonCong clearThongTinDonCong = new ClearThongTinDonCong(MainActivity.this);
-                clearThongTinDonCong.execute();
-
+//                ClearThongTinDonCong clearThongTinDonCong = new ClearThongTinDonCong(MainActivity.this);
+//                clearThongTinDonCong.execute();
                 ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM UIDTag");
                 ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM KiemTraDonCon");
+                ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM KiemTraDongTien");
                 ManHinhDangNhapActivity.databaseSQLite.QuerryData("VACUUM");
                 int countDontTakeStudent = FragmentDanhSachChamThe.LoadDuLieu();
                 FragmentDanhSachChuaChamThe.LoadDuLieuChuaChamThe();
@@ -301,9 +306,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseManage.Li
                 }
                 FragmentDanhSachChuaChamThe.LoadDuLieuChuaChamThe();
                 break;
-            case R.id.settingMenu:
-                startActivity(new Intent(MainActivity.this, SettingDeviceActivity.class));
-                break;
+//            case R.id.settingMenu:
+//                startActivity(new Intent(MainActivity.this, SettingDeviceActivity.class));
+//                break;
             case R.id.updateMenu:
                 if (kiemTraKetNoiInternet == true){
                     ManHinhDangNhapActivity.databaseSQLite.QuerryData("DELETE FROM ThongTinHocSinh");

@@ -99,7 +99,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
         arraySpinnerMonth.add("Tháng 12");
         ArrayAdapter arrayAdapterMonth = new ArrayAdapter(StatisticActivity.this,android.R.layout.simple_list_item_1,arraySpinnerMonth);
         monthList.setAdapter(arrayAdapterMonth);
-
+        
         loaitaikhoan = SharedPref.get(ManHinhDangNhapActivity.CURRENT_ACCOUNT,Integer.class);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

@@ -18,14 +18,13 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
         database.execSQL(sql);
     }
 
-    public void InsertPayment(String mahs, String malop, Integer status){
+    public void InsertPayment(String uid, String maHs){
         SQLiteDatabase database = getWritableDatabase();
-        String sql = "INSERT INTO ThongTinNopTien VALUES(null,?,?,?)";
+        String sql = "INSERT INTO KiemTraDongTien VALUES(null,?,?)";
         SQLiteStatement statement = database.compileStatement(sql);
         statement.clearBindings();
-        statement.bindString(1,mahs);
-        statement.bindString(2,malop);
-        statement.bindLong(3,status);
+        statement.bindString(1,uid);
+        statement.bindString(2,maHs);
         statement.executeInsert();
     }
     public void InsertThongTinNguoiThan(String uid, String ten, String diachi, String quanhe, String maHs, String soDienThoai, byte[] HinhAnh, String lop){

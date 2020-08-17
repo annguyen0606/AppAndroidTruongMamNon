@@ -17,9 +17,9 @@
             <item android:title="Thống kê thu tiền"
                 android:id="@+id/statisticMenu"
                 android:icon="@drawable/ic_pie_chart"></item>
-            <item android:title="Cài đặt thiết bị"
+            <!--<item android:title="Cài đặt thiết bị"
                 android:id="@+id/settingMenu"
-                android:icon="@drawable/ic_settings_black"></item>
+                android:icon="@drawable/ic_settings_black"></item>-->
             <item android:title="Đăng xuất"
                 android:id="@+id/logOutMenu"
                 android:icon="@drawable/ic_logout"></item>

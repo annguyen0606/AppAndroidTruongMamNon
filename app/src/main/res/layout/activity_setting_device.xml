@@ -18,9 +18,9 @@
             android:layout_alignParentTop="true"
             android:id="@+id/backMainActivityAtSettingActivity"
             android:src="@drawable/ic_back_black_24dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"></ImageView>
-        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"></ImageView>
+        <!--ImageView
             android:src="@drawable/ic_canhcay"
             android:layout_weight="1"
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             android:src="@drawable/ic_canhcay2"
             android:layout_width="match_parent"
             android:layout_weight="1"
-            android:layout_height="wrap_content"></ImageView>
+            android:layout_height="wrap_content"></ImageView-->
     </LinearLayout>
     <FrameLayout
         android:padding="20dp"

@@ -1,15 +1,10 @@
 package com.annguyen.truongmamnon.Activity;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -20,138 +15,87 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.annguyen.truongmamnon.Adapter.GetMoneyAdapter;
 import com.annguyen.truongmamnon.Controller.DataProvider;
 import com.annguyen.truongmamnon.Controller.SharedPref;
+import com.annguyen.truongmamnon.Model.ThongTinHocSinhThuTien;
 import com.annguyen.truongmamnon.Model.TrangThaiHocSinhNopTien;
 import com.annguyen.truongmamnon.R;
+import com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import de.hdodenhof.circleimageview.CircleImageView;
+import java.util.List;
 
 public class SupportPaymentActivity extends AppCompatActivity implements View.OnClickListener {
-    private static String textMaGiaoVien = "";
-    private static EditText uidPayment,nameParent, nameStudent, codeStudent, totalMoney, nameTeacher, codeTeacher,
-                    reasonPayment, statusPayment;
-    private static String uidDataSupportPayment = "123456";
     private static SharedPref sharedPref;
-    private static Button confirm, getData;
-    private Spinner monthPayment;
-    private TextView classStudent;
-    private SwipeRefreshLayout refreshLayout;
-    String phoneNumber = "";
-    DataProvider dataProvider;
+    private static ListView danhSachHocSinh;
+    private GetMoneyAdapter getMoneyAdapter;
     ImageView backMainActivity;
-    CircleImageView circleImageStudent;
-    boolean kiemTraNopTien = false;
+    private ArrayList<ThongTinHocSinhThuTien> arrayThongTinHocSinhThuTien;
+    private ArrayList<ThongTinHocSinhThuTien> arrayThongTinHocSinhThuTienTemp1;
+    private ArrayList<TrangThaiHocSinhNopTien> arrayThongTinHocSinhThuTienTemp2;
+    DataProvider dataProvider;
+    String maLop;
     byte[] byteImageStudent;
     boolean kiemTraKetNoiInternet = false;
+    private SwipeRefreshLayout refreshLayout;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_support_payment);
         sharedPref = new SharedPref(SupportPaymentActivity.this);
         byteImageStudent = new byte[0];
-        textMaGiaoVien = SharedPref.get(ManHinhDangNhapActivity.CURRENT_TEACHER,String.class);
         AnhXa();
     }
 
     private void AnhXa() {
-        monthPayment = findViewById(R.id.spinnerMonthPaymentSupportPaymentFragment);
-        nameParent = findViewById(R.id.edtNameParentSupportPayment);
-        nameStudent = findViewById(R.id.edtNameStudentSupportPayment);
-        codeStudent = findViewById(R.id.edtCodeStudentSupportPayment);
-        reasonPayment = findViewById(R.id.edtReasonSupportPaymentFragment);
-        classStudent = findViewById(R.id.tvClassStudentSupportPaymentFragment);
-
-        totalMoney = findViewById(R.id.edtTotalMoneySupportPayment);
-        nameTeacher = findViewById(R.id.edtNameTeacherSupportPayment);
-        codeTeacher = findViewById(R.id.edtCodeTeacherSupportPayment);
-        statusPayment = findViewById(R.id.edtTrangThaiNopTienSupportPaymentFragment);
         backMainActivity = findViewById(R.id.backMainActivityAtSupportPaymentActivity);
-        circleImageStudent = findViewById(R.id.circleHinhAnhHocSinhSupportPaymentActivity);
-        confirm = findViewById(R.id.btnConfirmSupportFragment);
-
-        uidPayment = findViewById(R.id.edtUidParentSupportPayment);
         refreshLayout = findViewById(R.id.pullToGetDataSupportPayment);
 
-        findViewById(R.id.btnConfirmSupportFragment).setOnClickListener(this);
         findViewById(R.id.backMainActivityAtSupportPaymentActivity).setOnClickListener(this);
-
-        final ArrayList<String> arraySpinnerMonth = new ArrayList<>();
-        arraySpinnerMonth.add("Tháng 1");
-        arraySpinnerMonth.add("Tháng 2");
-        arraySpinnerMonth.add("Tháng 3");
-        arraySpinnerMonth.add("Tháng 4");
-        arraySpinnerMonth.add("Tháng 5");
-        arraySpinnerMonth.add("Tháng 6");
-        arraySpinnerMonth.add("Tháng 7");
-        arraySpinnerMonth.add("Tháng 8");
-        arraySpinnerMonth.add("Tháng 9");
-        arraySpinnerMonth.add("Tháng 10");
-        arraySpinnerMonth.add("Tháng 11");
-        arraySpinnerMonth.add("Tháng 12");
-        ArrayAdapter arrayAdapterMonth = new ArrayAdapter(SupportPaymentActivity.this,android.R.layout.simple_list_item_1,arraySpinnerMonth);
-        monthPayment.setAdapter(arrayAdapterMonth);
-
+        danhSachHocSinh = findViewById(R.id.lvDanhSachHocSinhThuTien);
+        arrayThongTinHocSinhThuTien = new ArrayList<>();
+        arrayThongTinHocSinhThuTienTemp1 = new ArrayList<>();
+        arrayThongTinHocSinhThuTienTemp2 = new ArrayList<>();
+        getMoneyAdapter = new GetMoneyAdapter(SupportPaymentActivity.this,R.layout.dong_du_lieu_thanh_toan_tien,arrayThongTinHocSinhThuTien);
+        danhSachHocSinh.setAdapter(getMoneyAdapter);
+        maLop = SharedPref.get(ManHinhDangNhapActivity.CURRENT_Class,String.class);
+        LoadDataNopTienTrongThang();
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                RefreshGetData();
+                LoadDataNopTienTrongThang();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         refreshLayout.setRefreshing(false);
                     }
-                },100);
+                },2000);
             }
         });
     }
-    void RefreshGetData(){
-        if (kiemTraKetNoiInternet == true){
-            ClearDuLieu();
-            uidDataSupportPayment = SharedPref.get(ManHinhDangNhapActivity.CURRENT_UID,String.class);
-            uidPayment.setText(uidDataSupportPayment);
-            if (!uidDataSupportPayment.equals("")){
-                Cursor DataTeacher = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinGiaoVien WHERE MaGV = '"+textMaGiaoVien+"'");
-                while (DataTeacher.moveToNext()){
-                    nameTeacher.setText(DataTeacher.getString(2));
-                    codeTeacher.setText(DataTeacher.getString(1));
-                }
-                Cursor DataNT = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinNguoiThan WHERE Uid = '"+uidPayment.getText().toString().trim()+"'");
-                while (DataNT.moveToNext()){
-                    nameParent.setText(DataNT.getString(2));
-                    codeStudent.setText(DataNT.getString(5));
-                    phoneNumber = DataNT.getString(6);
-                }
-
-                Cursor DataHS = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinHocSinh WHERE MaHs = '"+codeStudent.getText().toString().trim()+"'");
-                while (DataHS.moveToNext()){
-                    nameStudent.setText(DataHS.getString(2));
-                    classStudent.setText(DataHS.getString(4));
-                    byteImageStudent = DataHS.getBlob(7);
-                }
-            }
-            Bitmap decodebitmap = BitmapFactory.decodeByteArray(byteImageStudent,
-                    0, byteImageStudent.length);
-            circleImageStudent.setImageBitmap(decodebitmap);
-            LayThongTinTaiKhoan layThongTinTaiKhoan = new LayThongTinTaiKhoan();
-            layThongTinTaiKhoan.execute();
-        }else {
-            Toast.makeText(SupportPaymentActivity.this,"Xin kiểm tra lại kết nối Internet",Toast.LENGTH_SHORT).show();
+    void LoadDataNopTienTrongThang(){
+        arrayThongTinHocSinhThuTien.clear();
+        arrayThongTinHocSinhThuTienTemp1.clear();
+        arrayThongTinHocSinhThuTienTemp2.clear();
+        Cursor duLieuHocSinh = ManHinhDangNhapActivity.databaseSQLite.GetData("SELECT *FROM ThongTinHocSinh where TRIM(Lop) = '" + maLop.trim() +"'");
+        while(duLieuHocSinh.moveToNext()){
+            arrayThongTinHocSinhThuTienTemp1.add(new ThongTinHocSinhThuTien(duLieuHocSinh.getString(2),
+                    duLieuHocSinh.getString(3),duLieuHocSinh.getString(1),
+                    "500000",0,duLieuHocSinh.getBlob(7)));;
         }
+        LayThongTinHocSinhNopTienFromServer layThongTinHocSinhNopTienFromServer = new LayThongTinHocSinhNopTienFromServer();
+        layThongTinHocSinhNopTienFromServer.execute();
     }
     @Override
     public void onClick(View v) {
@@ -159,188 +103,9 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
             case R.id.backMainActivityAtSupportPaymentActivity:
                 onBackPressed();
                 break;
-            case R.id.btnConfirmSupportFragment:
-                if (kiemTraKetNoiInternet == true){
-                    if (!uidPayment.getText().toString().trim().equals("") && !uidPayment.getText().toString().trim().equals("123456")){
-                        if (kiemTraNopTien == true){
-                            ConfirmPayment confirmPayment = new ConfirmPayment(SupportPaymentActivity.this);
-                            confirmPayment.execute();
-                        }else {
-                            Toast.makeText(SupportPaymentActivity.this,"Không được thu tiền tài khoản này",Toast.LENGTH_SHORT).show();
-                        }
-                        /*ConfirmPayment confirmPayment = new ConfirmPayment(view.getContext());
-                        confirmPayment.execute(thoiGianKiemTra);*/
-                    /*Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_SENDTO);
-                    intent.putExtra("sms_body",reasonPayment.getText().toString().trim());
-                    intent.setData(Uri.parse("sms:"+phoneNumber));
-                    view.getContext().startActivity(intent);*/
-                    }
-                    else {
-                        Toast.makeText(SupportPaymentActivity.this,"Bạn chưa lấy thông tin",Toast.LENGTH_SHORT).show();
-                    }
-                }else {
-                    Toast.makeText(SupportPaymentActivity.this,"Xin kiểm tra lại kết nối Internet!",Toast.LENGTH_SHORT).show();
-                }
+            default:
                 break;
         }
-    }
-    /*Lay tong cong so phut muon*/
-    private class LayThongTinTaiKhoan extends AsyncTask<Integer,Void,ArrayList<TrangThaiHocSinhNopTien>> {
-        public LayThongTinTaiKhoan() {
-        }
-        @Override
-        protected void onPreExecute() {
-        }
-        @SuppressLint("WrongThread")
-        @Override
-        protected ArrayList<TrangThaiHocSinhNopTien> doInBackground(Integer... integers) {
-            String dateTime = "";
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
-            String date = dateFormat.format(new Date());
-
-            switch (monthPayment.getSelectedItemPosition()){
-                case 0:
-                    dateTime = date+"-01";
-                    break;
-                case 1:
-                    dateTime = date+"-02";
-                    break;
-                case 2:
-                    dateTime = date+"-03";
-                    break;
-                case 3:
-                    dateTime = date+"-04";
-                    break;
-                case 4:
-                    dateTime = date+"-05";
-                    break;
-                case 5:
-                    dateTime = date+"-06";
-                    break;
-                case 6:
-                    dateTime = date+"-07";
-                    break;
-                case 7:
-                    dateTime = date+"-08";
-                    break;
-                case 8:
-                    dateTime = date+"-09";
-                    break;
-                case 9:
-                    dateTime = date+"-10";
-                    break;
-                case 10:
-                    dateTime = date+"-11";
-                    break;
-                case 11:
-                    dateTime = date+"-12";
-                    break;
-            }
-            return dataProvider.getInstance().CheckConfirmPayment(codeStudent.getText().toString().trim(),dateTime.trim());
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<TrangThaiHocSinhNopTien> trangThaiHocSinhNopTiens) {
-            reasonPayment.setText("Thanh toán tiền học " + monthPayment.getSelectedItem().toString().trim());
-            if (trangThaiHocSinhNopTiens.size() > 0){
-                totalMoney.setText(trangThaiHocSinhNopTiens.get(0).getSoTien());
-                if (trangThaiHocSinhNopTiens.get(0).getTrangThaiThu().toString().trim().equals("0")){
-                    kiemTraNopTien = true;
-                    statusPayment.setText("Chưa nộp tiền");
-                }else if (trangThaiHocSinhNopTiens.get(0).getTrangThaiThu().toString().trim().equals("1")){
-                    statusPayment.setText("Đã nộp tiền");
-                    kiemTraNopTien = false;
-                }
-            }else {
-                Toast.makeText(SupportPaymentActivity.this,"Không có dữ liệu thanh toán",Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private class ConfirmPayment extends AsyncTask<Void,Void,Integer>{
-        ProgressDialog progressDialog;
-        public ConfirmPayment(Context mContext){
-            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_HOLO_DARK);
-        }
-        @Override
-        protected void onPreExecute() {
-            progressDialog.setMessage("Confirming...");
-            progressDialog.show();
-        }
-
-        @SuppressLint("WrongThread")
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            String dateTime = "";
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
-            String date = dateFormat.format(new Date());
-
-            switch (monthPayment.getSelectedItemPosition()){
-                case 0:
-                    dateTime = date+"-01";
-                    break;
-                case 1:
-                    dateTime = date+"-02";
-                    break;
-                case 2:
-                    dateTime = date+"-03";
-                    break;
-                case 3:
-                    dateTime = date+"-04";
-                    break;
-                case 4:
-                    dateTime = date+"-05";
-                    break;
-                case 5:
-                    dateTime = date+"-06";
-                    break;
-                case 6:
-                    dateTime = date+"-07";
-                    break;
-                case 7:
-                    dateTime = date+"-08";
-                    break;
-                case 8:
-                    dateTime = date+"-09";
-                    break;
-                case 9:
-                    dateTime = date+"-10";
-                    break;
-                case 10:
-                    dateTime = date+"-11";
-                    break;
-                case 11:
-                    dateTime = date+"-12";
-                    break;
-            }
-            return dataProvider.getInstance().InsertConfirmPayment(codeStudent.getText().toString().trim(),dateTime);
-        }
-
-        @Override
-        protected void onPostExecute(Integer integer) {
-            if (integer == 1){
-                Toast.makeText(SupportPaymentActivity.this,"Xác nhận thành công",Toast.LENGTH_SHORT).show();
-                kiemTraNopTien = false;
-            }else {
-                Toast.makeText(SupportPaymentActivity.this,"Xác nhận không thành công",Toast.LENGTH_SHORT).show();
-            }
-            ClearDuLieu();
-            progressDialog.dismiss();
-        }
-    }
-
-    void ClearDuLieu(){
-        uidPayment.setText("");
-        nameParent.setText("");
-        nameTeacher.setText("");
-        nameStudent.setText("");
-        codeStudent.setText("");
-        codeTeacher.setText("");
-        classStudent.setText("");
-        totalMoney.setText("");
-        reasonPayment.setText("");
-        statusPayment.setText("");
     }
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -369,5 +134,48 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
     protected void onStop() {
         super.onStop();
         unregisterReceiver(broadcastReceiver);
+    }
+
+    private class LayThongTinHocSinhNopTienFromServer extends AsyncTask<Void,Void,ArrayList<TrangThaiHocSinhNopTien>>{
+        public LayThongTinHocSinhNopTienFromServer() {
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected ArrayList<TrangThaiHocSinhNopTien> doInBackground(Void... voids) {
+            String ngayKiemTra = new SimpleDateFormat("yyyy-MM").format(new Date());
+            return dataProvider.getInstance().LayDanhSachHocSinhNopTien(maLop,ngayKiemTra);
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<TrangThaiHocSinhNopTien> trangThaiHocSinhNopTiens) {
+            System.out.println("ANC: " + String.valueOf(trangThaiHocSinhNopTiens.size()));
+            for(ThongTinHocSinhThuTien hocSinhThuTien : arrayThongTinHocSinhThuTienTemp1){
+                int trangThaiThuTien = 0;
+                String soTienNeed = "0";
+                if(trangThaiHocSinhNopTiens.size() > 0){
+                    for (TrangThaiHocSinhNopTien hocSinhDaNop : trangThaiHocSinhNopTiens){
+                        if(hocSinhThuTien.getMaHs().trim().equals(hocSinhDaNop.getMaHocSinh().trim())){
+                            if(Integer.parseInt(hocSinhDaNop.getTrangThaiThu().trim()) == 1){
+                                trangThaiThuTien = 1;
+                            }
+                            soTienNeed = hocSinhDaNop.getSoTien();
+                        }
+                    }
+                }else{
+                    trangThaiThuTien = 0;
+                    soTienNeed = "0";
+                }
+                arrayThongTinHocSinhThuTien.add(new ThongTinHocSinhThuTien(hocSinhThuTien.getTen(),
+                        hocSinhThuTien.getNgaySinh(),hocSinhThuTien.getMaHs(),soTienNeed,
+                        trangThaiThuTien,hocSinhThuTien.getHinhAnh()));
+                getMoneyAdapter.notifyDataSetChanged();
+            }
+            super.onPostExecute(trangThaiHocSinhNopTiens);
+        }
     }
 }

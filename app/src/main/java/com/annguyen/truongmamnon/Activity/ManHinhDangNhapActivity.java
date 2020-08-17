@@ -104,6 +104,8 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
                         "MaLop VARCHAR(10),Status INTEGER)");
                 //Bang kiem tra don hoc sinh
                 databaseSQLite.QuerryData("CREATE TABLE IF NOT EXISTS KiemTraDonCon(Id INTEGER PRIMARY KEY AUTOINCREMENT,Uid VARCHAR(20),MaHs VARCHAR(10))");
+                //Bang kiem tra hoc sinh dong tien hoc
+                databaseSQLite.QuerryData("CREATE TABLE IF NOT EXISTS KiemTraDongTien(Id INTEGER PRIMARY KEY AUTOINCREMENT,Uid VARCHAR(20),MaHs VARCHAR(10))");
             }catch (Exception ex){
                 ex.printStackTrace();
             }
@@ -212,8 +214,6 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
                                 arrayDanhSachHocSinh.get(i).getNgaySinh().trim(), arrayDanhSachHocSinh.get(i).getLopHocSinh().trim(),
                                 arrayDanhSachHocSinh.get(i).getGioiTinh().trim(),arrayDanhSachHocSinh.get(i).getDiaChi().trim(),
                                 arrayDanhSachHocSinh.get(i).getHinhAnh(),arrayDanhSachHocSinh.get(i).getMaGiaoVien().trim());
-                        databaseSQLite.InsertPayment(arrayDanhSachHocSinh.get(i).getMaHocSinh().trim(),arrayDanhSachHocSinh.get(i).getLopHocSinh().trim(),
-                                0);
                     }
                     for (int i = 0; i < arrayDanhSachNguoiThan.size(); i++){
                         databaseSQLite.InsertThongTinNguoiThan(arrayDanhSachNguoiThan.get(i).getMaUID().trim(),arrayDanhSachNguoiThan.get(i).getHoTen(),
