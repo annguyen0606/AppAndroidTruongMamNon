@@ -31,7 +31,7 @@ public class NotifyManage {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setShowWhen(true)
-                .setColor(Color.BLUE)
+                .setColor(Color.BLACK)
                 .setSmallIcon(R.drawable.ic_conek);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             nb.setChannelId(chId);
@@ -47,7 +47,7 @@ public class NotifyManage {
                 .setContentTitle(title)
                 .setContentText(text)
                 .setShowWhen(true)
-                .setColor(Color.BLUE)
+                .setColor(Color.BLACK)
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.ic_conek);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){

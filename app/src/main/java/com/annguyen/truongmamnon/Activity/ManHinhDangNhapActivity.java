@@ -2,7 +2,6 @@ package com.annguyen.truongmamnon.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -32,7 +31,7 @@ import com.annguyen.truongmamnon.Model.ThongTinNguoiThan;
 import com.annguyen.truongmamnon.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
+import dmax.dialog.SpotsDialog;
 import java.util.ArrayList;
 
 public class ManHinhDangNhapActivity extends AppCompatActivity implements View.OnClickListener{
@@ -161,16 +160,18 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
     /*
     * Class load du lieu tu database sql server ve*/
     private class LoadDataFromDataBase extends AsyncTask<String,Void,ThongTinGiaoVien>{
-        ProgressDialog progressDialog;
+        AlertDialog alertDialog;
 
         public LoadDataFromDataBase(Context mContext) {
-            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_HOLO_DARK);
+            alertDialog = new SpotsDialog.Builder().setContext(mContext)
+                    .setMessage("Please waiting...")
+                    .setCancelable(false)
+                    .build();
         }
 
         @Override
         protected void onPreExecute() {
-            progressDialog.setMessage("Đang tải dữ liệu");
-            progressDialog.show();
+            alertDialog.show();
         }
 
         @Override
@@ -231,7 +232,7 @@ public class ManHinhDangNhapActivity extends AppCompatActivity implements View.O
             }else {
                 Toast.makeText(context,"Tài khoản chưa được đăng ký",Toast.LENGTH_SHORT).show();
             }
-            progressDialog.dismiss();
+            alertDialog.dismiss();
         }
     }
 

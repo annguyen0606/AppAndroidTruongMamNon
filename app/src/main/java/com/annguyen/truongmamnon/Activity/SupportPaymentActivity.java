@@ -31,10 +31,12 @@ import com.annguyen.truongmamnon.Model.TrangThaiHocSinhNopTien;
 import com.annguyen.truongmamnon.R;
 import com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class SupportPaymentActivity extends AppCompatActivity implements View.OnClickListener {
     private static SharedPref sharedPref;
@@ -153,25 +155,28 @@ public class SupportPaymentActivity extends AppCompatActivity implements View.On
 
         @Override
         protected void onPostExecute(ArrayList<TrangThaiHocSinhNopTien> trangThaiHocSinhNopTiens) {
-            System.out.println("ANC: " + String.valueOf(trangThaiHocSinhNopTiens.size()));
+            //Toast.makeText(SupportPaymentActivity.this,String.valueOf(trangThaiHocSinhNopTiens.size()),Toast.LENGTH_SHORT).show();
             for(ThongTinHocSinhThuTien hocSinhThuTien : arrayThongTinHocSinhThuTienTemp1){
                 int trangThaiThuTien = 0;
                 String soTienNeed = "0";
+                String soTienReal = "0";
                 if(trangThaiHocSinhNopTiens.size() > 0){
                     for (TrangThaiHocSinhNopTien hocSinhDaNop : trangThaiHocSinhNopTiens){
                         if(hocSinhThuTien.getMaHs().trim().equals(hocSinhDaNop.getMaHocSinh().trim())){
                             if(Integer.parseInt(hocSinhDaNop.getTrangThaiThu().trim()) == 1){
                                 trangThaiThuTien = 1;
                             }
-                            soTienNeed = hocSinhDaNop.getSoTien();
+                            soTienNeed = NumberFormat.getNumberInstance(Locale.US).format(Integer.parseInt(hocSinhDaNop.getSoTien().trim()));
+                            soTienReal = NumberFormat.getNumberInstance(Locale.US).format(Integer.parseInt(hocSinhDaNop.getSoTienReal().trim()));
                         }
                     }
                 }else{
                     trangThaiThuTien = 0;
                     soTienNeed = "0";
+                    soTienReal = "0";
                 }
                 arrayThongTinHocSinhThuTien.add(new ThongTinHocSinhThuTien(hocSinhThuTien.getTen(),
-                        hocSinhThuTien.getNgaySinh(),hocSinhThuTien.getMaHs(),soTienNeed,
+                        hocSinhThuTien.getNgaySinh(),hocSinhThuTien.getMaHs(),soTienReal + "/" + soTienNeed,
                         trangThaiThuTien,hocSinhThuTien.getHinhAnh()));
                 getMoneyAdapter.notifyDataSetChanged();
             }

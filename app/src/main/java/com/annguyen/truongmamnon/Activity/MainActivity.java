@@ -40,6 +40,9 @@ import com.google.android.material.tabs.TabLayout;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicLong;
+
+import dmax.dialog.SpotsDialog;
 
 public class MainActivity extends AppCompatActivity implements FirebaseManage.ListenData, View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     public static TabLayout tabLayout; //Bien tablayout
@@ -135,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseManage.Li
     private void AnhXa() {
         tabLayout = findViewById(R.id.myTabLayout);
         viewPager = findViewById(R.id.mainViewpagerMainActivity);
-        floatAddAccount = findViewById(R.id.floatAddAccount);
+        //floatAddAccount = findViewById(R.id.floatAddAccount);
         navigationMenu = findViewById(R.id.navigationMenu);
         textHello = findViewById(R.id.tvNameMainActivity);
 
@@ -145,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseManage.Li
         }
 
 
-        findViewById(R.id.floatAddAccount).setOnClickListener(this);
+        //findViewById(R.id.floatAddAccount).setOnClickListener(this);
 
         navigationMenu.setNavigationItemSelectedListener(this);
     }
@@ -175,21 +178,23 @@ public class MainActivity extends AppCompatActivity implements FirebaseManage.Li
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.floatAddAccount:
-                startActivity(new Intent(MainActivity.this, AddAccountActivity.class));
-                break;
+//            case R.id.floatAddAccount:
+//                startActivity(new Intent(MainActivity.this, AddAccountActivity.class));
+//                break;
         }
     }
 
     private class ClearThongTinDonCong extends AsyncTask<Void,Void,Void>{
-        ProgressDialog progressDialog;
+        AlertDialog alertDialog;
         public ClearThongTinDonCong(Context mContext){
-            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_HOLO_DARK);
+            alertDialog = new SpotsDialog.Builder().setContext(mContext)
+                    .setMessage("Clearing...")
+                    .setCancelable(false)
+                    .build();
         }
         @Override
         protected void onPreExecute() {
-            progressDialog.setMessage("Clearing...");
-            progressDialog.show();
+            alertDialog.show();
         }
 
         @Override
@@ -201,20 +206,22 @@ public class MainActivity extends AppCompatActivity implements FirebaseManage.Li
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            progressDialog.dismiss();
+            alertDialog.dismiss();
         }
     }
 
     /*Class Update du lieu tu database sql server*/
     private class UpdateDataFromDB extends AsyncTask<Void,Void,Void>{
-        ProgressDialog progressDialog;
+        AlertDialog alertDialog;
         public UpdateDataFromDB(Context mContext) {
-            progressDialog = new ProgressDialog(mContext, AlertDialog.THEME_HOLO_DARK);
+            alertDialog = new SpotsDialog.Builder().setContext(mContext)
+                    .setMessage("Please waiting...")
+                    .setCancelable(false)
+                    .build();
         }
         @Override
         protected void onPreExecute() {
-            progressDialog.setMessage("Please wait...");
-            progressDialog.show();
+            alertDialog.show();
         }
         @Override
         protected Void doInBackground(Void... voids) {
@@ -252,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseManage.Li
                     }
                 }
             });
-            progressDialog.dismiss();
+            alertDialog.dismiss();
         }
     }
 

@@ -380,13 +380,14 @@ public class DataProvider {
         connection = CONN(userName,passWord,nameDB,ipServer);
         try {
             Statement stmt = connection.createStatement();
-            String query = "SELECT mahs,sotien,trangthai FROM ThongTinNopTien WHERE malop = '"+maLop+"' and thang LIKE'%"+ngayThang+"%'";
+            String query = "SELECT mahs,sotien,trangthai,sotienreal FROM ThongTinNopTien WHERE malop = '"+maLop+"' and thang LIKE'%"+ngayThang+"%'";
             resultSet = stmt.executeQuery(query);
             while (resultSet != null && resultSet.next()) {
-                TrangThaiHocSinhNopTien hocSinhNopTien = new TrangThaiHocSinhNopTien("ABC","0","5");
+                TrangThaiHocSinhNopTien hocSinhNopTien = new TrangThaiHocSinhNopTien("ABC","0","5","");
                 hocSinhNopTien.setMaHocSinh(resultSet.getString("mahs"));
                 hocSinhNopTien.setTrangThaiThu(resultSet.getString("trangthai"));
                 hocSinhNopTien.setSoTien(resultSet.getString("sotien"));
+                hocSinhNopTien.setSoTienReal(resultSet.getString("sotienreal"));
                 arrayDanhSachNopTien.add(hocSinhNopTien);
             }
             resultSet.close();
@@ -406,7 +407,7 @@ public class DataProvider {
             Statement stmt = connection.createStatement();
             resultSet = stmt.executeQuery(query);
             while (resultSet != null && resultSet.next()) {
-                TrangThaiHocSinhNopTien trangThaiHocSinhNopTien = new TrangThaiHocSinhNopTien("ABC","ABC","ABC");
+                TrangThaiHocSinhNopTien trangThaiHocSinhNopTien = new TrangThaiHocSinhNopTien("ABC","ABC","ABC","");
                 trangThaiHocSinhNopTien.setTrangThaiThu(resultSet.getString("trangthai"));
                 trangThaiHocSinhNopTien.setMaHocSinh(resultSet.getString("mahs"));
                 trangThaiHocSinhNopTien.setSoTien(resultSet.getString("sotien"));

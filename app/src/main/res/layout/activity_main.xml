@@ -63,7 +63,7 @@
                 app:tabIndicatorHeight="2dp"
                 android:background="@android:color/transparent">
             </com.google.android.material.tabs.TabLayout>
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <!--com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/floatAddAccount"
                 android:layout_above="@+id/myTabLayout"
                 android:layout_margin="16dp"
@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 app:backgroundTint="#fff"
                 android:src="@drawable/ic_person_add_black_24dp"
-                android:layout_height="wrap_content"></com.google.android.material.floatingactionbutton.FloatingActionButton>
+                android:layout_height="wrap_content"></com.google.android.material.floatingactionbutton.FloatingActionButton-->
         </RelativeLayout>
         <com.google.android.material.navigation.NavigationView
             android:layout_width="wrap_content"

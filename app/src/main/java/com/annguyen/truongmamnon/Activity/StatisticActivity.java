@@ -33,9 +33,11 @@ import com.annguyen.truongmamnon.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class StatisticActivity extends AppCompatActivity implements View.OnClickListener {
     private Spinner classList, monthList;
@@ -249,6 +251,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                 arrayPhut.add(dataProvider.getInstance().GetLateMinuteFromMaHs(arrayDanhSachHocSinh.get(i).getMaHocSinh(),dateTime));
             }
             ArrayList<TrangThaiHocSinhNopTien> danhHocSinhNopTien = dataProvider.getInstance().LayDanhSachHocSinhNopTien(txtLop,dateTime);
+
             for (int i = 0; i < arrayDanhSachHocSinh.size(); i++){
                 ThongTinThongKe thongTinThongKe = new ThongTinThongKe("ABC","ABC",0,"0",0);
                 thongTinThongKe.setMaHS(arrayDanhSachHocSinh.get(i).getMaHocSinh());
@@ -258,9 +261,17 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                 for(int j = 0; j < danhHocSinhNopTien.size(); j++){
                     if (arrayDanhSachHocSinh.get(i).getMaHocSinh().trim().equals(danhHocSinhNopTien.get(j).getMaHocSinh().trim()) && danhHocSinhNopTien.get(j).getTrangThaiThu().trim().equals("1")){
                         an = 1;
-                        thongTinThongKe.setMoney(danhHocSinhNopTien.get(j).getSoTien().trim());
+                        int number1 = Integer.parseInt(danhHocSinhNopTien.get(j).getSoTienReal().trim());
+                        String strNum1 = NumberFormat.getNumberInstance(Locale.US).format(number1);
+                        int number2 = Integer.parseInt(danhHocSinhNopTien.get(j).getSoTien().trim());
+                        String strNum2 = NumberFormat.getNumberInstance(Locale.US).format(number2);
+                        thongTinThongKe.setMoney(strNum1 +"/"+ strNum2);
                     }else if (arrayDanhSachHocSinh.get(i).getMaHocSinh().trim().equals(danhHocSinhNopTien.get(j).getMaHocSinh().trim()) && danhHocSinhNopTien.get(j).getTrangThaiThu().trim().equals("0")){
-                        thongTinThongKe.setMoney(danhHocSinhNopTien.get(j).getSoTien().trim());
+                        int number1 = Integer.parseInt(danhHocSinhNopTien.get(j).getSoTienReal().trim());
+                        String strNum1 = NumberFormat.getNumberInstance(Locale.US).format(number1);
+                        int number2 = Integer.parseInt(danhHocSinhNopTien.get(j).getSoTien().trim());
+                        String strNum2 = NumberFormat.getNumberInstance(Locale.US).format(number2);
+                        thongTinThongKe.setMoney(strNum1 +"/"+ strNum2);
                     }
                 }
                 thongTinThongKe.setStatusPayment(an);
